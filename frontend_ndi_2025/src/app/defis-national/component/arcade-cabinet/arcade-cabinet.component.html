@@ -1,0 +1,78 @@
+<div class="arcade-overlay">
+  <div class="arcade-cabinet">
+    <!-- Cabinet Top -->
+    <div class="cabinet-top">
+      <div class="marquee">
+        <div class="marquee-lights">
+          @for (i of lights; track i) {
+            <div class="light" [style.animation-delay.ms]="i * 100"></div>
+          }
+        </div>
+        <h1 class="marquee-title">
+          <span class="letter n">N</span>
+          <span class="letter i">I</span>
+          <span class="letter r">R</span>
+          <span class="letter d">D</span>
+        </h1>
+        <p class="marquee-subtitle">SPACE MISSION</p>
+      </div>
+    </div>
+
+    <!-- Screen -->
+    <div class="screen-frame">
+      <div class="screen">
+        <div class="screen-content">
+          <div class="title-animation">
+            <span class="pixel-rocket">🚀</span>
+            <h2>NUMÉRIQUE INCLUSIF</h2>
+            <h2>RESPONSABLE & DURABLE</h2>
+          </div>
+
+          <div class="description">
+            <p>Rejoins la résistance numérique !</p>
+            <p class="small">Explore les planètes pour découvrir</p>
+            <p class="small">comment libérer ton établissement</p>
+          </div>
+
+          <button class="start-button" (click)="onStart()">
+            <span class="button-text">INSERT COIN</span>
+            <span class="button-hint">[ APPUIE POUR COMMENCER ]</span>
+          </button>
+
+          <div class="credits">
+            <p>© 2025 VILLAGE GAULOIS NUMÉRIQUE</p>
+            <p class="controls-info">↑↓←→ DÉPLACER | ESPACE INTERAGIR</p>
+          </div>
+        </div>
+
+        <!-- Scanlines -->
+        <div class="scanlines"></div>
+      </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <div class="joystick">
+        <div class="joystick-base"></div>
+        <div class="joystick-stick"></div>
+      </div>
+      <div class="buttons-row">
+        <div class="arcade-button red"></div>
+        <div class="arcade-button blue"></div>
+        <div class="arcade-button yellow"></div>
+      </div>
+    </div>
+
+    <!-- Cabinet Base -->
+    <div class="cabinet-base">
+      <div class="coin-slot">
+        <div class="slot"></div>
+        <span>COIN</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floor Reflection -->
+  <div class="floor-reflection"></div>
+</div>
+

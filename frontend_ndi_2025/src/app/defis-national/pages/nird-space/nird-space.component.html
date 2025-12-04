@@ -1,0 +1,81 @@
+<div class="game-container">
+  <!-- Stars Background -->
+  <app-stars-background />
+  
+  <!-- Header HUD -->
+  <div class="hud">
+    <div class="hud-left">
+      <span class="score">🪐 {{ visitedCount() }}/{{ totalPlanets() }}</span>
+    </div>
+    <div class="hud-center">
+      <h1 class="title">
+        <span class="nird">N</span>
+        <span class="nird">I</span>
+        <span class="nird">R</span>
+        <span class="nird">D</span>
+        <span class="subtitle">SPACE MISSION</span>
+      </h1>
+    </div>
+    <div class="hud-right">
+      @if (gameStarted()) {
+        <span class="controls-hint">↑↓←→ Déplacer | ESPACE Interagir</span>
+      }
+    </div>
+  </div>
+
+  <!-- Game Area -->
+  <div class="game-area">
+    <!-- Planets -->
+    @for (planet of planets(); track planet.id) {
+      <app-planet
+        [planet]="planet"
+        [isNear]="isNearPlanet(planet)"
+        (planetClick)="onPlanetClick($event)"
+      />
+    }
+    
+    <!-- Rocket -->
+    @if (gameStarted()) {
+      <app-rocket
+        [x]="rocketX()"
+        [y]="rocketY()"
+        [rotation]="rocketRotation()"
+        [isFlying]="isFlying()"
+      />
+    }
+  </div>
+
+  <!-- Arcade Cabinet (Start Screen) -->
+  @if (!gameStarted()) {
+    <app-arcade-cabinet (startGame)="startGame()" />
+  }
+
+  <!-- Victory Banner -->
+  @if (allVisited()) {
+    <div class="victory-banner">
+      <div class="victory-content">
+        <span class="victory-icon">🏆</span>
+        <span class="victory-text">MISSION ACCOMPLIE !</span>
+        <span class="victory-sub">Tu es maintenant un résistant NIRD !</span>
+      </div>
+    </div>
+  }
+
+  <!-- Info Modal -->
+  @if (showModal() && currentPlanet()) {
+    <app-info-modal
+      [planet]="currentPlanet()!"
+      (closeModal)="closeModal()"
+    />
+  }
+
+  <!-- Bottom Controls -->
+  @if (gameStarted()) {
+    <div class="bottom-bar">
+      <div class="mission-brief">
+        <span class="pixel-text">🎯 MISSION : Explore les 5 planètes pour découvrir la démarche NIRD</span>
+      </div>
+    </div>
+  }
+</div>
+

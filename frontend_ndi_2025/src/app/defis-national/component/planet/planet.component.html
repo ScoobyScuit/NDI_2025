@@ -1,0 +1,47 @@
+<div 
+  class="planet-container"
+  [style.left.%]="planet.x"
+  [style.top.%]="planet.y"
+  [class.visited]="planet.visited"
+  [class.near]="isNear"
+  (click)="onClick()"
+>
+  <!-- Orbit Ring -->
+  <div class="orbit-ring" [style.width.px]="planet.size + 40" [style.height.px]="planet.size + 40"></div>
+  
+  <!-- Planet Body -->
+  <div 
+    class="planet"
+    [style.width.px]="planet.size"
+    [style.height.px]="planet.size"
+    [style.background]="planetGradient"
+    [style.box-shadow]="planetShadow"
+  >
+    <!-- Surface Details -->
+    <div class="surface-detail d1"></div>
+    <div class="surface-detail d2"></div>
+    <div class="surface-detail d3"></div>
+    
+    <!-- Icon -->
+    <span class="planet-icon">{{ planet.icon }}</span>
+    
+    <!-- Shine -->
+    <div class="shine"></div>
+  </div>
+  
+  <!-- Planet Name -->
+  <div class="planet-name">{{ planet.name }}</div>
+  
+  <!-- Interaction Hint -->
+  @if (isNear) {
+    <div class="interact-hint">
+      <span>ESPACE</span>
+    </div>
+  }
+  
+  <!-- Visit Check -->
+  @if (planet.visited) {
+    <div class="visit-badge">✓</div>
+  }
+</div>
+

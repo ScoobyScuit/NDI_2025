@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.game-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, 
+    #0a0a1a 0%, 
+    #1a1a3a 30%, 
+    #0d0d2d 60%, 
+    #050510 100%
+  );
+  overflow: hidden;
+}
+
+/* HUD */
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+}
+
+.hud-left, .hud-right {
+  flex: 1;
+}
+
+.hud-right {
+  text-align: right;
+}
+
+.hud-center {
+  flex: 2;
+  text-align: center;
+}
+
+.score {
+  font-size: 14px;
+  color: #00ff88;
+  text-shadow: 0 0 10px #00ff88;
+}
+
+.title {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.nird {
+  font-size: 28px;
+  animation: colorCycle 4s infinite;
+  text-shadow: 0 0 20px currentColor;
+}
+
+.nird:nth-child(1) { color: #ff6b6b; animation-delay: 0s; }
+.nird:nth-child(2) { color: #4ecdc4; animation-delay: 0.5s; }
+.nird:nth-child(3) { color: #f9ca24; animation-delay: 1s; }
+.nird:nth-child(4) { color: #a55eea; animation-delay: 1.5s; }
+
+.subtitle {
+  font-size: 10px;
+  color: #888;
+  margin-left: 10px;
+}
+
+.controls-hint {
+  font-size: 8px;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+@keyframes colorCycle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.5); }
+}
+
+/* Game Area */
+.game-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+/* Victory Banner */
+.victory-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  animation: victoryPulse 0.5s ease-out;
+}
+
+.victory-content {
+  background: linear-gradient(135deg, #1a1a3a 0%, #2a2a5a 100%);
+  border: 4px solid #ffd700;
+  border-radius: 10px;
+  padding: 30px 50px;
+  text-align: center;
+  box-shadow: 
+    0 0 30px #ffd70080,
+    inset 0 0 30px rgba(255, 215, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.victory-icon {
+  font-size: 48px;
+  animation: bounce 1s infinite;
+}
+
+.victory-text {
+  font-size: 18px;
+  color: #ffd700;
+  text-shadow: 0 0 15px #ffd700;
+}
+
+.victory-sub {
+  font-size: 10px;
+  color: #88ff88;
+}
+
+@keyframes victoryPulse {
+  0% { transform: translate(-50%, -50%) scale(0); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Bottom Bar */
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 25px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+  z-index: 100;
+}
+
+.mission-brief {
+  text-align: center;
+}
+
+.pixel-text {
+  font-size: 10px;
+  color: #00ff88;
+  text-shadow: 0 0 5px #00ff88;
+  letter-spacing: 1px;
+}
+
+/* Scanlines Effect */
+.game-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* CRT Glow Effect */
+.game-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+

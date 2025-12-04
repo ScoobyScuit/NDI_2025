@@ -1,0 +1,41 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-container" [style.--planet-color]="planet.color" [style.--planet-glow]="planet.glowColor">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="planet-preview">
+        <span class="planet-icon">{{ planet.icon }}</span>
+      </div>
+      <h2 class="modal-title" [innerHTML]="planet.title"></h2>
+      <button class="close-button" (click)="onClose()">✕</button>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content">
+      <ul class="info-list">
+        @for (item of planet.content; track item; let i = $index) {
+          <li class="info-item" [style.animation-delay.ms]="i * 100" [innerHTML]="item"></li>
+        }
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <div class="progress-dots">
+        @for (i of [0,1,2,3,4]; track i) {
+          <span class="dot" [class.active]="i < visitedCount"></span>
+        }
+      </div>
+      <button class="continue-button" (click)="onClose()">
+        <span>CONTINUER</span>
+        <span class="arrow">→</span>
+      </button>
+    </div>
+
+    <!-- Decorations -->
+    <div class="corner-decor top-left"></div>
+    <div class="corner-decor top-right"></div>
+    <div class="corner-decor bottom-left"></div>
+    <div class="corner-decor bottom-right"></div>
+  </div>
+</div>
+

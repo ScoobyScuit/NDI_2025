@@ -1,0 +1,35 @@
+<div class="stars-container">
+  <!-- Static Stars -->
+  @for (star of stars(); track $index) {
+    <div 
+      class="star"
+      [style.left.%]="star.x"
+      [style.top.%]="star.y"
+      [style.width.px]="star.size"
+      [style.height.px]="star.size"
+      [style.opacity]="star.opacity"
+      [style.animation-duration.s]="star.animationDuration"
+      [style.animation-delay.s]="star.animationDelay"
+    ></div>
+  }
+
+  <!-- Shooting Stars -->
+  @for (shootingStar of shootingStars(); track shootingStar.id) {
+    <div 
+      class="shooting-star"
+      [style.left.%]="shootingStar.startX"
+      [style.top.%]="shootingStar.startY"
+      [style.animation-duration.s]="shootingStar.duration"
+      [style.animation-delay.s]="shootingStar.delay"
+    ></div>
+  }
+
+  <!-- Nebula Effects -->
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+  <div class="nebula nebula-3"></div>
+
+  <!-- Grid Lines (Retro Effect) -->
+  <div class="grid-overlay"></div>
+</div>
+

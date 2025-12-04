@@ -1,0 +1,188 @@
+.rocket-container {
+  position: absolute;
+  z-index: 50;
+  transition: left 0.05s linear, top 0.05s linear;
+}
+
+.rocket {
+  position: relative;
+  width: 40px;
+  height: 80px;
+  filter: drop-shadow(0 0 10px rgba(255, 150, 50, 0.5));
+}
+
+.rocket-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.nose-cone {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 20px solid #e74c3c;
+}
+
+.body-main {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 35px;
+  background: linear-gradient(90deg, #c0c0c0 0%, #ffffff 50%, #c0c0c0 100%);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.window {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle at 30% 30%, #87ceeb, #1e90ff);
+  border-radius: 50%;
+  border: 2px solid #333;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+}
+
+.stripe {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: #e74c3c;
+}
+
+.fins {
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+}
+
+.fin {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 8px solid #e74c3c;
+}
+
+.fin.left {
+  left: 0;
+  border-right: 10px solid #c0392b;
+}
+
+.fin.right {
+  right: 0;
+  border-left: 10px solid #c0392b;
+}
+
+.booster {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 12px;
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+  border-radius: 0 0 4px 4px;
+}
+
+/* Flame */
+.flame {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 30px;
+}
+
+.flame-inner {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 25px;
+  background: linear-gradient(180deg, 
+    #fff 0%, 
+    #ffff00 20%, 
+    #ff8800 50%, 
+    #ff4400 80%, 
+    transparent 100%
+  );
+  border-radius: 50% 50% 50% 50%;
+  animation: flicker 0.1s infinite alternate;
+}
+
+.flame-particle {
+  position: absolute;
+  bottom: -5px;
+  width: 4px;
+  height: 8px;
+  background: #ff6600;
+  border-radius: 50%;
+  animation: particle 0.3s infinite;
+}
+
+.flame-particle.p1 { left: 2px; animation-delay: 0s; }
+.flame-particle.p2 { left: 6px; animation-delay: 0.1s; }
+.flame-particle.p3 { left: 10px; animation-delay: 0.2s; }
+
+@keyframes flicker {
+  0% { 
+    height: 25px;
+    opacity: 0.9;
+  }
+  100% { 
+    height: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes particle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(15px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.rocket-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255, 100, 50, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+.rocket.flying .flame-inner {
+  animation: flicker 0.05s infinite alternate;
+}
+

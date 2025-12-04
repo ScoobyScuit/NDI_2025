@@ -1,0 +1,34 @@
+<div 
+  class="rocket-container" 
+  [style.left.%]="x" 
+  [style.top.%]="y"
+  [style.transform]="'translate(-50%, -50%) rotate(' + rotation + 'deg)'"
+>
+  <div class="rocket" [class.flying]="isFlying">
+    <!-- Flame -->
+    <div class="flame">
+      <div class="flame-inner"></div>
+      <div class="flame-particle p1"></div>
+      <div class="flame-particle p2"></div>
+      <div class="flame-particle p3"></div>
+    </div>
+    
+    <!-- Rocket Body -->
+    <div class="rocket-body">
+      <div class="nose-cone"></div>
+      <div class="body-main">
+        <div class="window"></div>
+        <div class="stripe"></div>
+      </div>
+      <div class="fins">
+        <div class="fin left"></div>
+        <div class="fin right"></div>
+      </div>
+      <div class="booster"></div>
+    </div>
+  </div>
+  
+  <!-- Glow Effect -->
+  <div class="rocket-glow"></div>
+</div>
+
