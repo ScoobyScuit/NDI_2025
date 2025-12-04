@@ -1,6 +1,6 @@
 @if (isOpen()) {
-  <div class="modal-overlay" (click)="close()">
-    <div class="modal-container" (click)="$event.stopPropagation()">
+  <div class="modal-overlay" (click)="close()" [style.background]="getThemeStyles()['--overlay']">
+    <div class="modal-container" (click)="$event.stopPropagation()" [ngStyle]="getThemeStyles()">
       <!-- En-tête de la modal -->
       <div class="modal-header">
         <div class="header-content">
@@ -11,20 +11,66 @@
           </div>
           <h2 class="modal-title">Terminal Chat</h2>
         </div>
-        <button class="close-button" (click)="close()" aria-label="Fermer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+        <div class="header-actions">
+          <button class="character-button" (click)="toggleCharacterSelector()" aria-label="Changer le personnage" title="Changer le personnage">
+            <span class="character-icon">{{ currentCharacter().icon }}</span>
+            <span class="character-name">{{ currentCharacter().name }}</span>
+          </button>
+          <button class="theme-button" (click)="toggleThemeSelector()" aria-label="Changer le thème" title="Changer le thème">
+            <span class="theme-icon">{{ currentTheme().icon }}</span>
+            <span class="theme-name">{{ currentTheme().name }}</span>
+          </button>
+          <button class="close-button" (click)="close()" aria-label="Fermer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
       </div>
+
+      <!-- Sélecteur de personnage -->
+      @if (showCharacterSelector()) {
+        <div class="character-selector">
+          @for (character of characters(); track character.id) {
+            <button 
+              class="character-option"
+              [class.active]="currentCharacter().id === character.id"
+              (click)="selectCharacter(character)"
+              [attr.aria-label]="'Sélectionner le personnage ' + character.name"
+              [title]="character.description">
+              <span class="character-option-icon">{{ character.icon }}</span>
+              <div class="character-option-info">
+                <span class="character-option-name">{{ character.name }}</span>
+                <span class="character-option-desc">{{ character.description }}</span>
+              </div>
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Sélecteur de thème -->
+      @if (showThemeSelector()) {
+        <div class="theme-selector">
+          @for (theme of themes(); track theme.id) {
+            <button 
+              class="theme-option"
+              [class.active]="currentTheme().id === theme.id"
+              (click)="selectTheme(theme)"
+              [attr.aria-label]="'Sélectionner le thème ' + theme.name">
+              <span class="theme-option-icon">{{ theme.icon }}</span>
+              <span class="theme-option-name">{{ theme.name }}</span>
+            </button>
+          }
+        </div>
+      }
 
       <!-- Zone de messages -->
       <div class="messages-container" #messagesContainer>
         @for (message of messages(); track $index) {
           <div class="message" [class.user-message]="message.role === 'user'" [class.assistant-message]="message.role === 'assistant'">
             <div class="message-header">
-              <span class="message-role">{{ message.role === 'user' ? '$' : 'assistant' }}</span>
+              <span class="message-role">{{ message.role === 'user' ? '$' : currentCharacter().name.toLowerCase() }}</span>
               <span class="message-time">{{ message.timestamp | date:'HH:mm:ss' }}</span>
             </div>
             <div class="message-content">{{ message.content }}</div>
@@ -33,7 +79,7 @@
         @if (isLoading()) {
           <div class="message assistant-message">
             <div class="message-header">
-              <span class="message-role">assistant</span>
+              <span class="message-role">{{ currentCharacter().name.toLowerCase() }}</span>
             </div>
             <div class="message-content">
               <span class="typing-indicator">

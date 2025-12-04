@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface ChatMessageRequest {
   message: string;
+  systemPrompt?: string;
 }
 
 export interface ChatMessageResponse {
@@ -19,8 +20,8 @@ export class ChatBrutiService {
 
   constructor(private http: HttpClient) {}
 
-  sendMessage(message: string): Observable<ChatMessageResponse> {
-    const body: ChatMessageRequest = { message };
+  sendMessage(message: string, systemPrompt?: string): Observable<ChatMessageResponse> {
+    const body: ChatMessageRequest = { message, systemPrompt };
     return this.http.post<ChatMessageResponse>(`${this.apiUrl}/message`, body);
   }
 }

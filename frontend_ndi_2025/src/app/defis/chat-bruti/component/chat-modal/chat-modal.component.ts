@@ -1,7 +1,9 @@
-import { Component, input, output, signal, effect, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
+import { Component, input, output, signal, effect, ViewChild, ElementRef, AfterViewInit, inject, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatBrutiService } from '../../services/chat-bruti.service';
+import { ChatThemeService, ChatTheme } from '../../services/chat-theme.service';
+import { ChatCharacterService, ChatCharacter } from '../../services/chat-character.service';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -21,6 +23,8 @@ export class ChatModalComponent implements AfterViewInit {
   @ViewChild('inputField') inputField!: ElementRef<HTMLInputElement>;
 
   private chatService = inject(ChatBrutiService);
+  private themeService = inject(ChatThemeService);
+  private characterService = inject(ChatCharacterService);
 
   isOpen = input.required<boolean>();
   closeModal = output<void>();
@@ -28,6 +32,13 @@ export class ChatModalComponent implements AfterViewInit {
   messages = signal<Message[]>([]);
   userInput = signal('');
   isLoading = signal(false);
+  showThemeSelector = signal(false);
+  showCharacterSelector = signal(false);
+  
+  currentTheme = this.themeService.currentTheme;
+  themes = signal(this.themeService.getThemes());
+  currentCharacter = this.characterService.currentCharacter;
+  characters = signal(this.characterService.getCharacters());
 
   constructor() {
     effect(() => {
@@ -43,11 +54,21 @@ export class ChatModalComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Ajouter un message de bienvenue
+    // Ajouter un message de bienvenue basé sur le personnage actuel
     if (this.messages().length === 0) {
+      const character = this.currentCharacter();
+      const welcomeMessages: { [key: string]: string } = {
+        'bruti': 'Bonjour ! Je suis Bruti, votre assistant complètement à côté de la plaque mais hilarant ! Comment puis-je vous aider ?',
+        'dark-vador': 'Je sens une grande perturbation dans la Force... Qui ose me déranger ?',
+        'sarkozy': 'Bonjour ! Moi président, je suis là pour répondre à vos questions. C\'est ça !',
+        'yoda': 'Bonjour, jeune padawan. Grande sagesse, tu cherches ?',
+        'einstein': 'Bonjour. L\'imagination est plus importante que la connaissance. Comment puis-je t\'aider ?',
+        'shakespeare': 'Hail, good friend! What questions dost thou have for this humble bard?',
+        'pirate': 'Ahoy matey! Welcome aboard! What brings ye to me ship?'
+      };
       this.messages.set([{
         role: 'assistant',
-        content: 'Bonjour ! Je suis Bruti, votre assistant complètement à côté de la plaque mais hilarant ! Comment puis-je vous aider ?',
+        content: welcomeMessages[character.id] || 'Bonjour ! Comment puis-je vous aider ?',
         timestamp: new Date()
       }]);
     }
@@ -67,8 +88,9 @@ export class ChatModalComponent implements AfterViewInit {
     this.userInput.set('');
     this.isLoading.set(true);
 
-    // Appel à l'API backend
-    this.chatService.sendMessage(message).subscribe({
+    // Appel à l'API backend avec le prompt système du personnage
+    const character = this.currentCharacter();
+    this.chatService.sendMessage(message, character.systemPrompt).subscribe({
       next: (response) => {
         const assistantMessage: Message = {
           role: 'assistant',
@@ -111,6 +133,68 @@ export class ChatModalComponent implements AfterViewInit {
 
   close() {
     this.closeModal.emit();
+  }
+
+  toggleThemeSelector() {
+    this.showThemeSelector.update(value => !value);
+  }
+
+  selectTheme(theme: ChatTheme) {
+    this.themeService.setTheme(theme.id);
+    this.showThemeSelector.set(false);
+  }
+
+  toggleCharacterSelector() {
+    this.showCharacterSelector.update(value => !value);
+  }
+
+  selectCharacter(character: ChatCharacter) {
+    this.characterService.setCharacter(character.id);
+    this.showCharacterSelector.set(false);
+    // Réinitialiser les messages et afficher un nouveau message de bienvenue
+    const welcomeMessages: { [key: string]: string } = {
+      'bruti': 'Bonjour ! Je suis Bruti, votre assistant complètement à côté de la plaque mais hilarant ! Comment puis-je vous aider ?',
+      'dark-vador': 'Je sens une grande perturbation dans la Force... Qui ose me déranger ?',
+      'sarkozy': 'Bonjour ! Moi président, je suis là pour répondre à vos questions. C\'est ça !',
+      'yoda': 'Bonjour, jeune padawan. Grande sagesse, tu cherches ?',
+      'einstein': 'Bonjour. L\'imagination est plus importante que la connaissance. Comment puis-je t\'aider ?',
+      'shakespeare': 'Hail, good friend! What questions dost thou have for this humble bard?',
+      'pirate': 'Ahoy matey! Welcome aboard! What brings ye to me ship?'
+    };
+    this.messages.set([{
+      role: 'assistant',
+      content: welcomeMessages[character.id] || 'Bonjour ! Comment puis-je vous aider ?',
+      timestamp: new Date()
+    }]);
+  }
+
+  getThemeStyles(): { [key: string]: string } {
+    const theme = this.currentTheme();
+    return {
+      '--bg-color': theme.colors.background,
+      '--surface-color': theme.colors.surface,
+      '--surface-secondary': theme.colors.surfaceSecondary,
+      '--border-color': theme.colors.border,
+      '--text-color': theme.colors.text,
+      '--text-secondary': theme.colors.textSecondary,
+      '--text-muted': theme.colors.textMuted,
+      '--user-role': theme.colors.userRole,
+      '--assistant-role': theme.colors.assistantRole,
+      '--user-message': theme.colors.userMessage,
+      '--assistant-message': theme.colors.assistantMessage,
+      '--input-bg': theme.colors.inputBackground,
+      '--input-border': theme.colors.inputBorder,
+      '--input-text': theme.colors.inputText,
+      '--button-primary': theme.colors.buttonPrimary,
+      '--button-primary-hover': theme.colors.buttonPrimaryHover,
+      '--button-text': theme.colors.buttonText,
+      '--scrollbar-track': theme.colors.scrollbarTrack,
+      '--scrollbar-thumb': theme.colors.scrollbarThumb,
+      '--overlay': theme.colors.overlay,
+      '--dot-red': theme.colors.dotRed,
+      '--dot-yellow': theme.colors.dotYellow,
+      '--dot-green': theme.colors.dotGreen
+    };
   }
 }
 

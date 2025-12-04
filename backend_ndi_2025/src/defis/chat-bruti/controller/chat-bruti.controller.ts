@@ -12,6 +12,7 @@ export class ChatBrutiController {
   ): Promise<ChatResponseDto> {
     return await this.chatBrutiService.getChatResponse(
       chatMessageDto.message,
+      chatMessageDto.systemPrompt,
     );
   }
 
@@ -20,8 +21,7 @@ export class ChatBrutiController {
     return {
       name: 'Bruti',
       description:
-        'Un chatbot complètement à côté de la plaque mais hilarant, persuadé d\'être un philosophe du dimanche !',
+        "Un chatbot complètement à côté de la plaque mais hilarant, persuadé d'être un philosophe du dimanche !",
     };
   }
 }
-

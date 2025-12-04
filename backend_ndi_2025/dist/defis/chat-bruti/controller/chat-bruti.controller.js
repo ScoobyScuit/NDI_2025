@@ -22,12 +22,12 @@ let ChatBrutiController = class ChatBrutiController {
         this.chatBrutiService = chatBrutiService;
     }
     async sendMessage(chatMessageDto) {
-        return await this.chatBrutiService.getChatResponse(chatMessageDto.message);
+        return await this.chatBrutiService.getChatResponse(chatMessageDto.message, chatMessageDto.systemPrompt);
     }
     getInfo() {
         return {
             name: 'Bruti',
-            description: 'Un chatbot complètement à côté de la plaque mais hilarant, persuadé d\'être un philosophe du dimanche !',
+            description: "Un chatbot complètement à côté de la plaque mais hilarant, persuadé d'être un philosophe du dimanche !",
         };
     }
 };

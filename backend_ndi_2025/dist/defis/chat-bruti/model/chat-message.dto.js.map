@@ -1,1 +1,1 @@
-{"version":3,"file":"chat-message.dto.js","sourceRoot":"","sources":["../../../../src/defis/chat-bruti/model/chat-message.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,cAAc;IACzB,OAAO,CAAS;CACjB;AAFD,wCAEC;AAED,MAAa,eAAe;IAC1B,QAAQ,CAAS;IACjB,SAAS,CAAO;CACjB;AAHD,0CAGC"}
+{"version":3,"file":"chat-message.dto.js","sourceRoot":"","sources":["../../../../src/defis/chat-bruti/model/chat-message.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,cAAc;IACzB,OAAO,CAAS;IAChB,YAAY,CAAU;CACvB;AAHD,wCAGC;AAED,MAAa,eAAe;IAC1B,QAAQ,CAAS;IACjB,SAAS,CAAO;CACjB;AAHD,0CAGC"}

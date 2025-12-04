@@ -3,6 +3,8 @@
 **/.env.production
 **/.venv
 /frontend/src/environments/*
+.env
+
 
 # Do not ignore example .env
 !/.env.sample
@@ -19,3 +21,6 @@
 
 # Logs
 **/logs
+
+dist
+

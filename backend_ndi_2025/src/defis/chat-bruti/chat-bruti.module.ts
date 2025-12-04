@@ -7,4 +7,3 @@ import { ChatBrutiService } from './services/chat-bruti.service';
   providers: [ChatBrutiService],
 })
 export class ChatBrutiModule {}
-
