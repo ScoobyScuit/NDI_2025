@@ -14,7 +14,8 @@ const common_1 = require("@nestjs/common");
 const axios_1 = __importDefault(require("axios"));
 let ChatBrutiService = class ChatBrutiService {
     apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
-    model = 'mistralai/mistral-small-3.1-24b-instruct:free';
+    mistralModel = 'mistralai/mistral-small-3.1-24b-instruct:free';
+    claudeModel = 'anthropic/claude-sonnet-4.5';
     get apiKey() {
         const key = process.env.OPENROUTER_API_KEY;
         if (!key) {
@@ -37,49 +38,105 @@ Règles absolues :
 6. Parle comme un philosophe du dimanche qui mélange tout
 
 Exemple de ton : "Ah, des cadeaux ? Moi je pense que le meilleur cadeau, c'est un nuage de pluie. Parce que la pluie, c'est comme les idées : ça tombe du ciel mais on ne sait jamais où ça va atterrir !"`;
+    isRateLimitError(error) {
+        if (!error.response) {
+            return false;
+        }
+        const status = error.response.status;
+        const errorData = error.response.data;
+        if (status === 429) {
+            return true;
+        }
+        const errorMessage = errorData?.error?.message || errorData?.message || '';
+        const lowerMessage = errorMessage.toLowerCase();
+        return (lowerMessage.includes('rate limit') ||
+            lowerMessage.includes('quota') ||
+            lowerMessage.includes('daily limit') ||
+            lowerMessage.includes('limit exceeded') ||
+            lowerMessage.includes('insufficient credits') ||
+            lowerMessage.includes('billing limit'));
+    }
+    async makeRequest(model, userMessage) {
+        const response = await axios_1.default.post(this.apiUrl, {
+            model: model,
+            messages: [
+                {
+                    role: 'system',
+                    content: this.systemPrompt,
+                },
+                {
+                    role: 'user',
+                    content: `${userMessage}\n\n(Réponds en français uniquement, de manière drôle et décalée)`,
+                },
+            ],
+            max_tokens: 300,
+            temperature: 0.9,
+        }, {
+            headers: {
+                Authorization: `Bearer ${this.apiKey}`,
+                'Content-Type': 'application/json',
+                'HTTP-Referer': 'https://nuit-info-2025.com',
+                'X-Title': "Chat Bruti - Nuit de l'Info 2025",
+            },
+        });
+        return (response.data.choices[0]?.message?.content ||
+            "Désolé, j'ai oublié ce que je voulais dire... C'est arrivé !");
+    }
     async getChatResponse(userMessage) {
         try {
-            const response = await axios_1.default.post(this.apiUrl, {
-                model: this.model,
-                messages: [
-                    {
-                        role: 'system',
-                        content: this.systemPrompt,
-                    },
-                    {
-                        role: 'user',
-                        content: `${userMessage}\n\n(Réponds en français uniquement, de manière drôle et décalée)`,
-                    },
-                ],
-                max_tokens: 300,
-                temperature: 0.9,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${this.apiKey}`,
-                    'Content-Type': 'application/json',
-                    'HTTP-Referer': 'https://nuit-info-2025.com',
-                    'X-Title': "Chat Bruti - Nuit de l'Info 2025",
-                },
-            });
-            const botResponse = response.data.choices[0]?.message?.content ||
-                "Désolé, j'ai oublié ce que je voulais dire... C'est arrivé !";
+            console.log('Tentative avec Mistral free...');
+            const botResponse = await this.makeRequest(this.mistralModel, userMessage);
             return {
                 response: botResponse,
                 timestamp: new Date(),
             };
         }
-        catch (error) {
-            console.error("Erreur lors de la requête à l'API OpenRouter:", error);
-            const fallbackResponses = [
-                "Oh là là, j'ai perdu mes clés... de l'API ! Mais bon, comme disait mon grand-père philosophe : 'Quand l'API ne répond pas, c'est qu'elle médite sur l'existence des requêtes HTTP.'",
-                "L'API a décidé de faire une pause philosophique. Moi aussi parfois je fais ça, surtout quand on me pose des questions trop sérieuses !",
-                "Erreur 404 : La sagesse n'a pas été trouvée. Mais rassure-toi, moi non plus je ne la trouve jamais !",
-            ];
-            const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-            return {
-                response: randomResponse,
-                timestamp: new Date(),
-            };
+        catch (mistralError) {
+            console.error('Erreur avec Mistral:', mistralError.response?.data || mistralError.message);
+            if (this.isRateLimitError(mistralError)) {
+                console.log('Limite Mistral atteinte, tentative avec Claude Sonnet 4.5...');
+                try {
+                    const botResponse = await this.makeRequest(this.claudeModel, userMessage);
+                    return {
+                        response: botResponse,
+                        timestamp: new Date(),
+                    };
+                }
+                catch (claudeError) {
+                    console.error('Erreur avec Claude Sonnet 4.5:', claudeError.response?.data || claudeError.message);
+                    if (this.isRateLimitError(claudeError)) {
+                        return {
+                            response: "Désolé, la limite journalière de requêtes a été atteinte. Les modèles Mistral (gratuit) et Claude Sonnet 4.5 ont tous les deux atteint leurs limites. Veuillez réessayer demain ou contactez l'administrateur.",
+                            timestamp: new Date(),
+                        };
+                    }
+                    return {
+                        response: "Oups ! Il y a eu un problème avec les deux modèles (Mistral et Claude). L'API semble avoir des difficultés. Veuillez réessayer plus tard.",
+                        timestamp: new Date(),
+                    };
+                }
+            }
+            console.log('Erreur non-limitée avec Mistral, tentative avec Claude Sonnet 4.5...');
+            try {
+                const botResponse = await this.makeRequest(this.claudeModel, userMessage);
+                return {
+                    response: botResponse,
+                    timestamp: new Date(),
+                };
+            }
+            catch (claudeError) {
+                console.error('Erreur avec Claude Sonnet 4.5:', claudeError.response?.data || claudeError.message);
+                if (this.isRateLimitError(claudeError)) {
+                    return {
+                        response: 'Désolé, la limite journalière de requêtes a été atteinte pour tous les modèles disponibles. Veuillez réessayer demain.',
+                        timestamp: new Date(),
+                    };
+                }
+                return {
+                    response: "Oh là là, j'ai perdu mes clés... de l'API ! Les deux modèles (Mistral et Claude) ont rencontré des difficultés. Veuillez réessayer plus tard.",
+                    timestamp: new Date(),
+                };
+            }
         }
     }
 };
