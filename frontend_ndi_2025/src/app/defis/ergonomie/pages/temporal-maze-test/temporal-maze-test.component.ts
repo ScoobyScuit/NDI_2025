@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DateMazeFieldComponent } from '../../component/date-maze-field/date-maze-field.component';
+import { AddressPuzzleFieldComponent } from '../../component/address-puzzle-field/address-puzzle-field.component';
 
 /**
- * @brief Test page for date maze field
+ * @brief Test page for ergonomie fields
  */
 @Component({
   selector: 'app-temporal-maze-test',
   standalone: true,
-  imports: [CommonModule, DateMazeFieldComponent],
+  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent],
   template: `
     <div class="test-container">
       <h1>Défis Ergonomie</h1>
@@ -16,6 +17,12 @@ import { DateMazeFieldComponent } from '../../component/date-maze-field/date-maz
       @if (selectedDate) {
         <div class="result">
           <p>Date sélectionnée : {{ selectedDate | date:'dd/MM/yyyy' }}</p>
+        </div>
+      }
+      <app-address-puzzle-field (addressSelected)="onAddressSelected($event)" />
+      @if (selectedAddress) {
+        <div class="result">
+          <p>Adresse sélectionnée : {{ selectedAddress }}</p>
         </div>
       }
     </div>
@@ -34,40 +41,51 @@ import { DateMazeFieldComponent } from '../../component/date-maze-field/date-maz
     
     .test-container {
       padding: 2rem;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       min-height: 100%;
     }
     
     h1 {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
       color: #fff;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      font-size: 2.5rem;
     }
     
     .result {
-      margin-top: 2rem;
-      padding: 1rem;
-      background: #e8f5e9;
+      margin: 1.5rem auto;
+      padding: 1.5rem;
+      background: rgba(39, 174, 96, 0.2);
+      border: 2px solid rgba(39, 174, 96, 0.5);
       border-radius: 8px;
       text-align: center;
+      max-width: 800px;
+      backdrop-filter: blur(10px);
     }
     
     .result p {
       margin: 0;
       font-size: 1.2rem;
       font-weight: bold;
-      color: #2e7d32;
+      color: #4ecdc4;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
   `]
 })
 export class TemporalMazeTestComponent {
   selectedDate: Date | null = null;
+  selectedAddress: string | null = null;
 
   onDateSelected(date: Date): void {
     this.selectedDate = date;
     console.log('Date sélectionnée:', date);
+  }
+
+  onAddressSelected(address: string): void {
+    this.selectedAddress = address;
+    console.log('Adresse sélectionnée:', address);
   }
 }
 
