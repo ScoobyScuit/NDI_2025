@@ -1,4 +1,41 @@
 @if (isOpen()) {
+  <!-- Modal de choix de pseudo (première visite ou modification) -->
+  @if (showPseudoModal()) {
+    <div class="pseudo-modal-overlay" (click)="showPseudoModal.set(false)">
+      <div class="pseudo-modal-container" (click)="$event.stopPropagation()">
+        <div class="pseudo-modal-header">
+          <h2 class="pseudo-modal-title">{{ userService.hasPseudo() ? 'Modifier votre pseudo' : 'Bienvenue ! 👋' }}</h2>
+        </div>
+        <div class="pseudo-modal-content">
+          <p class="pseudo-modal-description">
+            {{ userService.hasPseudo() ? 'Choisissez un nouveau pseudo' : 'Choisissez un pseudo pour personnaliser votre expérience de chat' }}
+          </p>
+          <div class="pseudo-input-wrapper">
+            <input
+              type="text"
+              class="pseudo-input"
+              [(ngModel)]="pseudoInput"
+              (keydown.enter)="savePseudo()"
+              placeholder="Votre pseudo..."
+              maxlength="20"
+              autofocus
+            />
+          </div>
+          <div class="pseudo-modal-actions">
+            <button class="pseudo-button pseudo-button-primary" (click)="savePseudo()" [disabled]="!pseudoInput().trim() || pseudoInput().trim().length < 2">
+              {{ userService.hasPseudo() ? 'Enregistrer' : 'Commencer' }}
+            </button>
+            @if (!userService.hasPseudo()) {
+              <button class="pseudo-button pseudo-button-secondary" (click)="skipPseudo()">
+                Passer
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
   <div class="modal-overlay" (click)="close()" [style.background]="getThemeStyles()['--overlay']">
     <!-- Fond animé rétro avec étoiles, étoiles filantes et lune -->
     <div class="retro-background">
@@ -43,6 +80,11 @@
           <!-- Indicateur d'émotion -->
           <div class="emotion-indicator" [class]="'emotion-' + currentEmotion().type">
             <span class="emotion-icon" [title]="currentEmotion().description">{{ currentEmotion().icon }}</span>
+          </div>
+          <!-- Pseudo utilisateur -->
+          <div class="user-pseudo-display" (click)="editPseudo()" [title]="'Cliquez pour changer votre pseudo'">
+            <span class="pseudo-label">@</span>
+            <span class="pseudo-value">{{ userPseudo() }}</span>
           </div>
         </div>
         <div class="header-actions">
@@ -113,7 +155,7 @@
         @for (message of messages(); track $index) {
           <div class="message" [class.user-message]="message.role === 'user'" [class.assistant-message]="message.role === 'assistant'">
             <div class="message-header">
-              <span class="message-role">{{ message.role === 'user' ? '$' : currentCharacter().name.toLowerCase() }}</span>
+              <span class="message-role">{{ message.role === 'user' ? userPseudo() : currentCharacter().name.toLowerCase() }}</span>
               <span class="message-time">{{ message.timestamp | date:'HH:mm:ss' }}</span>
             </div>
             <div class="message-content">{{ message.content }}</div>
@@ -138,7 +180,7 @@
       <!-- Zone de saisie -->
       <div class="input-container">
         <div class="input-wrapper">
-          <span class="input-prompt">$</span>
+          <span class="input-prompt">{{ userPseudo() }}</span>
           <input
             #inputField
             type="text"

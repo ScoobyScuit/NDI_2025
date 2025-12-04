@@ -1,3 +1,143 @@
+/* Modal de choix de pseudo */
+.pseudo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.pseudo-modal-container {
+  background: linear-gradient(135deg, #1a0a2e 0%, #16213e 100%);
+  border: 2px solid #ff00ff;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 
+    0 0 30px rgba(255, 0, 255, 0.5),
+    0 0 60px rgba(0, 255, 255, 0.3),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.4s ease;
+}
+
+.pseudo-modal-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.pseudo-modal-title {
+  color: #00ffff;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.pseudo-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pseudo-modal-description {
+  color: #e0e0e0;
+  text-align: center;
+  font-size: 16px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.pseudo-input-wrapper {
+  position: relative;
+}
+
+.pseudo-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #ff00ff;
+  border-radius: 8px;
+  color: #00ffff;
+  font-size: 18px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.pseudo-input:focus {
+  border-color: #00ffff;
+  box-shadow: 
+    0 0 15px rgba(255, 0, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.pseudo-input::placeholder {
+  color: rgba(0, 255, 255, 0.5);
+}
+
+.pseudo-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pseudo-button {
+  padding: 12px 24px;
+  border: 2px solid;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  min-width: 120px;
+}
+
+.pseudo-button-primary {
+  background: #ff00ff;
+  border-color: #ff00ff;
+  color: #000;
+}
+
+.pseudo-button-primary:hover:not(:disabled) {
+  background: #ff33ff;
+  border-color: #ff33ff;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 255, 0.8),
+    0 0 40px rgba(255, 0, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.pseudo-button-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pseudo-button-secondary {
+  background: transparent;
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
+.pseudo-button-secondary:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.5),
+    0 0 30px rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -461,6 +601,37 @@
   font-size: 24px;
   display: inline-block;
   transition: all 0.3s ease;
+}
+
+/* Affichage du pseudo utilisateur */
+.user-pseudo-display {
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: var(--surface-secondary, #1e1e1e);
+  border: 1px solid var(--border-color, #3d3d3d);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+}
+
+.user-pseudo-display:hover {
+  background: var(--border-color, #3d3d3d);
+  transform: translateY(-1px);
+}
+
+.pseudo-label {
+  color: var(--text-muted, #6a6a6a);
+  font-weight: 600;
+}
+
+.pseudo-value {
+  color: var(--user-role, #569cd6);
+  font-weight: 600;
 }
 
 .terminal-indicator {

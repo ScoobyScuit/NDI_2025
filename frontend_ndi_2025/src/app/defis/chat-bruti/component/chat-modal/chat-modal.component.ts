@@ -5,6 +5,7 @@ import { ChatBrutiService } from '../../services/chat-bruti.service';
 import { ChatThemeService, ChatTheme } from '../../services/chat-theme.service';
 import { ChatCharacterService, ChatCharacter } from '../../services/chat-character.service';
 import { ChatEmotionService, Emotion } from '../../services/chat-emotion.service';
+import { ChatUserService } from '../../services/chat-user.service';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -27,6 +28,7 @@ export class ChatModalComponent implements AfterViewInit {
   private themeService = inject(ChatThemeService);
   private characterService = inject(ChatCharacterService);
   private emotionService = inject(ChatEmotionService);
+  private userService = inject(ChatUserService);
 
   isOpen = input.required<boolean>();
   closeModal = output<void>();
@@ -36,12 +38,16 @@ export class ChatModalComponent implements AfterViewInit {
   isLoading = signal(false);
   showThemeSelector = signal(false);
   showCharacterSelector = signal(false);
+  showPseudoModal = signal(false);
+  pseudoInput = signal('');
   
   currentTheme = this.themeService.currentTheme;
   themes = signal(this.themeService.getThemes());
   currentCharacter = this.characterService.currentCharacter;
   characters = signal(this.characterService.getCharacters());
   currentEmotion = this.emotionService.currentEmotion;
+  userPseudo = this.userService.userPseudo;
+  userService = this.userService; // Exposer le service pour le template
   
   // Génération d'étoiles pour le fond
   stars = signal<Array<{ x: number; y: number; size: number; delay: number }>>([]);
@@ -59,10 +65,15 @@ export class ChatModalComponent implements AfterViewInit {
 
     effect(() => {
       if (this.isOpen()) {
-        // Focus sur l'input quand la modal s'ouvre
-        setTimeout(() => {
-          this.inputField?.nativeElement?.focus();
-        }, 100);
+        // Vérifier si c'est la première visite
+        if (this.userService.isFirstVisit()) {
+          this.showPseudoModal.set(true);
+        } else {
+          // Focus sur l'input quand la modal s'ouvre
+          setTimeout(() => {
+            this.inputField?.nativeElement?.focus();
+          }, 100);
+        }
         // Scroll vers le bas
         this.scrollToBottom();
       }
@@ -242,6 +253,34 @@ export class ChatModalComponent implements AfterViewInit {
       '--emotion-message-bg': emotion.colors.messageBg,
       '--emotion-border': emotion.colors.border
     };
+  }
+
+  savePseudo() {
+    const pseudo = this.pseudoInput().trim();
+    if (pseudo && pseudo.length >= 2) {
+      this.userService.setPseudo(pseudo);
+      this.showPseudoModal.set(false);
+      this.pseudoInput.set('');
+      // Focus sur l'input après avoir défini le pseudo
+      setTimeout(() => {
+        this.inputField?.nativeElement?.focus();
+      }, 100);
+    }
+  }
+
+  skipPseudo() {
+    // Utiliser un pseudo par défaut
+    this.userService.setPseudo('Utilisateur');
+    this.showPseudoModal.set(false);
+    this.pseudoInput.set('');
+    setTimeout(() => {
+      this.inputField?.nativeElement?.focus();
+    }, 100);
+  }
+
+  editPseudo() {
+    this.pseudoInput.set(this.userPseudo());
+    this.showPseudoModal.set(true);
   }
 }
 
