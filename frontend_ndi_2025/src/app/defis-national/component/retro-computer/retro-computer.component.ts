@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./retro-computer.component.css']
 })
 export class RetroComputerComponent implements OnInit, OnDestroy {
+  @Input() isNear: boolean = false; // Reçoit l'état de proximité
+
   displayLines = signal<string[]>([]);
   
   private messages = [

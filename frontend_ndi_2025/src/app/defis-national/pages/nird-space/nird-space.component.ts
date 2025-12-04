@@ -6,7 +6,6 @@ import { BlackHoleComponent, BlackHole } from '../../component/black-hole/black-
 import { ArcadeCabinetComponent } from '../../component/arcade-cabinet/arcade-cabinet.component';
 import { InfoModalComponent } from '../../component/info-modal/info-modal.component';
 import { StarsBackgroundComponent } from '../../component/stars-background/stars-background.component';
-// Import du composant rétro
 import { RetroComputerComponent } from '../../component/retro-computer/retro-computer.component';
 
 @Component({
@@ -45,7 +44,21 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     x: 50, y: 50, size: 180, pullStrength: 5
   };
 
-  // --- PHYSIQUE ---
+  // --- CONFIGURATION RETRO COMPUTER ---
+  // Position fixe de l'ordinateur
+  computerPos = { x: 89, y: 18}; 
+  
+  // Calcul de proximité pour l'animation
+  isNearComputer = computed(() => {
+    if (!this.gameStarted()) return false;
+    const dist = Math.sqrt(
+      Math.pow(this.rocketX() - this.computerPos.x, 2) + 
+      Math.pow(this.rocketY() - this.computerPos.y, 2)
+    );
+    return dist < 12; // Rayon de détection
+  });
+
+  // --- PHYSIQUE TROU NOIR ---
   private rocketDistanceToBlackHole = computed(() => {
     if (!this.gameStarted()) return 100;
     const dx = this.rocketX() - this.blackHole.x;
@@ -70,7 +83,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   private animationFrame: number | null = null;
   private readonly speed = 0.8;
 
-  // --- PLANÈTES (Incluant l'IBM) ---
+  // --- PLANÈTES ---
   planets = signal<Planet[]>([
     {
       id: 'constat',
@@ -104,9 +117,6 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     },
   ]);
 
-  // Helper pour récupérer l'objet IBM dans le HTML
-  ibmPlanet = computed(() => this.planets().find(p => p.id === 'ibm'));
-
   visitedCount = computed(() => this.planets().filter((p: Planet) => p.visited).length);
   totalPlanets = computed(() => this.planets().length);
 
@@ -118,8 +128,12 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   onKeyDown(event: KeyboardEvent) {
     if (!this.gameStarted() || this.showModal()) return;
     this.keys.add(event.key.toLowerCase());
-    if (event.key === ' ' || event.key === 'Enter') this.checkPlanetCollision();
+    
+    if (event.key === ' ' || event.key === 'Enter') {
+        this.checkInteractions();
+    }
   }
+  
   @HostListener('window:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) { this.keys.delete(event.key.toLowerCase()); }
 
@@ -144,7 +158,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
       const dist = this.rocketDistanceToBlackHole();
       const vecX = this.blackHole.x - this.rocketX();
       const vecY = this.blackHole.y - this.rocketY();
-      const maxGravity = 0.7; // Gravité réduite pour sortir facilement
+      const maxGravity = 0.7; 
       const gravityStrength = (ratio * ratio) * maxGravity;
       
       dx += (vecX / dist) * gravityStrength;
@@ -165,11 +179,20 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private checkPlanetCollision() {
+  private checkInteractions() {
+    // 1. Check Planètes
     const rocket = { x: this.rocketX(), y: this.rocketY() };
     for (const planet of this.planets()) {
       const distance = Math.sqrt(Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2));
-      if (distance < 12) { this.openPlanetInfo(planet); break; }
+      if (distance < 12) { 
+          this.openPlanetInfo(planet); 
+          return; 
+      }
+    }
+    
+    // 2. Check Computer (Si tu veux ajouter une action plus tard)
+    if (this.isNearComputer()) {
+       // Action future...
     }
   }
 
@@ -182,6 +205,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
 
   closeModal() { this.showModal.set(false); this.currentPlanet.set(null); }
   onPlanetClick(planet: Planet) { if (this.gameStarted()) this.openPlanetInfo(planet); }
+  
   isNearPlanet(planet: Planet): boolean {
     const rocket = { x: this.rocketX(), y: this.rocketY() };
     return Math.sqrt(Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2)) < 12;
