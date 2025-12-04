@@ -1,1 +1,5 @@
 <router-outlet />
+
+<!-- Composants Chat Bruti -->
+<app-chat-button [isOpen]="isChatOpen()" (toggleChat)="toggleChat()" />
+<app-chat-modal [isOpen]="isChatOpen()" (closeModal)="closeChat()" />
