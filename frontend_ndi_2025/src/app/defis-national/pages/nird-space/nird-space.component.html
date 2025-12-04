@@ -38,6 +38,7 @@
         [x]="rocketX()"
         [y]="rocketY()"
         [rotation]="rocketRotation()"
+        [scale]="rocketScale()"
         [isFlying]="isFlying()"
       />
     }
@@ -67,7 +68,8 @@
   @if (gameStarted()) {
     <div class="bottom-bar">
       <div class="mission-brief">
-        <span class="pixel-text">🎯 MISSION : Explore les 5 planètes pour découvrir la démarche NIRD</span>
+        <span class="pixel-text">🎯 MISSION : Explore les 5 planètes pour découvrir la démarche NIRD<br>  Le trou noir vous transporte dans une autre dimension, pour découvrir d’autres éléments de ce monde <br> (vous pourrez en sortir tout en sécurité)</span>
+        
       </div>
     </div>
   }

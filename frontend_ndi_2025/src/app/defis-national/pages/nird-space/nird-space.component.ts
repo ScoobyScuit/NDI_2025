@@ -2,7 +2,6 @@ import { Component, signal, computed, HostListener, OnInit, OnDestroy } from '@a
 import { CommonModule } from '@angular/common';
 import { RocketComponent } from '../../component/rocket/rocket.component';
 import { PlanetComponent, Planet } from '../../component/planet/planet.component';
-// AJOUT : Import du composant et de l'interface trou noir
 import { BlackHoleComponent, BlackHole } from '../../component/black-hole/black-hole.component';
 import { ArcadeCabinetComponent } from '../../component/arcade-cabinet/arcade-cabinet.component';
 import { InfoModalComponent } from '../../component/info-modal/info-modal.component';
@@ -15,7 +14,6 @@ import { StarsBackgroundComponent } from '../../component/stars-background/stars
     CommonModule,
     RocketComponent,
     PlanetComponent,
-    // AJOUT : Ajout du composant aux imports autonomes
     BlackHoleComponent,
     ArcadeCabinetComponent,
     InfoModalComponent,
@@ -37,64 +35,57 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   gameStarted = signal(false);
   allVisited = signal(false);
 
-  // AJOUT : Définition du trou noir central
+  // --- CONFIGURATION DU TROU NOIR ---
   blackHole: BlackHole = {
-    id: 'central-singularity',
-    name: 'SINGULARITÉ NIRD',
-    x: 50,  // Centre horizontal (50%)
-    y: 50,  // Centre vertical (50%)
-    size: 180, // Taille imposante
-    pullStrength: 5 // Force de l'effet visuel
+    id: ' ',
+    name: ' ',
+    x: 50,
+    y: 50,
+    size: 180,
+    pullStrength: 5
   };
 
-  // --- NOUVEAU : CALCUL DE L'ACCÉLÉRATION ---
+  // --- PHYSIQUE ET CALCULS ---
 
-  // 1. Calcule la distance brute entre la fusée et le centre (Pythagore)
   private rocketDistanceToBlackHole = computed(() => {
-    if (!this.gameStarted()) return 100; // Loin si pas commencé
+    if (!this.gameStarted()) return 100;
     const dx = this.rocketX() - this.blackHole.x;
     const dy = this.rocketY() - this.blackHole.y;
     return Math.sqrt(dx * dx + dy * dy);
   });
 
-  // 2. Calcule le multiplicateur de vitesse (C'est le cœur de la nouvelle mécanique)
-  blackHoleSpeedMultiplier = computed(() => {
-    const distance = this.rocketDistanceToBlackHole();
+  private proximityRatio = computed(() => {
+    const dist = this.rocketDistanceToBlackHole();
     
-    const startEffectDistance = 35; // Distance (%) où l'accélération commence
-    const maxSpeedDistance = 5;     // Distance (%) où la vitesse est maximale (très près)
-    const maxMultiplier = 25;       // Vitesse maximale (25 fois la vitesse normale)
+    // Zone de danger courte (16%)
+    const startRadius = 16; 
+    const endRadius = 1;
+    
+    if (dist > startRadius) return 0;
+    if (dist < endRadius) return 1;
+    
+    return 1 - ((dist - endRadius) / (startRadius - endRadius));
+  });
 
-    // Si on est loin, vitesse normale (x1)
-    if (distance > startEffectDistance) return 1;
+  rocketScale = computed(() => {
+    const ratio = this.proximityRatio();
+    // La fusée rétrécit jusqu'à 5%
+    return 1 - (ratio * 0.95);
+  });
 
-    // Si on est très près, vitesse maximale
-    if (distance < maxSpeedDistance) return maxMultiplier;
-
-    // Sinon, on calcule une progression entre 1 et maxMultiplier.
-    const range = startEffectDistance - maxSpeedDistance;
-    const currentPosInRange = startEffectDistance - distance;
-    const normalizedProgress = currentPosInRange / range;
-
-    // On applique une courbe pour que l'accélération soit plus forte sur la fin
-    const curvedProgress = normalizedProgress * normalizedProgress;
-
-    return 1 + (curvedProgress * (maxMultiplier - 1));
+  blackHoleSpeedMultiplier = computed(() => {
+    const ratio = this.proximityRatio();
+    return 1 + (ratio * ratio * 40);
   });
   
-  // Determine si on est "proche" pour afficher l'ALERTE (visuel seulement)
-  isNearBlackHole = computed(() => {
-    // On utilise la même distance calculée plus haut
-    return this.rocketDistanceToBlackHole() < 25;
-  });
+  isNearBlackHole = computed(() => this.rocketDistanceToBlackHole() < 18);
   
-  // Movement
   private keys = new Set<string>();
   private animationFrame: number | null = null;
-  private readonly speed = 0.8;
+  private readonly speed = 0.8; // Puissance moteur
 
+  // --- CONTENU DES PLANÈTES ---
   planets = signal<Planet[]>([
-    // ... (J'ai gardé ta liste de planètes telle quelle)
     {
       id: 'constat',
       name: 'CONSTAT',
@@ -214,7 +205,6 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   onKeyDown(event: KeyboardEvent) {
     if (!this.gameStarted() || this.showModal()) return;
     this.keys.add(event.key.toLowerCase());
-    
     if (event.key === ' ' || event.key === 'Enter') {
       this.checkPlanetCollision();
     }
@@ -236,6 +226,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   }
 
   private updateRocketPosition() {
+    // 1. Inputs Joueur
     let dx = 0;
     let dy = 0;
 
@@ -244,21 +235,50 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     if (this.keys.has('arrowleft') || this.keys.has('q') || this.keys.has('a')) dx = -this.speed;
     if (this.keys.has('arrowright') || this.keys.has('d')) dx = this.speed;
 
+    // 2. Calcul Physique
+    const ratio = this.proximityRatio();
+    
+    if (ratio > 0) {
+      const dist = this.rocketDistanceToBlackHole();
+      const vecX = this.blackHole.x - this.rocketX();
+      const vecY = this.blackHole.y - this.rocketY();
+      
+      // MODIFICATION ICI : Baisse de la gravité
+      // 0.85 est juste un peu plus fort que les moteurs (0.80) au centre
+      // Ça permet de lutter et de sortir.
+      const maxGravity = 0.7; 
+      const gravityStrength = (ratio * ratio) * maxGravity;
+      
+      dx += (vecX / dist) * gravityStrength;
+      dy += (vecY / dist) * gravityStrength;
+
+      // Chaos de position (Tremblements)
+      const chaosIntensity = ratio * 3.0; 
+      dx += (Math.random() - 0.5) * chaosIntensity;
+      dy += (Math.random() - 0.5) * chaosIntensity;
+    }
+
+    // 3. Application
     if (dx !== 0 || dy !== 0) {
-      const newX = Math.max(5, Math.min(95, this.rocketX() + dx));
-      const newY = Math.max(5, Math.min(90, this.rocketY() + dy));
+      const newX = Math.max(2, Math.min(98, this.rocketX() + dx));
+      const newY = Math.max(2, Math.min(98, this.rocketY() + dy));
       this.rocketX.set(newX);
       this.rocketY.set(newY);
       
-      // Calculate rotation based on movement direction
-      const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+      let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+
+      // Chaos de Rotation
+      if (ratio > 0) {
+        const rotationChaos = (Math.random() - 0.5) * 360 * (ratio * ratio);
+        angle += rotationChaos;
+      }
+
       this.rocketRotation.set(angle);
     }
   }
 
   private checkPlanetCollision() {
     const rocket = { x: this.rocketX(), y: this.rocketY() };
-    
     for (const planet of this.planets()) {
       const distance = Math.sqrt(
         Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2)
@@ -275,12 +295,10 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     this.currentPlanet.set(planet);
     this.showModal.set(true);
     
-    // Mark as visited
     this.planets.update((planets: Planet[]) => 
       planets.map((p: Planet) => p.id === planet.id ? { ...p, visited: true } : p)
     );
     
-    // Check if all visited
     const allPlanetsVisited = this.planets().filter((p: Planet) => p.visited).length === this.totalPlanets();
     if (allPlanetsVisited) {
       this.allVisited.set(true);
@@ -305,5 +323,4 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     );
     return distance < 12;
   }
-  // L'ancienne méthode isNearBlackHole a été remplacée par le signal computed
 }
