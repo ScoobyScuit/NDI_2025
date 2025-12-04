@@ -5,6 +5,7 @@ import { AddressPuzzleFieldComponent } from '../../component/address-puzzle-fiel
 import { MissingLetterFieldComponent } from '../../component/missing-letter-field/missing-letter-field.component';
 import { ButtonPressureFieldComponent } from '../../component/button-pressure-field/button-pressure-field.component';
 import { ActionSequenceFieldComponent } from '../../component/action-sequence-field/action-sequence-field.component';
+import { MovingDragDropFieldComponent } from '../../component/moving-drag-drop-field/moving-drag-drop-field.component';
 
 /**
  * @brief Test page for ergonomie fields
@@ -12,7 +13,7 @@ import { ActionSequenceFieldComponent } from '../../component/action-sequence-fi
 @Component({
   selector: 'app-temporal-maze-test',
   standalone: true,
-  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent, MissingLetterFieldComponent, ButtonPressureFieldComponent, ActionSequenceFieldComponent],
+  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent, MissingLetterFieldComponent, ButtonPressureFieldComponent, ActionSequenceFieldComponent, MovingDragDropFieldComponent],
   template: `
     <div class="test-container">
       <h1>Défis Ergonomie</h1>
@@ -44,6 +45,12 @@ import { ActionSequenceFieldComponent } from '../../component/action-sequence-fi
       @if (selectedSequence) {
         <div class="result">
           <p>Séquence complétée : {{ selectedSequence }}</p>
+        </div>
+      }
+      <app-moving-drag-drop-field (dropCompleted)="onDropCompleted($event)" />
+      @if (selectedDrop) {
+        <div class="result">
+          <p>Bloc déposé : {{ selectedDrop }}</p>
         </div>
       }
     </div>
@@ -101,6 +108,7 @@ export class TemporalMazeTestComponent {
   selectedText: string | null = null;
   selectedPressure: number | null = null;
   selectedSequence: string | null = null;
+  selectedDrop: string | null = null;
 
   onDateSelected(date: Date): void {
     this.selectedDate = date;
@@ -125,6 +133,11 @@ export class TemporalMazeTestComponent {
   onSequenceCompleted(sequence: string): void {
     this.selectedSequence = sequence;
     console.log('Séquence complétée:', sequence);
+  }
+
+  onDropCompleted(blockText: string): void {
+    this.selectedDrop = blockText;
+    console.log('Bloc déposé:', blockText);
   }
 }
 
