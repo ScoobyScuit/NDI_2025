@@ -1,0 +1,58 @@
+<div class="button-pressure-field-container">
+  <h2 class="field-title">Pression Alternée</h2>
+  <div class="content-wrapper" [class.blurred]="!isStarted()">
+    <div class="header">
+      <div class="instruction-text">
+        <p>Maintenez le bouton appuyé pendant exactement <strong>{{ getFormattedTargetDuration() }}s</strong>.</p>
+        <p class="warning-text">⚠️ Relâcher trop tôt ou trop tard entraînera un reset !</p>
+      </div>
+    </div>
+
+    @if (isStarted()) {
+      <div class="button-area">
+        <button
+          class="pressure-button"
+          [class.pressing]="isPressing()"
+          (mousedown)="onButtonPress($event)"
+          (mouseup)="onButtonRelease($event)"
+          (mouseleave)="onButtonRelease($event)"
+          (touchstart)="onButtonPress($event)"
+          (touchend)="onButtonRelease($event)"
+          [disabled]="!isActive()"
+        >
+          @if (isPressing()) {
+            <div class="button-content">
+              <span class="button-text">Maintenez...</span>
+              <span class="button-timer">{{ getFormattedElapsedTime() }}s</span>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getProgress()"></div>
+              </div>
+            </div>
+          } @else {
+            <span class="button-text">Appuyez et maintenez</span>
+          }
+        </button>
+      </div>
+
+      @if (showMessage()) {
+        <div class="message-box" [class.error]="isActive()">
+          <p>{{ messageText() }}</p>
+        </div>
+      }
+
+      @if (!isActive()) {
+        <div class="validation-message">
+          <p>✅ Pression validée !</p>
+          <button class="reset-button" (click)="reset()">Réinitialiser</button>
+        </div>
+      }
+    }
+  </div>
+  
+  @if (!isStarted()) {
+    <div class="start-button-wrapper">
+      <button class="start-button" (click)="startField()">Commencer le champ</button>
+    </div>
+  }
+</div>
+

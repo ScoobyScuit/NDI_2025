@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DateMazeFieldComponent } from '../../component/date-maze-field/date-maze-field.component';
 import { AddressPuzzleFieldComponent } from '../../component/address-puzzle-field/address-puzzle-field.component';
+import { MissingLetterFieldComponent } from '../../component/missing-letter-field/missing-letter-field.component';
+import { ButtonPressureFieldComponent } from '../../component/button-pressure-field/button-pressure-field.component';
 
 /**
  * @brief Test page for ergonomie fields
@@ -9,7 +11,7 @@ import { AddressPuzzleFieldComponent } from '../../component/address-puzzle-fiel
 @Component({
   selector: 'app-temporal-maze-test',
   standalone: true,
-  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent],
+  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent, MissingLetterFieldComponent, ButtonPressureFieldComponent],
   template: `
     <div class="test-container">
       <h1>Défis Ergonomie</h1>
@@ -23,6 +25,18 @@ import { AddressPuzzleFieldComponent } from '../../component/address-puzzle-fiel
       @if (selectedAddress) {
         <div class="result">
           <p>Adresse sélectionnée : {{ selectedAddress }}</p>
+        </div>
+      }
+      <app-missing-letter-field (textSelected)="onTextSelected($event)" />
+      @if (selectedText) {
+        <div class="result">
+          <p>Texte sélectionné : {{ selectedText }}</p>
+        </div>
+      }
+      <app-button-pressure-field (pressureCompleted)="onPressureCompleted($event)" />
+      @if (selectedPressure) {
+        <div class="result">
+          <p>Pression validée : {{ selectedPressure.toFixed(1) }}s</p>
         </div>
       }
     </div>
@@ -77,6 +91,8 @@ import { AddressPuzzleFieldComponent } from '../../component/address-puzzle-fiel
 export class TemporalMazeTestComponent {
   selectedDate: Date | null = null;
   selectedAddress: string | null = null;
+  selectedText: string | null = null;
+  selectedPressure: number | null = null;
 
   onDateSelected(date: Date): void {
     this.selectedDate = date;
@@ -86,6 +102,16 @@ export class TemporalMazeTestComponent {
   onAddressSelected(address: string): void {
     this.selectedAddress = address;
     console.log('Adresse sélectionnée:', address);
+  }
+
+  onTextSelected(text: string): void {
+    this.selectedText = text;
+    console.log('Texte sélectionné:', text);
+  }
+
+  onPressureCompleted(duration: number): void {
+    this.selectedPressure = duration;
+    console.log('Pression validée:', duration);
   }
 }
 
