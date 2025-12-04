@@ -102,25 +102,6 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
       x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: '📋', 
       title: '📋 MÉTHODE', content: ['...'], visited: false 
     },
-    // NOUVEAU : L'ordinateur est ajouté ici comme une "planète" invisible logiciellement
-    {
-      id: 'ibm',
-      name: 'TERMINAL',
-      x: 88, // Position X (Haut Droite)
-      y: 12, // Position Y
-      size: 60, // Taille de la zone de clic
-      color: 'transparent',
-      glowColor: 'transparent',
-      icon: '💻',
-      title: '💻 TERMINAL CENTRAL',
-      content: [
-        'SYSTEME NIRD ONLINE',
-        'Accès aux archives validé.',
-        'La démarche Numérique Responsable est activée.',
-        'Merci de votre contribution, pilote.'
-      ],
-      visited: false
-    }
   ]);
 
   // Helper pour récupérer l'objet IBM dans le HTML

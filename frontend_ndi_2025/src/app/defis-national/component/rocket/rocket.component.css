@@ -1,6 +1,6 @@
 .rocket-container {
   position: absolute;
-  z-index: 50;
+  z-index: 95;
   transition: left 0.05s linear, top 0.05s linear;
 }
 

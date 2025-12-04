@@ -83,7 +83,6 @@
 @keyframes blink {
   50% { opacity: 0; }
 }
-
 /* --- DÉTAILS --- */
 .monitor-controls {
   margin-top: 8px;
