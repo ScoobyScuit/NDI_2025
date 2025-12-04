@@ -40,7 +40,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   // Configuration Trou Noir
   blackHole: BlackHole = {
     id: 'central-singularity',
-    name: 'SINGULARITÉ NIRD',
+    name: ' ',
     x: 50, y: 50, size: 180, pullStrength: 5
   };
 
@@ -89,31 +89,66 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
       id: 'constat',
       name: 'CONSTAT',
       x: 15, y: 20, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: '⚠️', 
-      title: '🔴 LE CONSTAT', content: ['...'], visited: false 
+      title: '🔴 LE CONSTAT', 
+      content: [
+        '💥 <strong>Le déclencheur :</strong> Fin du support Windows 10 en octobre 2025',
+        '🗑️ Des millions d\'ordinateurs fonctionnels rendus obsolètes',
+        '🌍 <strong>Problème écologique :</strong> Jeter du matériel qui marche = désastre environnemental',
+        '💸 <strong>Problème économique :</strong> Licences coûteuses + renouvellement forcé',
+        '🔒 <strong>Souveraineté :</strong> Données hors UE, écosystèmes fermés, dépendance totale'
+      ], 
+      visited: false 
     },
     {
       id: 'technique',
       name: 'TECHNIQUE',
       x: 75, y: 35, size: 100, color: '#4ecdc4', glowColor: '#00ffcc80', icon: '🐧', 
-      title: '🐧 TECHNIQUE', content: ['...'], visited: false 
+      title: '🐧 TECHNIQUE', content: [
+        '🔄 <strong>Remplacer Windows par Linux :</strong> système libre et gratuit',
+        '♻️ Linux fonctionne sur ordinateurs anciens = prolonger la vie des machines',
+        '📦 <strong>Logiciels Libres :</strong> LibreOffice, Firefox, GIMP...',
+        '🏛️ La Forge des Communs Numériques : ressources libres pour l\'éducation',
+        '🛡️ <strong>Résultat :</strong> Indépendance totale vis-à-vis des GAFAM'
+      ], 
+      visited: false 
     },
     {
       id: 'materiel',
       name: 'MATÉRIEL',
       x: 25, y: 55, size: 85, color: '#f9ca24', glowColor: '#ffcc0080', icon: '🔧', 
-      title: '🔧 MATÉRIEL', content: ['...'], visited: false 
+      title: '🔧 MATÉRIEL', content: [
+        '🚫 <strong>Ne pas jeter :</strong> Lutter contre l\'obsolescence programmée',
+        '📦 Récupérer les flottes d\'ordinateurs d\'entreprises',
+        '🔄 Remettre à neuf avec Linux pour les élèves',
+        '💰 Économies massives sur les budgets publics',
+        '🌱 <strong>Impact :</strong> Réduction drastique des déchets électroniques'
+      ], 
+      visited: false 
     },
     {
       id: 'pedagogique',
       name: 'PÉDAGOGIE',
       x: 70, y: 65, size: 95, color: '#a55eea', glowColor: '#9900ff80', icon: '👨‍🎓', 
-      title: '👨‍🎓 PÉDAGOGIE', content: ['...'], visited: false 
+      title: '👨‍🎓 PÉDAGOGIE', content: [
+        '🎓 <strong>Les élèves acteurs :</strong> Ils apprennent à reconditionner',
+        '💻 Installation de Linux par les élèves eux-mêmes',
+        '🤝 Formation entre pairs : élèves forment leurs camarades',
+        '🌟 Éco-délégués au cœur du dispositif',
+        '🚀 <strong>Transformation :</strong> De consommateur passif à acteur éclairé'
+      ], visited: false 
     },
     {
       id: 'methode',
       name: 'MÉTHODE',
       x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: '📋', 
-      title: '📋 MÉTHODE', content: ['...'], visited: false 
+      title: '📋 MÉTHODE', content: [
+        '🏁 <strong>Jalon 1 - MOBILISATION :</strong> Un enseignant volontaire lance la dynamique',
+        '🧪 <strong>Jalon 2 - EXPÉRIMENTATION :</strong> Linux sur quelques postes de test',
+        '✅ <strong>Jalon 3 - INTÉGRATION :</strong> Généralisation dans le projet d\'établissement',
+        '🏛️ Soutien officiel de la collectivité (mairie, région)',
+        '🎯 <strong>Objectif :</strong> Du "David contre Goliath" au "Village Résistant"'
+      ], 
+      visited: false 
     },
   ]);
 
