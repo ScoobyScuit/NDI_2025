@@ -1,6 +1,7 @@
-import { Component, input, output, signal, effect, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, input, output, signal, effect, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ChatBrutiService } from '../../services/chat-bruti.service';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -18,6 +19,8 @@ interface Message {
 export class ChatModalComponent implements AfterViewInit {
   @ViewChild('messagesContainer') messagesContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('inputField') inputField!: ElementRef<HTMLInputElement>;
+
+  private chatService = inject(ChatBrutiService);
 
   isOpen = input.required<boolean>();
   closeModal = output<void>();
@@ -44,7 +47,7 @@ export class ChatModalComponent implements AfterViewInit {
     if (this.messages().length === 0) {
       this.messages.set([{
         role: 'assistant',
-        content: 'Bonjour ! Je suis votre assistant. Comment puis-je vous aider ?',
+        content: 'Bonjour ! Je suis Bruti, votre assistant complètement à côté de la plaque mais hilarant ! Comment puis-je vous aider ?',
         timestamp: new Date()
       }]);
     }
@@ -64,17 +67,30 @@ export class ChatModalComponent implements AfterViewInit {
     this.userInput.set('');
     this.isLoading.set(true);
 
-    // Simuler une réponse (à remplacer par un appel API réel)
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: `Vous avez dit : "${message}". C'est une réponse simulée. Connectez-moi à votre API pour des réponses réelles !`,
-        timestamp: new Date()
-      };
-      this.messages.update(msgs => [...msgs, assistantMessage]);
-      this.isLoading.set(false);
-      this.scrollToBottom();
-    }, 1000);
+    // Appel à l'API backend
+    this.chatService.sendMessage(message).subscribe({
+      next: (response) => {
+        const assistantMessage: Message = {
+          role: 'assistant',
+          content: response.response,
+          timestamp: new Date(response.timestamp)
+        };
+        this.messages.update(msgs => [...msgs, assistantMessage]);
+        this.isLoading.set(false);
+        this.scrollToBottom();
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'envoi du message:', error);
+        const errorMessage: Message = {
+          role: 'assistant',
+          content: 'Oups ! Il semble y avoir un problème de connexion. Vérifiez que le backend est bien démarré et que l\'API est accessible.',
+          timestamp: new Date()
+        };
+        this.messages.update(msgs => [...msgs, errorMessage]);
+        this.isLoading.set(false);
+        this.scrollToBottom();
+      }
+    });
   }
 
   onKeyDown(event: KeyboardEvent) {
