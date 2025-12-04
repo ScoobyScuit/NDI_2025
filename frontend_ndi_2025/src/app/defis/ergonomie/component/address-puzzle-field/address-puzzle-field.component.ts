@@ -146,7 +146,7 @@ export class AddressPuzzleFieldComponent implements OnInit, OnDestroy {
       if (this.isActive()) {
         this.animateFragments();
       }
-    }, 2500 + Math.random() * 500); // 2.5-3 seconds
+    }, 1500 + Math.random() * 500); // 1.5-2 seconds (more frequent - increased difficulty)
   }
 
   /**

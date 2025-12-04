@@ -33,8 +33,8 @@ interface MazeCell {
 export class DateMazeFieldComponent implements OnInit, OnDestroy {
   @Output() dateSelected = new EventEmitter<Date>();
 
-  // Maze configuration
-  private readonly MAZE_SIZE = 6;
+  // Maze configuration (increased difficulty)
+  private readonly MAZE_SIZE = 8;
   
   // Current date being modified
   currentDate = signal(new Date());

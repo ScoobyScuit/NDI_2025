@@ -46,11 +46,13 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
   // Current target word
   private currentWord: string = '';
   
-  // Word with 2 missing letters (displayed to user)
+  // Word with 3-4 missing letters (displayed to user) - increased difficulty
   displayedWord = signal('');
   
-  // The 2 missing letters that user must find
-  private missingLetters: string[] = [];
+  // The 3-4 missing letters that user must find
+  missingLetters: string[] = [];
+  private readonly MIN_MISSING_LETTERS = 3;
+  private readonly MAX_MISSING_LETTERS = 4;
   
   // Input value (for the 2 missing letters)
   inputValue = signal('');
@@ -58,7 +60,7 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
   // Previous input value to detect new letters
   private previousValue = '';
   
-  // Counter for letters typed (to remove one every 2 letters)
+  // Counter for letters typed (to remove one every 1.5 letters - increased difficulty)
   private lettersTypedCount = 0;
   
   // Timeout for delayed letter removal
@@ -85,17 +87,17 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @brief Select a random word and create version with 2 missing letters
+   * @brief Select a random word and create version with 3-4 missing letters (increased difficulty)
    */
   private selectRandomWord(): void {
     // Ensure we only use words from the predefined list
     const randomIndex = Math.floor(Math.random() * this.WORDS.length);
     this.currentWord = this.WORDS[randomIndex];
     
-    // All words in the list have at least 7 letters, so we can always remove 2
-    // Get 2 different random positions
+    // Select 3-4 random positions to hide (increased difficulty)
+    const numMissing = Math.floor(Math.random() * (this.MAX_MISSING_LETTERS - this.MIN_MISSING_LETTERS + 1)) + this.MIN_MISSING_LETTERS;
     const positions: number[] = [];
-    while (positions.length < 2) {
+    while (positions.length < numMissing) {
       const pos = Math.floor(Math.random() * this.currentWord.length);
       if (!positions.includes(pos)) {
         positions.push(pos);
@@ -159,8 +161,8 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
         this.removalTimeout = null;
       }
       
-      // Every 2 letters typed, remove one letter after a delay
-      if (this.lettersTypedCount % 2 === 0 && value.length >= 2) {
+      // Every 1.5 letters typed (every 3 letters), remove one letter after a delay (increased difficulty)
+      if (this.lettersTypedCount % 3 === 0 && this.lettersTypedCount > 0 && value.length >= 2) {
         // Remove a random letter after a short delay to show the letters first
         this.removalTimeout = setTimeout(() => {
           if (this.isActive() && this.inputValue().length >= 2) {
@@ -248,11 +250,11 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @brief Check if the letters are correct (check if both missing letters are present)
+   * @brief Check if the letters are correct (check if all missing letters are present)
    */
   private checkCompletion(value: string): void {
-    if (value.length >= 2) {
-      // Check if both missing letters are present in the input
+    if (value.length >= this.missingLetters.length) {
+      // Check if all missing letters are present in the input
       const valueLetters = value.split('');
       const missingLettersCopy = [...this.missingLetters];
       
@@ -266,8 +268,8 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
         }
       }
       
-      if (foundCount === 2) {
-        // Both missing letters are present - validation successful
+      if (foundCount === this.missingLetters.length) {
+        // All missing letters are present - validation successful
         const completeWord = this.currentWord;
         this.textSelected.emit(completeWord);
         this.isActive.set(false);
@@ -283,19 +285,19 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
     
     const value = this.inputValue().trim().toUpperCase();
     
-    if (value.length < 2) {
-      this.messageText.set('Vous devez avoir au moins 2 lettres pour valider.');
+    if (value.length < this.missingLetters.length) {
+      this.messageText.set(`Vous devez avoir au moins ${this.missingLetters.length} lettres pour valider.`);
       this.showMessage.set(true);
       if (this.messageTimeout) clearTimeout(this.messageTimeout);
       this.messageTimeout = setTimeout(() => this.showMessage.set(false), 2000);
       return;
     }
     
-    // Check if the input contains the 2 missing letters (in any order, even with other letters)
+    // Check if the input contains all missing letters (in any order, even with other letters)
     const valueLetters = value.split('');
     const missingLettersCopy = [...this.missingLetters];
     
-    // Check if both missing letters are present in the input
+    // Check if all missing letters are present in the input
     let foundCount = 0;
     for (const missingLetter of missingLettersCopy) {
       const index = valueLetters.indexOf(missingLetter);
@@ -306,7 +308,7 @@ export class MissingLetterFieldComponent implements OnInit, OnDestroy {
       }
     }
     
-    if (foundCount === 2) {
+    if (foundCount === this.missingLetters.length) {
       // Both missing letters are present - validation successful
       const completeWord = this.currentWord;
       this.textSelected.emit(completeWord);

@@ -4,6 +4,7 @@ import { DateMazeFieldComponent } from '../../component/date-maze-field/date-maz
 import { AddressPuzzleFieldComponent } from '../../component/address-puzzle-field/address-puzzle-field.component';
 import { MissingLetterFieldComponent } from '../../component/missing-letter-field/missing-letter-field.component';
 import { ButtonPressureFieldComponent } from '../../component/button-pressure-field/button-pressure-field.component';
+import { ActionSequenceFieldComponent } from '../../component/action-sequence-field/action-sequence-field.component';
 
 /**
  * @brief Test page for ergonomie fields
@@ -11,7 +12,7 @@ import { ButtonPressureFieldComponent } from '../../component/button-pressure-fi
 @Component({
   selector: 'app-temporal-maze-test',
   standalone: true,
-  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent, MissingLetterFieldComponent, ButtonPressureFieldComponent],
+  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent, MissingLetterFieldComponent, ButtonPressureFieldComponent, ActionSequenceFieldComponent],
   template: `
     <div class="test-container">
       <h1>Défis Ergonomie</h1>
@@ -37,6 +38,12 @@ import { ButtonPressureFieldComponent } from '../../component/button-pressure-fi
       @if (selectedPressure) {
         <div class="result">
           <p>Pression validée : {{ selectedPressure.toFixed(1) }}s</p>
+        </div>
+      }
+      <app-action-sequence-field (sequenceCompleted)="onSequenceCompleted($event)" />
+      @if (selectedSequence) {
+        <div class="result">
+          <p>Séquence complétée : {{ selectedSequence }}</p>
         </div>
       }
     </div>
@@ -93,6 +100,7 @@ export class TemporalMazeTestComponent {
   selectedAddress: string | null = null;
   selectedText: string | null = null;
   selectedPressure: number | null = null;
+  selectedSequence: string | null = null;
 
   onDateSelected(date: Date): void {
     this.selectedDate = date;
@@ -112,6 +120,11 @@ export class TemporalMazeTestComponent {
   onPressureCompleted(duration: number): void {
     this.selectedPressure = duration;
     console.log('Pression validée:', duration);
+  }
+
+  onSequenceCompleted(sequence: string): void {
+    this.selectedSequence = sequence;
+    console.log('Séquence complétée:', sequence);
   }
 }
 

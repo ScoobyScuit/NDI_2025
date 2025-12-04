@@ -45,8 +45,8 @@ export class ButtonPressureFieldComponent implements OnInit, OnDestroy {
   // Message timeout
   private messageTimeout: ReturnType<typeof setTimeout> | null = null;
   
-  // Tolerance for exact match (in milliseconds)
-  private readonly TOLERANCE_MS = 100; // ±0.1 seconds
+  // Tolerance for exact match (in milliseconds) - reduced for increased difficulty
+  private readonly TOLERANCE_MS = 50; // ±0.05 seconds (more precise)
 
   ngOnInit() {
     this.generateRandomTargetDuration();
@@ -60,11 +60,11 @@ export class ButtonPressureFieldComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @brief Generate a random target duration between 2.0 and 5.0 seconds
+   * @brief Generate a random target duration between 3.0 and 6.0 seconds (increased difficulty)
    */
   private generateRandomTargetDuration(): void {
-    // Random between 2.0 and 5.0 seconds, with 1 decimal place
-    const duration = Math.round((Math.random() * 3 + 2) * 10) / 10;
+    // Random between 3.0 and 6.0 seconds, with 1 decimal place
+    const duration = Math.round((Math.random() * 3 + 3) * 10) / 10;
     this.targetDuration.set(duration);
   }
 

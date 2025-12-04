@@ -1,0 +1,144 @@
+<div class="action-sequence-field-container">
+  <h2 class="field-title">Séquence d'Actions</h2>
+  <div class="content-wrapper" [class.blurred]="!isStarted()">
+    <div class="header">
+      <div class="instruction-text">
+        <p>Suivez la séquence exacte d'actions indiquée ci-dessous.</p>
+        <p class="warning-text">⚠️ Toute erreur entraînera un reset complet !</p>
+      </div>
+    </div>
+
+    @if (isStarted()) {
+      <div class="sequence-area">
+        <!-- Step indicator -->
+        <div class="step-indicator">
+          <p class="current-step">Étape actuelle : <strong>{{ getCurrentStepName() }}</strong></p>
+        </div>
+
+        <!-- Step 0: Start button -->
+        @if (currentStep() === 0) {
+          <div class="step-content">
+            <button class="start-sequence-button" (click)="onStartButtonClick()" [disabled]="!isActive()">
+              Start
+            </button>
+          </div>
+        }
+
+        <!-- Step 1-2: Type 2 letters -->
+        @if (currentStep() === 1 || currentStep() === 2) {
+          <div class="step-content">
+            <div class="input-area">
+              <input
+                type="text"
+                class="sequence-input"
+                [ngModel]="inputValue()"
+                (ngModelChange)="onInputChange($event)"
+                placeholder="Tapez 2 lettres..."
+                [disabled]="!isActive()"
+                maxlength="2"
+              />
+            </div>
+            @if (currentStep() === 2) {
+              <div class="wait-indicator">
+                <p>⏳ Attente en cours...</p>
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="getWaitProgress()"></div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Step 3: Type 1 digit -->
+        @if (currentStep() === 3) {
+          <div class="step-content">
+            <div class="input-area">
+              <input
+                type="text"
+                class="sequence-input"
+                [ngModel]="inputValue()"
+                (ngModelChange)="onInputChange($event)"
+                placeholder="Tapez 1 chiffre..."
+                [disabled]="!isActive()"
+                maxlength="1"
+              />
+            </div>
+          </div>
+        }
+
+        <!-- Step 4: Arrow key sequence -->
+        @if (currentStep() === 4) {
+          <div class="step-content">
+            <div class="arrow-sequence-area">
+              <p class="arrow-instruction">⌨️ Appuyez sur la séquence de flèches</p>
+              <div class="arrow-display">
+                <p class="arrow-sequence-text">{{ getArrowSequenceDisplay() }}</p>
+              </div>
+              <div class="arrow-progress">
+                <p class="current-arrow-hint">Flèche actuelle : <strong>{{ getCurrentArrow() }}</strong></p>
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="getArrowProgress()"></div>
+                </div>
+                <p class="arrow-hint">Progression : {{ currentArrowIndex }} / {{ arrowSequence.length }}</p>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Step 5: Type remaining text -->
+        @if (currentStep() === 5) {
+          <div class="step-content">
+            <div class="input-area">
+              <input
+                type="text"
+                class="sequence-input"
+                [ngModel]="inputValue()"
+                (ngModelChange)="onInputChange($event)"
+                [placeholder]="'Tapez ' + getRemainingTextLength() + ' caractères...'"
+                [disabled]="!isActive()"
+                [maxlength]="getRemainingTextLength() + lettersTyped.length + digitTyped.length"
+              />
+            </div>
+            <div class="text-hint">
+              <p>Il reste {{ getRemainingTextLength() }} caractères à taper</p>
+            </div>
+          </div>
+        }
+
+        <!-- Steps list -->
+        <div class="steps-list">
+          @for (step of STEPS; track $index) {
+            <div class="step-item" [class.active]="currentStep() === $index" [class.completed]="currentStep() > $index">
+              <span class="step-number">{{ $index + 1 }}</span>
+              <span class="step-text">{{ step }}</span>
+              @if (currentStep() > $index) {
+                <span class="step-check">✓</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (showError()) {
+        <div class="error-message">
+          <p>❌ {{ errorMessage() }}</p>
+          <p class="error-hint">Le champ sera réinitialisé dans 3 secondes...</p>
+        </div>
+      }
+
+      @if (!isActive() && !showError()) {
+        <div class="validation-message">
+          <p>✅ Séquence complétée avec succès !</p>
+          <button class="reset-button" (click)="reset()">Réinitialiser</button>
+        </div>
+      }
+    }
+  </div>
+  
+  @if (!isStarted()) {
+    <div class="start-button-wrapper">
+      <button class="start-button" (click)="startField()">Commencer le champ</button>
+    </div>
+  }
+</div>
+

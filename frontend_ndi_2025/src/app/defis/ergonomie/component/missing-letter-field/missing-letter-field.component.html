@@ -3,7 +3,7 @@
   <div class="content-wrapper" [class.blurred]="!isStarted()">
     <div class="header">
       <div class="instruction-text">
-        <p>Trouvez les 2 lettres manquantes. Attention : toutes les 2 lettres tapées, une lettre sera effacée !</p>
+        <p>Trouvez les {{ missingLetters.length }} lettres manquantes. Attention : toutes les 1.5 lettres tapées, une lettre sera effacée !</p>
         @if (isStarted()) {
           <div class="word-display">
             <p class="word-label">Mot à compléter :</p>
