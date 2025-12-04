@@ -10,9 +10,7 @@ export class ChatBrutiController {
   async sendMessage(
     @Body() chatMessageDto: ChatMessageDto,
   ): Promise<ChatResponseDto> {
-    return await this.chatBrutiService.getChatResponse(
-      chatMessageDto.message,
-    );
+    return await this.chatBrutiService.getChatResponse(chatMessageDto.message);
   }
 
   @Get()

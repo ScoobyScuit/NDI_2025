@@ -18,7 +18,7 @@ let ChatBrutiService = class ChatBrutiService {
     get apiKey() {
         const key = process.env.OPENROUTER_API_KEY;
         if (!key) {
-            throw new Error('OPENROUTER_API_KEY n\'est pas définie dans les variables d\'environnement. Assurez-vous d\'avoir créé le fichier .env à la racine du backend.');
+            throw new Error("OPENROUTER_API_KEY n'est pas définie dans les variables d'environnement. Assurez-vous d'avoir créé le fichier .env à la racine du backend.");
         }
         return key;
     }
@@ -58,7 +58,7 @@ Exemple de ton : "Ah, des cadeaux ? Moi je pense que le meilleur cadeau, c'est u
                     Authorization: `Bearer ${this.apiKey}`,
                     'Content-Type': 'application/json',
                     'HTTP-Referer': 'https://nuit-info-2025.com',
-                    'X-Title': 'Chat Bruti - Nuit de l\'Info 2025',
+                    'X-Title': "Chat Bruti - Nuit de l'Info 2025",
                 },
             });
             const botResponse = response.data.choices[0]?.message?.content ||
@@ -69,7 +69,7 @@ Exemple de ton : "Ah, des cadeaux ? Moi je pense que le meilleur cadeau, c'est u
             };
         }
         catch (error) {
-            console.error('Erreur lors de la requête à l\'API OpenRouter:', error);
+            console.error("Erreur lors de la requête à l'API OpenRouter:", error);
             const fallbackResponses = [
                 "Oh là là, j'ai perdu mes clés... de l'API ! Mais bon, comme disait mon grand-père philosophe : 'Quand l'API ne répond pas, c'est qu'elle médite sur l'existence des requêtes HTTP.'",
                 "L'API a décidé de faire une pause philosophique. Moi aussi parfois je fais ça, surtout quand on me pose des questions trop sérieuses !",

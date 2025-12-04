@@ -1,6 +1,36 @@
 @if (isOpen()) {
   <div class="modal-overlay" (click)="close()" [style.background]="getThemeStyles()['--overlay']">
-    <div class="modal-container" (click)="$event.stopPropagation()" [ngStyle]="getThemeStyles()">
+    <!-- Fond animé rétro avec étoiles, étoiles filantes et lune -->
+    <div class="retro-background">
+      <!-- Lune -->
+      <div class="moon"></div>
+      
+      <!-- Étoiles -->
+      @for (star of stars(); track $index) {
+        <div 
+          class="star" 
+          [style.left.%]="star.x"
+          [style.top.%]="star.y"
+          [style.width.px]="star.size"
+          [style.height.px]="star.size"
+          [style.animation-delay.s]="star.delay">
+        </div>
+      }
+      
+      <!-- Étoiles filantes -->
+      <div class="shooting-star shooting-star-1"></div>
+      <div class="shooting-star shooting-star-2"></div>
+      <div class="shooting-star shooting-star-3"></div>
+    </div>
+    
+    <div 
+      class="modal-container" 
+      [class.theme-retro]="currentTheme().id === 'retro'"
+      [class.theme-cyberpunk]="currentTheme().id === 'cyberpunk'"
+      [class.theme-matrix]="currentTheme().id === 'matrix'"
+      [class]="'emotion-' + currentEmotion().type"
+      (click)="$event.stopPropagation()" 
+      [ngStyle]="getThemeStyles()">
       <!-- En-tête de la modal -->
       <div class="modal-header">
         <div class="header-content">
@@ -10,6 +40,10 @@
             <span class="dot dot-green"></span>
           </div>
           <h2 class="modal-title">Terminal Chat</h2>
+          <!-- Indicateur d'émotion -->
+          <div class="emotion-indicator" [class]="'emotion-' + currentEmotion().type">
+            <span class="emotion-icon" [title]="currentEmotion().description">{{ currentEmotion().icon }}</span>
+          </div>
         </div>
         <div class="header-actions">
           <button class="character-button" (click)="toggleCharacterSelector()" aria-label="Changer le personnage" title="Changer le personnage">
@@ -61,6 +95,15 @@
               <span class="theme-option-icon">{{ theme.icon }}</span>
               <span class="theme-option-name">{{ theme.name }}</span>
             </button>
+          }
+        </div>
+      }
+
+      <!-- Particules d'émotion -->
+      @if (currentEmotion().particles) {
+        <div class="emotion-particles">
+          @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+            <span class="particle" [style.animation-delay.s]="i * 0.2">{{ currentEmotion().particles }}</span>
           }
         </div>
       }

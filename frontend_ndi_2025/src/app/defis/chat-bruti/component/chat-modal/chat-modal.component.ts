@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatBrutiService } from '../../services/chat-bruti.service';
 import { ChatThemeService, ChatTheme } from '../../services/chat-theme.service';
 import { ChatCharacterService, ChatCharacter } from '../../services/chat-character.service';
+import { ChatEmotionService, Emotion } from '../../services/chat-emotion.service';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -25,6 +26,7 @@ export class ChatModalComponent implements AfterViewInit {
   private chatService = inject(ChatBrutiService);
   private themeService = inject(ChatThemeService);
   private characterService = inject(ChatCharacterService);
+  private emotionService = inject(ChatEmotionService);
 
   isOpen = input.required<boolean>();
   closeModal = output<void>();
@@ -39,8 +41,22 @@ export class ChatModalComponent implements AfterViewInit {
   themes = signal(this.themeService.getThemes());
   currentCharacter = this.characterService.currentCharacter;
   characters = signal(this.characterService.getCharacters());
+  currentEmotion = this.emotionService.currentEmotion;
+  
+  // Génération d'étoiles pour le fond
+  stars = signal<Array<{ x: number; y: number; size: number; delay: number }>>([]);
 
   constructor() {
+    // Générer les étoiles au démarrage
+    this.generateStars();
+    
+    // Changer d'émotion de manière aléatoire toutes les 10-15 secondes
+    setInterval(() => {
+      if (this.isOpen()) {
+        this.emotionService.randomEmotionChange();
+      }
+    }, 12000);
+
     effect(() => {
       if (this.isOpen()) {
         // Focus sur l'input quand la modal s'ouvre
@@ -51,6 +67,19 @@ export class ChatModalComponent implements AfterViewInit {
         this.scrollToBottom();
       }
     });
+  }
+
+  generateStars() {
+    const starsArray = [];
+    for (let i = 0; i < 100; i++) {
+      starsArray.push({
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 2 + 1,
+        delay: Math.random() * 3
+      });
+    }
+    this.stars.set(starsArray);
   }
 
   ngAfterViewInit() {
@@ -88,6 +117,10 @@ export class ChatModalComponent implements AfterViewInit {
     this.userInput.set('');
     this.isLoading.set(true);
 
+    // Détecter l'émotion du message utilisateur
+    const detectedEmotion = this.emotionService.detectEmotionFromMessage(message);
+    this.emotionService.setEmotion(detectedEmotion);
+
     // Appel à l'API backend avec le prompt système du personnage
     const character = this.currentCharacter();
     this.chatService.sendMessage(message, character.systemPrompt).subscribe({
@@ -99,6 +132,13 @@ export class ChatModalComponent implements AfterViewInit {
         };
         this.messages.update(msgs => [...msgs, assistantMessage]);
         this.isLoading.set(false);
+        
+        // Détecter l'émotion de la réponse de l'assistant
+        const responseEmotion = this.emotionService.detectEmotionFromMessage(response.response);
+        setTimeout(() => {
+          this.emotionService.setEmotion(responseEmotion);
+        }, 500);
+        
         this.scrollToBottom();
       },
       error: (error) => {
@@ -170,6 +210,7 @@ export class ChatModalComponent implements AfterViewInit {
 
   getThemeStyles(): { [key: string]: string } {
     const theme = this.currentTheme();
+    const emotion = this.currentEmotion();
     return {
       '--bg-color': theme.colors.background,
       '--surface-color': theme.colors.surface,
@@ -193,7 +234,13 @@ export class ChatModalComponent implements AfterViewInit {
       '--overlay': theme.colors.overlay,
       '--dot-red': theme.colors.dotRed,
       '--dot-yellow': theme.colors.dotYellow,
-      '--dot-green': theme.colors.dotGreen
+      '--dot-green': theme.colors.dotGreen,
+      // Couleurs d'émotion
+      '--emotion-primary': emotion.colors.primary,
+      '--emotion-secondary': emotion.colors.secondary,
+      '--emotion-glow': emotion.colors.glow,
+      '--emotion-message-bg': emotion.colors.messageBg,
+      '--emotion-border': emotion.colors.border
     };
   }
 }
