@@ -1,24 +1,12 @@
 import { Component, signal, computed, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RocketComponent } from '../../component/rocket/rocket.component';
-import { PlanetComponent } from '../../component/planet/planet.component';
+import { PlanetComponent, Planet } from '../../component/planet/planet.component';
+// AJOUT : Import du composant et de l'interface trou noir
+import { BlackHoleComponent, BlackHole } from '../../component/black-hole/black-hole.component';
 import { ArcadeCabinetComponent } from '../../component/arcade-cabinet/arcade-cabinet.component';
 import { InfoModalComponent } from '../../component/info-modal/info-modal.component';
 import { StarsBackgroundComponent } from '../../component/stars-background/stars-background.component';
-
-export interface Planet {
-  id: string;
-  name: string;
-  x: number;
-  y: number;
-  size: number;
-  color: string;
-  glowColor: string;
-  icon: string;
-  title: string;
-  content: string[];
-  visited: boolean;
-}
 
 @Component({
   selector: 'app-nird-space',
@@ -27,6 +15,8 @@ export interface Planet {
     CommonModule,
     RocketComponent,
     PlanetComponent,
+    // AJOUT : Ajout du composant aux imports autonomes
+    BlackHoleComponent,
     ArcadeCabinetComponent,
     InfoModalComponent,
     StarsBackgroundComponent
@@ -46,6 +36,57 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   showModal = signal(false);
   gameStarted = signal(false);
   allVisited = signal(false);
+
+  // AJOUT : Définition du trou noir central
+  blackHole: BlackHole = {
+    id: 'central-singularity',
+    name: 'SINGULARITÉ NIRD',
+    x: 50,  // Centre horizontal (50%)
+    y: 50,  // Centre vertical (50%)
+    size: 180, // Taille imposante
+    pullStrength: 5 // Force de l'effet visuel
+  };
+
+  // --- NOUVEAU : CALCUL DE L'ACCÉLÉRATION ---
+
+  // 1. Calcule la distance brute entre la fusée et le centre (Pythagore)
+  private rocketDistanceToBlackHole = computed(() => {
+    if (!this.gameStarted()) return 100; // Loin si pas commencé
+    const dx = this.rocketX() - this.blackHole.x;
+    const dy = this.rocketY() - this.blackHole.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  });
+
+  // 2. Calcule le multiplicateur de vitesse (C'est le cœur de la nouvelle mécanique)
+  blackHoleSpeedMultiplier = computed(() => {
+    const distance = this.rocketDistanceToBlackHole();
+    
+    const startEffectDistance = 35; // Distance (%) où l'accélération commence
+    const maxSpeedDistance = 5;     // Distance (%) où la vitesse est maximale (très près)
+    const maxMultiplier = 25;       // Vitesse maximale (25 fois la vitesse normale)
+
+    // Si on est loin, vitesse normale (x1)
+    if (distance > startEffectDistance) return 1;
+
+    // Si on est très près, vitesse maximale
+    if (distance < maxSpeedDistance) return maxMultiplier;
+
+    // Sinon, on calcule une progression entre 1 et maxMultiplier.
+    const range = startEffectDistance - maxSpeedDistance;
+    const currentPosInRange = startEffectDistance - distance;
+    const normalizedProgress = currentPosInRange / range;
+
+    // On applique une courbe pour que l'accélération soit plus forte sur la fin
+    const curvedProgress = normalizedProgress * normalizedProgress;
+
+    return 1 + (curvedProgress * (maxMultiplier - 1));
+  });
+  
+  // Determine si on est "proche" pour afficher l'ALERTE (visuel seulement)
+  isNearBlackHole = computed(() => {
+    // On utilise la même distance calculée plus haut
+    return this.rocketDistanceToBlackHole() < 25;
+  });
   
   // Movement
   private keys = new Set<string>();
@@ -53,6 +94,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   private readonly speed = 0.8;
 
   planets = signal<Planet[]>([
+    // ... (J'ai gardé ta liste de planètes telle quelle)
     {
       id: 'constat',
       name: 'CONSTAT',
@@ -263,5 +305,5 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     );
     return distance < 12;
   }
+  // L'ancienne méthode isNearBlackHole a été remplacée par le signal computed
 }
-

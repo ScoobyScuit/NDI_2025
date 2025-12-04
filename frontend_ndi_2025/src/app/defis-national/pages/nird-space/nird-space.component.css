@@ -72,6 +72,13 @@
 .nird:nth-child(2) { color: #4ecdc4; animation-delay: 0.5s; }
 .nird:nth-child(3) { color: #f9ca24; animation-delay: 1s; }
 .nird:nth-child(4) { color: #a55eea; animation-delay: 1.5s; }
+.nird:nth-child(5) { color: #f9ca24; animation-delay: 2s; }
+.nird:nth-child(6) { color: #a55eea; animation-delay: 2.5s; }
+.nird:nth-child(7) { color: #f9ca24; animation-delay: 3s; }
+.nird:nth-child(8) { color: #a55eea; animation-delay: 3.5s; }
+.nird:nth-child(9) { color: #f924f2; animation-delay: 4s; }
+.nird:nth-child(10) { color: #a55eea; animation-delay: 4.5s; }
+.nird:nth-child(11) { color: #24f939; animation-delay: 5s; }
 
 .subtitle {
   font-size: 10px;
@@ -208,4 +215,3 @@
   pointer-events: none;
   z-index: 999;
 }
-

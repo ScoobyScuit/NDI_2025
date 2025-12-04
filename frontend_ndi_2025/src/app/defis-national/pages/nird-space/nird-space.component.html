@@ -1,19 +1,13 @@
 <div class="game-container">
-  <!-- Stars Background -->
   <app-stars-background />
   
-  <!-- Header HUD -->
   <div class="hud">
     <div class="hud-left">
       <span class="score">🪐 {{ visitedCount() }}/{{ totalPlanets() }}</span>
     </div>
     <div class="hud-center">
       <h1 class="title">
-        <span class="nird">N</span>
-        <span class="nird">I</span>
-        <span class="nird">R</span>
-        <span class="nird">D</span>
-        <span class="subtitle">SPACE MISSION</span>
+        <span class="nird">P</span><span class="nird">R</span><span class="nird">O</span><span class="nird">J</span><span class="nird">E</span><span class="nird">T</span><span class="nird">-</span><span class="nird">N</span><span class="nird">I</span><span class="nird">R</span><span class="nird">D</span>
       </h1>
     </div>
     <div class="hud-right">
@@ -23,9 +17,14 @@
     </div>
   </div>
 
-  <!-- Game Area -->
   <div class="game-area">
-    <!-- Planets -->
+    
+    <app-black-hole
+      [blackHole]="blackHole"
+      [isNear]="isNearBlackHole()"
+      [speedMultiplier]="blackHoleSpeedMultiplier()"
+    />
+
     @for (planet of planets(); track planet.id) {
       <app-planet
         [planet]="planet"
@@ -34,7 +33,6 @@
       />
     }
     
-    <!-- Rocket -->
     @if (gameStarted()) {
       <app-rocket
         [x]="rocketX()"
@@ -45,12 +43,10 @@
     }
   </div>
 
-  <!-- Arcade Cabinet (Start Screen) -->
   @if (!gameStarted()) {
     <app-arcade-cabinet (startGame)="startGame()" />
   }
 
-  <!-- Victory Banner -->
   @if (allVisited()) {
     <div class="victory-banner">
       <div class="victory-content">
@@ -61,7 +57,6 @@
     </div>
   }
 
-  <!-- Info Modal -->
   @if (showModal() && currentPlanet()) {
     <app-info-modal
       [planet]="currentPlanet()!"
@@ -69,7 +64,6 @@
     />
   }
 
-  <!-- Bottom Controls -->
   @if (gameStarted()) {
     <div class="bottom-bar">
       <div class="mission-brief">
@@ -78,4 +72,3 @@
     </div>
   }
 </div>
-
