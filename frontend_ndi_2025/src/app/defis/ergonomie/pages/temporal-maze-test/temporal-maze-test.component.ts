@@ -56,6 +56,8 @@ import { MovingDragDropFieldComponent } from '../../component/moving-drag-drop-f
     </div>
   `,
   styles: [`
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    
     :host {
       display: block;
       position: fixed;
@@ -65,6 +67,59 @@ import { MovingDragDropFieldComponent } from '../../component/moving-drag-drop-f
       height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
+      font-family: 'Press Start 2P', monospace;
+      background: #0a0a1a;
+      background-image: 
+        radial-gradient(2px 2px at 20% 30%, #00ff88, transparent),
+        radial-gradient(2px 2px at 60% 70%, #4ecdc4, transparent),
+        radial-gradient(1px 1px at 50% 50%, #fff, transparent),
+        radial-gradient(1px 1px at 80% 10%, #a55eea, transparent),
+        radial-gradient(2px 2px at 90% 40%, #ff6b6b, transparent),
+        radial-gradient(1px 1px at 33% 60%, #f9ca24, transparent),
+        radial-gradient(1px 1px at 66% 20%, #00ff88, transparent);
+      background-size: 200% 200%, 200% 200%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 40%, 33% 60%, 66% 20%;
+      animation: starfield 20s linear infinite;
+      position: relative;
+    }
+    
+    :host::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 136, 0.03) 2px,
+        rgba(0, 255, 136, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    :host::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        rgba(0, 0, 0, 0.4) 100%
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    @keyframes starfield {
+      0% { background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 40%, 33% 60%, 66% 20%; }
+      100% { background-position: 100% 100%, 0% 0%, 50% 50%, 80% 10%, 90% 40%, 33% 60%, 66% 20%; }
     }
     
     .test-container {
@@ -72,33 +127,87 @@ import { MovingDragDropFieldComponent } from '../../component/moving-drag-drop-f
       max-width: 900px;
       margin: 0 auto;
       min-height: 100%;
+      position: relative;
+      z-index: 10;
     }
     
     h1 {
       text-align: center;
       margin-bottom: 3rem;
-      color: #fff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      font-size: 2.5rem;
+      color: #00ff88;
+      text-shadow: 
+        0 0 10px #00ff88,
+        0 0 20px #00ff88,
+        0 0 30px #00ff88,
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+      font-size: 2rem;
+      font-family: 'Press Start 2P', monospace;
+      letter-spacing: 4px;
+      animation: titleGlow 2s ease-in-out infinite alternate;
+      position: relative;
+      z-index: 10;
+    }
+    
+    @keyframes titleGlow {
+      0% {
+        text-shadow: 
+          0 0 10px #00ff88,
+          0 0 20px #00ff88,
+          0 0 30px #00ff88,
+          2px 2px 4px rgba(0, 0, 0, 0.8);
+      }
+      100% {
+        text-shadow: 
+          0 0 20px #00ff88,
+          0 0 30px #00ff88,
+          0 0 40px #00ff88,
+          0 0 50px #00ff88,
+          2px 2px 4px rgba(0, 0, 0, 0.8);
+      }
     }
     
     .result {
       margin: 1.5rem auto;
       padding: 1.5rem;
-      background: rgba(39, 174, 96, 0.2);
-      border: 2px solid rgba(39, 174, 96, 0.5);
-      border-radius: 8px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 2px solid #00ff88;
+      border-radius: 0;
       text-align: center;
       max-width: 800px;
       backdrop-filter: blur(10px);
+      box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.3),
+        inset 0 0 20px rgba(0, 255, 136, 0.1);
+      position: relative;
+      z-index: 10;
+      font-family: 'Press Start 2P', monospace;
+    }
+    
+    .result::before {
+      content: '>';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00ff88;
+      font-size: 1.5rem;
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
     }
     
     .result p {
       margin: 0;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #4ecdc4;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      font-size: 0.7rem;
+      font-weight: normal;
+      color: #00ff88;
+      text-shadow: 
+        0 0 5px #00ff88,
+        0 0 10px #00ff88;
+      line-height: 1.8;
     }
   `]
 })

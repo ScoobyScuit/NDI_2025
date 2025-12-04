@@ -135,8 +135,8 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @brief Generate a new maze with exits
-   * Maze layout changes based on wrong exits count
+   * @brief Generate a new maze using recursive backtracking algorithm
+   * Creates a proper maze with dead ends and complex paths
    */
   private generateMaze(): void {
     const size = this.MAZE_SIZE;
@@ -150,103 +150,157 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
       }
     }
     
-    // Get variation pattern based on wrong exits
-    const variation = this.wrongExitsCount() % 4;
+    // Use recursive backtracking to generate a proper maze
+    // Start from position (1,1)
+    this.carveMaze(maze, 1, 1, size);
     
-    // Pattern 0: Original simple path
-    if (variation === 0) {
-      maze[1][1] = { type: 'path', visited: false };
-      maze[1][2] = { type: 'path', visited: false };
-      maze[1][3] = { type: 'path', visited: false };
-      maze[1][4] = { type: 'path', visited: false };
-      maze[2][1] = { type: 'path', visited: false };
-      maze[2][4] = { type: 'path', visited: false };
-      maze[3][1] = { type: 'path', visited: false };
-      maze[3][2] = { type: 'path', visited: false };
-      maze[3][3] = { type: 'path', visited: false };
-      maze[3][4] = { type: 'path', visited: false };
-      maze[4][1] = { type: 'path', visited: false };
-      maze[4][4] = { type: 'path', visited: false };
-    }
-    // Pattern 1: More horizontal paths
-    else if (variation === 1) {
-      maze[1][1] = { type: 'path', visited: false };
-      maze[1][2] = { type: 'path', visited: false };
-      maze[1][3] = { type: 'path', visited: false };
-      maze[1][4] = { type: 'path', visited: false };
-      maze[2][1] = { type: 'path', visited: false };
-      maze[2][2] = { type: 'path', visited: false };
-      maze[2][3] = { type: 'path', visited: false };
-      maze[2][4] = { type: 'path', visited: false };
-      maze[3][2] = { type: 'path', visited: false };
-      maze[3][3] = { type: 'path', visited: false };
-      maze[4][1] = { type: 'path', visited: false };
-      maze[4][2] = { type: 'path', visited: false };
-      maze[4][3] = { type: 'path', visited: false };
-      maze[4][4] = { type: 'path', visited: false };
-    }
-    // Pattern 2: More vertical paths
-    else if (variation === 2) {
-      maze[1][1] = { type: 'path', visited: false };
-      maze[1][3] = { type: 'path', visited: false };
-      maze[1][4] = { type: 'path', visited: false };
-      maze[2][1] = { type: 'path', visited: false };
-      maze[2][2] = { type: 'path', visited: false };
-      maze[2][3] = { type: 'path', visited: false };
-      maze[2][4] = { type: 'path', visited: false };
-      maze[3][1] = { type: 'path', visited: false };
-      maze[3][2] = { type: 'path', visited: false };
-      maze[3][3] = { type: 'path', visited: false };
-      maze[3][4] = { type: 'path', visited: false };
-      maze[4][2] = { type: 'path', visited: false };
-      maze[4][3] = { type: 'path', visited: false };
-      maze[4][4] = { type: 'path', visited: false };
-    }
-    // Pattern 3: Complex zigzag
-    else {
-      maze[1][1] = { type: 'path', visited: false };
-      maze[1][2] = { type: 'path', visited: false };
-      maze[1][4] = { type: 'path', visited: false };
-      maze[2][1] = { type: 'path', visited: false };
-      maze[2][3] = { type: 'path', visited: false };
-      maze[2][4] = { type: 'path', visited: false };
-      maze[3][1] = { type: 'path', visited: false };
-      maze[3][2] = { type: 'path', visited: false };
-      maze[3][3] = { type: 'path', visited: false };
-      maze[3][4] = { type: 'path', visited: false };
-      maze[4][1] = { type: 'path', visited: false };
-      maze[4][3] = { type: 'path', visited: false };
-      maze[4][4] = { type: 'path', visited: false };
-    }
-    
-    // Place exits on edges with connections
-    // Left exit (day +1) - always accessible from row 2
+    // Place exits on edges
+    // Left exit (day +1) - row 2, column 0
     maze[2][0] = { type: 'exit-left', visited: false };
+    // Ensure connection to left exit
     if (maze[2][1].type === 'wall') {
       maze[2][1] = { type: 'path', visited: false };
     }
     
-    // Right exit (month +1) - always accessible from row 2
+    // Right exit (month +1) - row 2, last column
     maze[2][size - 1] = { type: 'exit-right', visited: false };
+    // Ensure connection to right exit
     if (maze[2][size - 2].type === 'wall') {
       maze[2][size - 2] = { type: 'path', visited: false };
     }
     
-    // Top exit (year +1) - always accessible from column 2
+    // Top exit (year +1) - row 0, column 2
     maze[0][2] = { type: 'exit-top', visited: false };
+    // Ensure connection to top exit
     if (maze[1][2].type === 'wall') {
       maze[1][2] = { type: 'path', visited: false };
     }
     
-    // Bottom exit (validation) - always accessible from column 3
+    // Bottom exit (validation) - last row, column 3
     maze[size - 1][3] = { type: 'exit-bottom', visited: false };
+    // Ensure connection to bottom exit
     if (maze[size - 2][3].type === 'wall') {
       maze[size - 2][3] = { type: 'path', visited: false };
     }
     
+    // Ensure starting position (1,1) is a path
+    maze[1][1] = { type: 'path', visited: false };
+    
+    // Verify and fix connectivity - ensure all exits are reachable
+    this.ensureConnectivity(maze, size);
+    
     this.maze.set(maze);
     this.playerX.set(1);
     this.playerY.set(1);
+  }
+
+  /**
+   * @brief Recursive backtracking algorithm to carve a maze
+   */
+  private carveMaze(maze: MazeCell[][], x: number, y: number, size: number): void {
+    maze[y][x] = { type: 'path', visited: false };
+    
+    // Directions: up, right, down, left
+    const directions = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+    
+    // Shuffle directions for randomness
+    for (let i = directions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [directions[i], directions[j]] = [directions[j], directions[i]];
+    }
+    
+    // Try each direction
+    for (const [dx, dy] of directions) {
+      const nx = x + dx * 2;
+      const ny = y + dy * 2;
+      
+      // Check if within bounds and not visited
+      if (nx >= 1 && nx < size - 1 && ny >= 1 && ny < size - 1 && maze[ny][nx].type === 'wall') {
+        // Carve the path
+        maze[y + dy][x + dx] = { type: 'path', visited: false };
+        // Recursively carve from new position
+        this.carveMaze(maze, nx, ny, size);
+      }
+    }
+  }
+
+  /**
+   * @brief Ensure all exits are reachable from the starting position
+   */
+  private ensureConnectivity(maze: MazeCell[][], size: number): void {
+    // Use BFS to check if all exits are reachable from start (1,1)
+    const visited: boolean[][] = [];
+    for (let y = 0; y < size; y++) {
+      visited[y] = new Array(size).fill(false);
+    }
+    
+    const queue: [number, number][] = [[1, 1]];
+    visited[1][1] = true;
+    
+    const exits: [number, number][] = [
+      [2, 0],        // Left exit (y, x)
+      [2, size - 1], // Right exit
+      [0, 2],        // Top exit
+      [size - 1, 3]  // Bottom exit
+    ];
+    
+    const reachableExits: boolean[] = [false, false, false, false];
+    
+    while (queue.length > 0) {
+      const [x, y] = queue.shift()!;
+      
+      // Check if we reached an exit
+      for (let i = 0; i < exits.length; i++) {
+        if (x === exits[i][1] && y === exits[i][0]) {
+          reachableExits[i] = true;
+        }
+      }
+      
+      // Explore neighbors
+      const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+      for (const [dx, dy] of directions) {
+        const nx = x + dx;
+        const ny = y + dy;
+        
+        if (nx >= 0 && nx < size && ny >= 0 && ny < size && !visited[ny][nx]) {
+          const cell = maze[ny][nx];
+          if (cell.type !== 'wall') {
+            visited[ny][nx] = true;
+            queue.push([nx, ny]);
+          }
+        }
+      }
+    }
+    
+    // If any exit is not reachable, create a minimal path to it
+    if (!reachableExits[0]) {
+      // Connect to left exit via row 2
+      maze[2][1] = { type: 'path', visited: false };
+      if (maze[2][0].type === 'wall') {
+        maze[2][0] = { type: 'exit-left', visited: false };
+      }
+    }
+    if (!reachableExits[1]) {
+      // Connect to right exit via row 2
+      maze[2][size - 2] = { type: 'path', visited: false };
+      if (maze[2][size - 1].type === 'wall') {
+        maze[2][size - 1] = { type: 'exit-right', visited: false };
+      }
+    }
+    if (!reachableExits[2]) {
+      // Connect to top exit via column 2
+      maze[1][2] = { type: 'path', visited: false };
+      if (maze[0][2].type === 'wall') {
+        maze[0][2] = { type: 'exit-top', visited: false };
+      }
+    }
+    if (!reachableExits[3]) {
+      // Connect to bottom exit via column 3
+      maze[size - 2][3] = { type: 'path', visited: false };
+      if (maze[size - 1][3].type === 'wall') {
+        maze[size - 1][3] = { type: 'exit-bottom', visited: false };
+      }
+    }
   }
 
   /**
