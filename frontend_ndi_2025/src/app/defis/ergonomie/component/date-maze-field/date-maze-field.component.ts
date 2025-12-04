@@ -50,9 +50,11 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
   maze = signal<MazeCell[][]>([]);
   
   // Game state
+  isStarted = signal(false);
   isActive = signal(false);
   wrongExitsCount = signal(0);
   showError = signal(false);
+  errorType = signal<'limit' | 'validation' | null>(null);
   
   // Computed date display
   formattedDate = computed(() => {
@@ -78,6 +80,16 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.generateRandomTargetDate();
     this.generateMaze();
+    // Don't activate until user clicks start button
+    this.isStarted.set(false);
+    this.isActive.set(false);
+  }
+  
+  /**
+   * @brief Start the field - called when user clicks start button
+   */
+  startField(): void {
+    this.isStarted.set(true);
     this.isActive.set(true);
   }
   
@@ -98,7 +110,7 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
   }
   
   /**
-   * @brief Check if current date exceeds target date and reset if needed
+   * @brief Check if current date exceeds target date and show error if needed
    */
   private checkDateLimit(): void {
     const target = this.targetDate();
@@ -110,8 +122,10 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
       const currentDate = new Date(current.getFullYear(), current.getMonth(), current.getDate());
       
       if (currentDate > targetDate) {
-        // Date exceeded, reset the field
-        this.reset();
+        // Date exceeded, show error message
+        this.errorType.set('limit');
+        this.showError.set(true);
+        this.isActive.set(false);
       }
     }
   }
@@ -240,7 +254,7 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
    */
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
-    if (!this.isActive()) return;
+    if (!this.isStarted() || !this.isActive()) return;
     
     let newX = this.playerX();
     let newY = this.playerY();
@@ -350,6 +364,7 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
         this.isActive.set(false);
       } else {
         // Wrong date - show error
+        this.errorType.set('validation');
         this.showError.set(true);
         this.isActive.set(false);
       }
@@ -361,6 +376,7 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
    */
   acknowledgeError(): void {
     this.showError.set(false);
+    this.errorType.set(null);
     this.reset();
   }
 
@@ -372,8 +388,10 @@ export class DateMazeFieldComponent implements OnInit, OnDestroy {
     this.wrongExitsCount.set(0);
     this.generateRandomTargetDate();
     this.generateMaze();
-    this.isActive.set(true);
+    this.isStarted.set(false);
+    this.isActive.set(false);
     this.showError.set(false);
+    this.errorType.set(null);
   }
 }
 

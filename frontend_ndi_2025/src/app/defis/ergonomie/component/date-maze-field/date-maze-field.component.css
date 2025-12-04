@@ -9,19 +9,78 @@
   max-width: 600px;
   margin: 0 auto;
   color: white;
+  position: relative;
+}
+
+.field-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: white;
+  letter-spacing: 2px;
+}
+
+.content-wrapper {
+  width: 100%;
+  transition: filter 0.3s ease;
+}
+
+.content-wrapper.blurred {
+  filter: blur(5px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.start-button-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  pointer-events: all;
+}
+
+.start-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  padding: 1.5rem 3rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.start-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.start-button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.8);
+  }
 }
 
 .header {
   width: 100%;
   text-align: center;
   margin-bottom: 1.5rem;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 0 0 1rem 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .date-display {
@@ -200,15 +259,30 @@
   text-align: center;
 }
 
+.error-message-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  pointer-events: all;
+}
+
 .error-message {
-  width: 100%;
+  width: 90%;
+  max-width: 500px;
   text-align: center;
-  background: rgba(231, 76, 60, 0.3);
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-top: 1rem;
-  border: 2px solid rgba(231, 76, 60, 0.5);
+  background: rgba(231, 76, 60, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 3px solid rgba(231, 76, 60, 0.8);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   animation: shake 0.5s ease-in-out;
+  backdrop-filter: blur(10px);
 }
 
 .error-title {
