@@ -22,7 +22,7 @@ let ChatBrutiController = class ChatBrutiController {
         this.chatBrutiService = chatBrutiService;
     }
     async sendMessage(chatMessageDto) {
-        return await this.chatBrutiService.getChatResponse(chatMessageDto.message, chatMessageDto.systemPrompt);
+        return await this.chatBrutiService.getChatResponse(chatMessageDto.message);
     }
     getInfo() {
         return {

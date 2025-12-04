@@ -12,7 +12,6 @@ export class ChatBrutiController {
   ): Promise<ChatResponseDto> {
     return await this.chatBrutiService.getChatResponse(
       chatMessageDto.message,
-      chatMessageDto.systemPrompt,
     );
   }
 

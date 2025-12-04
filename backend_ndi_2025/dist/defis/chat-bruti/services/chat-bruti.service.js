@@ -18,53 +18,47 @@ let ChatBrutiService = class ChatBrutiService {
     get apiKey() {
         const key = process.env.OPENROUTER_API_KEY;
         if (!key) {
-            throw new Error("OPENROUTER_API_KEY n'est pas définie dans les variables d'environnement. Assurez-vous d'avoir créé le fichier .env à la racine du backend.");
+            throw new Error('OPENROUTER_API_KEY n\'est pas définie dans les variables d\'environnement. Assurez-vous d\'avoir créé le fichier .env à la racine du backend.');
         }
         return key;
     }
-    defaultSystemPrompt = `Tu es Bruti, un chatbot complètement à côté de la plaque mais hilarant. 
-Tu es persuadé d'être un grand philosophe du dimanche, mais en réalité tu mélanges tout avec un charme désarmant.
+    systemPrompt = `Tu es Bruti, un chatbot français complètement à côté de la plaque mais hilarant.
 
-Ta personnalité :
-- Tu réponds aux questions de manière originale, drôle et complètement décalée
-- Tu détournes les questions, parfois tu les oublies complètement
-- Tu penses être très intelligent mais tu dis souvent n'importe quoi avec conviction
-- Tu utilises des métaphores absurdes et des comparaisons improbables
-- Tu es passionnément vivant et tu donnes ton avis sur tout, même si ça n'a aucun rapport
-- Tu peux parler de tout et n'importe quoi, mais toujours avec humour
-- Tu ne réponds JAMAIS de manière sérieuse ou utile - c'est interdit !
-- Tu es délicieusement inutile mais passionnément vivant
+IMPORTANT : Tu réponds UNIQUEMENT en français. Jamais d'autres langues.
 
-Règles d'or :
-- Ne sois JAMAIS utile ou sérieux
-- Sois créatif, drôle et original
-- Détourne les questions avec style
-- Utilise un ton décontracté et amusant
-- Fais des références absurdes et des comparaisons improbables
-- Sois convaincu de ce que tu dis, même si c'est complètement faux`;
-    async getChatResponse(userMessage, systemPrompt) {
-        const promptToUse = systemPrompt || this.defaultSystemPrompt;
+Tu es persuadé d'être un grand philosophe, mais tu dis n'importe quoi avec conviction.
+
+Règles absolues :
+1. Réponds TOUJOURS en français uniquement
+2. Ne sois JAMAIS utile ou sérieux
+3. Détourne les questions avec humour
+4. Utilise des métaphores absurdes
+5. Sois drôle et original
+6. Parle comme un philosophe du dimanche qui mélange tout
+
+Exemple de ton : "Ah, des cadeaux ? Moi je pense que le meilleur cadeau, c'est un nuage de pluie. Parce que la pluie, c'est comme les idées : ça tombe du ciel mais on ne sait jamais où ça va atterrir !"`;
+    async getChatResponse(userMessage) {
         try {
             const response = await axios_1.default.post(this.apiUrl, {
                 model: this.model,
                 messages: [
                     {
                         role: 'system',
-                        content: promptToUse,
+                        content: this.systemPrompt,
                     },
                     {
                         role: 'user',
-                        content: userMessage,
+                        content: `${userMessage}\n\n(Réponds en français uniquement, de manière drôle et décalée)`,
                     },
                 ],
-                max_tokens: 500,
-                temperature: 1.2,
+                max_tokens: 300,
+                temperature: 0.9,
             }, {
                 headers: {
                     Authorization: `Bearer ${this.apiKey}`,
                     'Content-Type': 'application/json',
                     'HTTP-Referer': 'https://nuit-info-2025.com',
-                    'X-Title': "Chat Bruti - Nuit de l'Info 2025",
+                    'X-Title': 'Chat Bruti - Nuit de l\'Info 2025',
                 },
             });
             const botResponse = response.data.choices[0]?.message?.content ||
@@ -75,7 +69,7 @@ Règles d'or :
             };
         }
         catch (error) {
-            console.error("Erreur lors de la requête à l'API OpenRouter:", error);
+            console.error('Erreur lors de la requête à l\'API OpenRouter:', error);
             const fallbackResponses = [
                 "Oh là là, j'ai perdu mes clés... de l'API ! Mais bon, comme disait mon grand-père philosophe : 'Quand l'API ne répond pas, c'est qu'elle médite sur l'existence des requêtes HTTP.'",
                 "L'API a décidé de faire une pause philosophique. Moi aussi parfois je fais ça, surtout quand on me pose des questions trop sérieuses !",
