@@ -1,0 +1,19 @@
+<div class="monitor-chassis">
+    <div class="monitor-bezel">
+      <div class="screen-surface">
+        <div class="crt-overlay"></div>
+        <div class="screen-content">
+          @for (line of displayLines(); track $index) {
+            <div class="terminal-line">> {{ line }}</div>
+          }
+          <div class="terminal-line blink-cursor">_</div>
+        </div>
+      </div>
+    </div>
+    <div class="monitor-controls">
+      <div class="btn power-btn"></div>
+      <div class="vents">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
