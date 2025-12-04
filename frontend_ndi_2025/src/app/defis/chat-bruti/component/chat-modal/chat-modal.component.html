@@ -1,0 +1,78 @@
+@if (isOpen()) {
+  <div class="modal-overlay" (click)="close()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <!-- En-tête de la modal -->
+      <div class="modal-header">
+        <div class="header-content">
+          <div class="terminal-indicator">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <h2 class="modal-title">Terminal Chat</h2>
+        </div>
+        <button class="close-button" (click)="close()" aria-label="Fermer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Zone de messages -->
+      <div class="messages-container" #messagesContainer>
+        @for (message of messages(); track $index) {
+          <div class="message" [class.user-message]="message.role === 'user'" [class.assistant-message]="message.role === 'assistant'">
+            <div class="message-header">
+              <span class="message-role">{{ message.role === 'user' ? '$' : 'assistant' }}</span>
+              <span class="message-time">{{ message.timestamp | date:'HH:mm:ss' }}</span>
+            </div>
+            <div class="message-content">{{ message.content }}</div>
+          </div>
+        }
+        @if (isLoading()) {
+          <div class="message assistant-message">
+            <div class="message-header">
+              <span class="message-role">assistant</span>
+            </div>
+            <div class="message-content">
+              <span class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Zone de saisie -->
+      <div class="input-container">
+        <div class="input-wrapper">
+          <span class="input-prompt">$</span>
+          <input
+            #inputField
+            type="text"
+            class="chat-input"
+            [ngModel]="userInput()"
+            (ngModelChange)="userInput.set($event)"
+            (keydown)="onKeyDown($event)"
+            placeholder="Tapez votre message..."
+            [disabled]="isLoading()"
+          />
+          <button 
+            class="send-button"
+            (click)="sendMessage()"
+            [disabled]="!userInput().trim() || isLoading()"
+            aria-label="Envoyer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
