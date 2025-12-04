@@ -1,0 +1,23 @@
+﻿Structure du backend (NestJS)
+
+Chaque défi possède son propre dossier dans src/defis/.
+À l’intérieur, on retrouve 4 éléments :
+
+1. Module (*.module.ts)
+
+Déclare le défi dans l’application.
+Obligatoire pour que NestJS le reconnaisse.
+
+2. Controller (controller/)
+
+Contient les routes HTTP (ex : GET, POST…).
+Il reçoit les requêtes et appelle le service.
+
+3. Service (services/)
+
+Contient la logique métier.
+C’est ici que le travail réel est effectué.
+
+4. Model (model/)
+
+Définit la structure des données du défi.
