@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, signal, WritableSignal, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Nécessaire si non dans un module existant
+import { PortalBurgerComponent } from '../../../defis-national/component/portal-burger/portal-burger.component';
 
 // Déclaration factice pour que TypeScript accepte les références à THREE
 declare const THREE: any;
@@ -37,7 +38,7 @@ interface PlayerState {
 @Component({
   selector: 'app-retro-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PortalBurgerComponent],
   templateUrl: './retro-visualizer.component.html',
   styleUrls: ['./retro-visualizer.component.css'],
   changeDetection: ChangeDetectionStrategy.Default,
