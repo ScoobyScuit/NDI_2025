@@ -1,4 +1,4 @@
-import { Component, signal, computed, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, computed, HostListener, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RocketComponent } from '../../component/rocket/rocket.component';
 import { PlanetComponent, Planet } from '../../component/planet/planet.component';
@@ -25,6 +25,9 @@ import { RetroComputerComponent } from '../../component/retro-computer/retro-com
   styleUrl: './nird-space.component.css'
 })
 export class NirdSpaceComponent implements OnInit, OnDestroy {
+  // Référence essentielle pour commander l'ordinateur
+  @ViewChild(RetroComputerComponent) retroComputer!: RetroComputerComponent;
+
   // Rocket position
   rocketX = signal(50);
   rocketY = signal(85);
@@ -88,7 +91,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'constat',
       name: 'CONSTAT',
-      x: 15, y: 20, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: '⚠️', 
+      x: 15, y: 20, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: ' ', 
       title: '🔴 LE CONSTAT', 
       content: [
         '💥 <strong>Le déclencheur :</strong> Fin du support Windows 10 en octobre 2025',
@@ -102,7 +105,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'technique',
       name: 'TECHNIQUE',
-      x: 75, y: 35, size: 100, color: '#4ecdc4', glowColor: '#00ffcc80', icon: '🐧', 
+      x: 75, y: 35, size: 100, color: '#4ecdc4', glowColor: '#00ffcc80', icon: ' ', 
       title: '🐧 TECHNIQUE', content: [
         '🔄 <strong>Remplacer Windows par Linux :</strong> système libre et gratuit',
         '♻️ Linux fonctionne sur ordinateurs anciens = prolonger la vie des machines',
@@ -115,7 +118,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'materiel',
       name: 'MATÉRIEL',
-      x: 25, y: 55, size: 85, color: '#f9ca24', glowColor: '#ffcc0080', icon: '🔧', 
+      x: 25, y: 55, size: 85, color: '#f9ca24', glowColor: '#ffcc0080', icon: ' ', 
       title: '🔧 MATÉRIEL', content: [
         '🚫 <strong>Ne pas jeter :</strong> Lutter contre l\'obsolescence programmée',
         '📦 Récupérer les flottes d\'ordinateurs d\'entreprises',
@@ -128,7 +131,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'pedagogique',
       name: 'PÉDAGOGIE',
-      x: 70, y: 65, size: 95, color: '#a55eea', glowColor: '#9900ff80', icon: '👨‍🎓', 
+      x: 70, y: 65, size: 95, color: '#a55eea', glowColor: '#9900ff80', icon: ' ', 
       title: '👨‍🎓 PÉDAGOGIE', content: [
         '🎓 <strong>Les élèves acteurs :</strong> Ils apprennent à reconditionner',
         '💻 Installation de Linux par les élèves eux-mêmes',
@@ -140,7 +143,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'methode',
       name: 'MÉTHODE',
-      x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: '📋', 
+      x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: ' ', 
       title: '📋 MÉTHODE', content: [
         '🏁 <strong>Jalon 1 - MOBILISATION :</strong> Un enseignant volontaire lance la dynamique',
         '🧪 <strong>Jalon 2 - EXPÉRIMENTATION :</strong> Linux sur quelques postes de test',
@@ -161,9 +164,15 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
+    // Si le chat est ouvert, on empêche tout mouvement, mais le composant Chat gère ses propres touches
+    if (this.retroComputer && this.retroComputer.isChatOpen()) return;
+    
+    // Si le jeu n'est pas lancé ou si une planète est ouverte
     if (!this.gameStarted() || this.showModal()) return;
+
     this.keys.add(event.key.toLowerCase());
     
+    // INTERACTION AVEC ESPACE OU ENTREE
     if (event.key === ' ' || event.key === 'Enter') {
         this.checkInteractions();
     }
@@ -174,7 +183,12 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
 
   private startGameLoop() {
     const gameLoop = () => {
-      if (this.gameStarted() && !this.showModal()) this.updateRocketPosition();
+      // Le jeu se fige visuellement (pas de mouvement) si le chat ou une modale est ouvert
+      const isChatOpen = this.retroComputer && this.retroComputer.isChatOpen();
+      
+      if (this.gameStarted() && !this.showModal() && !isChatOpen) {
+        this.updateRocketPosition();
+      }
       this.animationFrame = requestAnimationFrame(gameLoop);
     };
     gameLoop();
@@ -225,9 +239,12 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
       }
     }
     
-    // 2. Check Computer (Si tu veux ajouter une action plus tard)
+    // 2. Check Computer - Appel Manuel
+    // Si on est proche et qu'on appuie sur Espace, on ouvre le chat
     if (this.isNearComputer()) {
-       // Action future...
+       // On vide les touches pour ne pas que la fusée continue d'avancer "toute seule" en arrière plan
+       this.keys.clear();
+       this.retroComputer.openChat();
     }
   }
 

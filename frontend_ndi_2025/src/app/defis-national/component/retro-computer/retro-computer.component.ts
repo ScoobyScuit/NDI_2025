@@ -36,10 +36,7 @@ export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // Ouvrir le chat automatiquement quand la fusée entre en contact
-    if (changes['isNear'] && changes['isNear'].currentValue === true && !changes['isNear'].previousValue) {
-      this.openChat();
-    }
+    // RIEN ICI : On n'ouvre plus automatiquement
   }
 
   ngOnDestroy() {
