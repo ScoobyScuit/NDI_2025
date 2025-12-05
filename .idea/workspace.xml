@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1a29380f-d339-4e46-b025-3939cbd4cd75" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/frontend_ndi_2025/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend_ndi_2025/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend_ndi_2025/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend_ndi_2025/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend_ndi_2025/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend_ndi_2025/src/app/app.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend_ndi_2025/src/app/app.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend_ndi_2025/src/app/app.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend_ndi_2025/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend_ndi_2025/src/app/app.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend_ndi_2025/src/app/defis/visualisation-audio/component/sample" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend_ndi_2025/src/app/defis/visualisation-audio/pages/sample" beforeDir="false" />
-    </list>
+    <list default="true" id="1a29380f-d339-4e46-b025-3939cbd4cd75" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
