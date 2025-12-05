@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { config } from 'dotenv';
+import { resolve } from 'path';
 import { AppModule } from './app.module';
 
 // Charger les variables d'environnement depuis .env
-config();
+// Utiliser le chemin absolu depuis le répertoire de travail actuel
+config({ path: resolve(process.cwd(), '.env') });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -28,7 +28,7 @@ export class ChatModalComponent implements AfterViewInit {
   private themeService = inject(ChatThemeService);
   private characterService = inject(ChatCharacterService);
   private emotionService = inject(ChatEmotionService);
-  private userService = inject(ChatUserService);
+  userService = inject(ChatUserService);
 
   isOpen = input.required<boolean>();
   closeModal = output<void>();
@@ -47,7 +47,6 @@ export class ChatModalComponent implements AfterViewInit {
   characters = signal(this.characterService.getCharacters());
   currentEmotion = this.emotionService.currentEmotion;
   userPseudo = this.userService.userPseudo;
-  userService = this.userService; // Exposer le service pour le template
   
   // Génération d'étoiles pour le fond
   stars = signal<Array<{ x: number; y: number; size: number; delay: number }>>([]);
