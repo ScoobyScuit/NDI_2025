@@ -1,4 +1,4 @@
-<div class="retro-player" [class.playing]="isPlaying()">
+<div class="retro-player" [class.playing]="isPlaying()" [class.near]="isNear" (click)="onClick()">
   <!-- Vis aux coins -->
   <div class="screw tl"></div>
   <div class="screw tr"></div>
@@ -31,13 +31,13 @@
 
   <!-- Contrôles -->
   <div class="controls">
-    <button class="ctrl-btn prev" (click)="prevTrack()">
+    <button class="ctrl-btn prev" (click)="prevTrack(); $event.stopPropagation()">
       <span>⏮</span>
     </button>
-    <button class="ctrl-btn play" [class.playing]="isPlaying()" (click)="togglePlay()">
+    <button class="ctrl-btn play" [class.playing]="isPlaying()" (click)="togglePlay(); $event.stopPropagation()">
       <span>{{ isPlaying() ? '⏸' : '▶' }}</span>
     </button>
-    <button class="ctrl-btn next" (click)="nextTrack()">
+    <button class="ctrl-btn next" (click)="nextTrack(); $event.stopPropagation()">
       <span>⏭</span>
     </button>
   </div>
@@ -57,5 +57,9 @@
     <div class="led stereo" [class.on]="isPlaying()"></div>
     <div class="led bass" [class.on]="isPlaying()"></div>
   </div>
+
+  @if (isNear) {
+    <div class="interact-hint">"ESPACE" pour jouer de la musique</div>
+  }
 </div>
 

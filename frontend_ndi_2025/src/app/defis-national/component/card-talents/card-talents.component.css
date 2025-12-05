@@ -31,7 +31,7 @@
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: auto;
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .retro-card:hover {
@@ -82,6 +82,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 /* === HEADER === */
@@ -273,12 +275,12 @@
   pointer-events: none;
 }
 
-/* === HINT D'INTERACTION === */
+/* === HINT D'INTERACTION - côté gauche === */
 .interact-hint {
   position: absolute;
-  bottom: -50px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  right: calc(100% + 15px);
+  transform: translateY(-50%);
   
   background: rgba(0, 0, 0, 0.95);
   color: #F5D547;
@@ -294,23 +296,23 @@
   z-index: 200;
   pointer-events: none;
   
-  animation: float-hint 0.8s ease-in-out infinite alternate;
+  animation: float-hint-side 0.8s ease-in-out infinite alternate;
 }
 
 .interact-hint::before {
   content: '';
   position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid #F5D547;
+  top: 50%;
+  right: -8px;
+  transform: translateY(-50%);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #F5D547;
 }
 
-@keyframes float-hint {
-  from { transform: translateX(-50%) translateY(0); }
-  to { transform: translateX(-50%) translateY(-5px); }
+@keyframes float-hint-side {
+  from { transform: translateY(-50%) translateX(0); }
+  to { transform: translateY(-50%) translateX(-5px); }
 }
 
 /* === RESPONSIVE === */

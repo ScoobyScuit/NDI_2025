@@ -1,5 +1,6 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-retro-media-player',
@@ -10,12 +11,15 @@ import { CommonModule } from '@angular/common';
 })
 export class RetroMediaPlayerComponent {
   @Input() isNear: boolean = false;
+  @Output() mediaPlayerClick = new EventEmitter<void>();
 
   isPlaying = signal(false);
   currentTrack = signal(1);
   volume = signal(75);
 
   trackName = signal('SYNTHWAVE MIX');
+
+  constructor(private router: Router) {}
   
   togglePlay() {
     this.isPlaying.update(v => !v);
@@ -27,6 +31,15 @@ export class RetroMediaPlayerComponent {
 
   prevTrack() {
     this.currentTrack.update(t => t > 1 ? t - 1 : 12);
+  }
+
+  onClick() {
+    this.mediaPlayerClick.emit();
+    this.navigateToVisualizer();
+  }
+
+  navigateToVisualizer() {
+    this.router.navigate(['/retro-visualizer']);
   }
 }
 

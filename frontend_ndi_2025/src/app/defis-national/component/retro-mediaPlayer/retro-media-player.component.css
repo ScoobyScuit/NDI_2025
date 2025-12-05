@@ -353,3 +353,54 @@
   color: var(--primary);
 }
 
+/* Near state */
+.retro-player.near {
+  border-color: var(--primary);
+  box-shadow: 
+    inset 2px 2px 5px rgba(255,255,255,0.1),
+    inset -2px -2px 5px rgba(0,0,0,0.8),
+    0 0 80px var(--primary),
+    0 0 120px var(--primary-dim),
+    0 20px 40px rgba(0,0,0,0.9);
+}
+
+/* Hint d'interaction - sur le côté droit */
+.interact-hint {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 15px);
+  transform: translateY(-50%);
+  
+  background: rgba(0, 0, 0, 0.95);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  
+  box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+  z-index: 200;
+  pointer-events: none;
+  
+  animation: float-hint-side 0.8s ease-in-out infinite alternate;
+}
+
+.interact-hint::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  transform: translateY(-50%);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--primary);
+}
+
+@keyframes float-hint-side {
+  from { transform: translateY(-50%) translateX(0); }
+  to { transform: translateY(-50%) translateX(5px); }
+}
+

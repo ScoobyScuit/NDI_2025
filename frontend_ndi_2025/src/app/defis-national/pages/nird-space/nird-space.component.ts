@@ -35,6 +35,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   @ViewChild(RetroComputerComponent) retroComputer!: RetroComputerComponent;
   @ViewChild(CardTalentsComponent) cardTalents!: CardTalentsComponent;
   @ViewChild(RetroFormComponent) retroForm!: RetroFormComponent;
+  @ViewChild(RetroMediaPlayerComponent) retroMediaPlayer!: RetroMediaPlayerComponent;
 
   // Rocket position
   rocketX = signal(50);
@@ -312,6 +313,14 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     if (this.isNearRetroForm()) {
        this.keys.clear();
        this.retroForm.navigateToForm();
+       return;
+    }
+    
+    // 5. Check Retro Media Player - Navigation vers le visualizer
+    // Si on est proche et qu'on appuie sur Espace, on redirige vers /retro-visualizer
+    if (this.isNearMediaPlayer()) {
+       this.keys.clear();
+       this.retroMediaPlayer.navigateToVisualizer();
     }
   }
 
