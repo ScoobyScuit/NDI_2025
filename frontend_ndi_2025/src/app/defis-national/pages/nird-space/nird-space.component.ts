@@ -47,6 +47,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   showModal = signal(false);
   gameStarted = signal(false);
   allVisited = signal(false);
+  showVictoryBanner = signal(false);
 
   // Configuration Trou Noir
   blackHole: BlackHole = {
@@ -57,7 +58,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
 
   // --- CONFIGURATION RETRO COMPUTER ---
   // Position fixe de l'ordinateur
-  computerPos = { x: 89, y: 18}; 
+  computerPos = { x: 89, y: 20}; 
   
   // Calcul de proximité pour l'animation
   isNearComputer = computed(() => {
@@ -318,7 +319,14 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     this.currentPlanet.set(planet);
     this.showModal.set(true);
     this.planets.update(planets => planets.map(p => p.id === planet.id ? { ...p, visited: true } : p));
-    if (this.planets().filter(p => p.visited).length === this.totalPlanets()) this.allVisited.set(true);
+    if (this.planets().filter(p => p.visited).length === this.totalPlanets()) {
+      this.allVisited.set(true);
+      this.showVictoryBanner.set(true);
+    }
+  }
+
+  closeVictoryBanner() {
+    this.showVictoryBanner.set(false);
   }
 
   closeModal() { this.showModal.set(false); this.currentPlanet.set(null); }
