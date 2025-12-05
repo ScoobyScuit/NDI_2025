@@ -25,8 +25,8 @@ export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
     "SYSTEME NIRD v1.0",
     "CONNEXION...",
     "OK.",
-    "SCANNEURS ACTIFS",
-    "ATTENTE PILOTE..."
+    "CHAT BRUTI V2.0",
+    "EN ATTENTE..."
   ];
   
   private intervalId: any;
