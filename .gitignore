@@ -16,6 +16,10 @@
 **/.vscode
 **/note.txt
 
+# IDE and assets
+.idea/
+assets/
+
 #node_modules
 **/node_modules
 

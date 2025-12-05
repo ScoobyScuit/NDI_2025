@@ -1,0 +1,203 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          PROJET NIRD - ESPACE RÉTRO                         ║
+║                         Voyage Spatial Interactif 8-BIT                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+URL DU SITE : https://ndi2025-production.up.railway.app/nird
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DESCRIPTION DE L'EXPÉRIENCE INTERACTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le "NIRD Space" est une expérience interactive rétro-gaming en 8-bit qui plonge 
+les utilisateurs dans un univers spatial pixel art pour découvrir le projet NIRD 
+(Numérique Inclusif Reconditionné Durable).
+
+CONCEPT PRINCIPAL :
+═══════════════════════
+
+Vous pilotez une fusée spatiale dans un univers rétro parsemé de planètes,
+d'un trou noir mystérieux et d'objets interactifs. Votre mission : explorer 
+l'espace pour découvrir les 5 leviers du projet NIRD !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTRÔLES ET GAMEPLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DÉPLACEMENT :
+  ↑ ↓ ← →  Flèches directionnelles
+  Z Q S D  Clavier AZERTY
+  W A S D  Clavier QWERTY
+
+INTERACTION :
+  ESPACE   Interagir avec planètes et objets
+  ENTRÉE   Interagir (alternative)
+
+ATTENTION : Le trou noir central exerce une force gravitationnelle qui 
+    attire votre fusée ! Plus vous vous approchez, plus la force augmente.
+    La fusée rétrécit progressivement jusqu'à disparaître au centre.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LES 5 PLANÈTES À EXPLORER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Chaque planète révèle un aspect crucial du projet NIRD :
+
+PLANÈTE ROUGE (Haut-Gauche ~ 30%, 25%)
+   "LE CONSTAT" - La menace Big Tech
+   └─ Découvrez pourquoi l'obsolescence programmée de Windows 10 est un 
+      problème écologique, économique et de souveraineté.
+
+PLANÈTE CYAN (Haut-Droite ~ 75%, 35%)
+   "LEVIER TECHNIQUE" - Passer au Libre
+   └─ Comment Linux et les logiciels libres offrent une alternative complète 
+      et gratuite aux solutions propriétaires.
+
+PLANÈTE JAUNE (Gauche-Centre ~ 25%, 55%)
+   "LEVIER MATÉRIEL" - Reconditionnement
+   └─ Redonner vie aux ordinateurs "obsolètes" : économies massives et 
+      impact écologique positif.
+
+PLANÈTE VIOLETTE (Droite-Centre ~ 70%, 65%)
+   "LEVIER PÉDAGOGIQUE" - Élèves vers Élèves
+   └─ Les élèves deviennent acteurs : reconditionnement, formation, 
+      transmission de savoirs.
+
+PLANÈTE ROSE (Centre-Haut ~ 50%, 15%)
+   "LA MÉTHODE NIRD" - 3 Jalons
+   └─ Le plan d'action en 3 étapes pour déployer NIRD dans votre 
+      établissement scolaire.
+
+PROGRESSION : Un compteur "X/5" affiche le nombre de planètes visitées.
+VICTOIRE : Une fois les 5 planètes explorées, vous débloquez le statut de 
+              "Résistant NIRD" !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LE TROU NOIR - PORTAIL DIMENSIONNEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Au centre de l'écran (50%, 50%) se trouve un trou noir massif et tournoyant.
+
+PHYSIQUE RÉALISTE :
+  • Force gravitationnelle progressive (rayon d'influence : 16 unités)
+  • La fusée rétrécit et tourne de façon chaotique en s'approchant
+  • Effet de spaghettification visuel
+
+PORTAIL INTERACTIF :
+  Appuyez sur ESPACE près du trou noir pour ouvrir le "Menu Portail" qui 
+  vous transporte vers d'autres dimensions :
+  • Chat avec Bruti (IA assistant)
+  • Retour à l'espace NIRD
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OBJETS INTERACTIFS AUX 4 COINS DE L'UNIVERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ORDINATEUR RÉTRO (Haut-Droite ~ 89%, 20%)
+   └─ Ouvrez un chat interactif avec Bruti, l'assistant IA du projet NIRD
+   └─ Animation de proximité : l'écran s'illumine quand vous approchez
+   └─ Rayon de détection : 8 unités
+
+MEDIA PLAYER RÉTRO (Bas-Gauche ~ 8%, 78%)
+   └─ Accédez au visualiseur audio et explorez les médias du projet
+   └─ Design inspiré des lecteurs Winamp des années 90
+   └─ Rayon de détection : 12 unités
+
+CARTE DES TALENTS (Bas-Droite ~ 90%, 80%)
+   └─ Découvrez l'équipe et les contributeurs du projet NIRD
+   └─ Navigation vers la page dédiée des talents
+   └─ Rayon de détection : 12 unités
+
+FORMULAIRE RÉTRO (Haut-Gauche ~ 10%, 20%)
+   └─ Accédez au formulaire de contact ou de participation
+   └─ Interface retro-futuriste
+   └─ Rayon de détection : 12 unités
+
+ASTUCE : Tous ces objets s'illuminent et s'animent quand vous en approchez !
+           Cherchez les indicateurs visuels pour ne rien manquer.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AMBIANCE VISUELLE RÉTRO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STYLE PIXEL ART 8-BIT :
+  • Étoiles scintillantes générées aléatoirement (200 étoiles fixes)
+  • Étoiles filantes traversant l'écran périodiquement
+  • Nébuleuses colorées en arrière-plan
+  • Grille rétro overlay pour l'effet "écran cathodique"
+  • Palette de couleurs vibrantes style années 80-90
+  • Animations fluides à 60 FPS
+
+EFFETS SPÉCIAUX :
+  • Glow sur les planètes (halo lumineux coloré)
+  • Rotation et pulsation du trou noir
+  • Traînée lumineuse de la fusée
+  • Distorsion spatiale près du trou noir
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OBJECTIFS PÉDAGOGIQUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cette expérience gamifiée vise à :
+
+SENSIBILISER de manière ludique aux enjeux du numérique responsable
+ÉDUQUER sur l'obsolescence programmée et ses impacts
+PRÉSENTER les solutions concrètes (Linux, reconditionnement)
+MOBILISER la communauté éducative autour du projet NIRD
+RENDRE ACCESSIBLE des concepts techniques complexes via le jeu
+
+Le format rétro-gaming est choisi volontairement pour :
+  • Créer un lien émotionnel avec les joueurs (nostalgie)
+  • Démontrer qu'on peut faire mieux avec moins (parallèle avec NIRD)
+  • Offrir une expérience légère et accessible (fonctionne sur vieux PC !)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ASPECTS TECHNIQUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TECHNOLOGIE : Angular 18+ avec Signals pour la réactivité
+PERFORMANCE : Game loop optimisé avec requestAnimationFrame
+RESPONSIVE : S'adapte à toutes les tailles d'écran
+ACCESSIBILITÉ : Contrôles clavier multiples (AZERTY/QWERTY)
+ARCHITECTURE : Composants Angular standalone et modulaires
+
+CODE ORGANISATION :
+  • nird-space.component.ts : Logique principale et orchestration
+  • rocket.component.ts : Rendu et animation de la fusée
+  • planet.component.ts : Gestion des planètes interactives
+  • black-hole.component.ts : Physique et visuel du trou noir
+  • stars-background.component.ts : Génération de l'espace étoilé
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUCTIONS D'UTILISATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Accédez à l'URL : https://ndi2025-production.up.railway.app/nird
+
+2. Cliquez sur la borne d'arcade pour lancer le jeu
+
+3. Utilisez les flèches ou ZQSD pour piloter votre fusée
+
+4. Explorez les 5 planètes en vous approchant et en appuyant sur ESPACE
+
+5. Tentez de vous approcher du trou noir pour accéder au portail
+
+6. Visitez les 4 objets interactifs positionnés aux coins de l'univers
+
+7. Complétez la mission en visitant toutes les planètes !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MESSAGE FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Comme ce jeu rétro qui fonctionne sur n'importe quelle machine, le projet NIRD 
+prouve qu'on peut faire mieux avec moins. Redonnons vie à nos ordinateurs, 
+libérons-nous des géants du numérique, et construisons ensemble un avenir 
+numérique inclusif, reconditionné et durable !"
+
+                            Bon voyage spatial !
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    Projet NIRD - Nuit de l'Info 2025                        ║
+║                    https://ndi2025-production.up.railway.app                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
