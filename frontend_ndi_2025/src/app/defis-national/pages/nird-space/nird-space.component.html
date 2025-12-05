@@ -7,6 +7,13 @@
     [isNear]="isNearComputer()"
     [class.near]="isNearComputer()"
   />
+
+  <app-retro-media-player
+    [style.left.%]="mediaPlayerPos.x"
+    [style.top.%]="mediaPlayerPos.y"
+    [isNear]="isNearMediaPlayer()"
+    [class.near]="isNearMediaPlayer()"
+  />
   
   <div class="hud">
     <div class="hud-left">

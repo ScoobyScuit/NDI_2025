@@ -1,0 +1,483 @@
+<div class="talent-form">
+  <!-- PROGRESS BAR -->
+  <div class="form-progress">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="(currentStep / totalSteps) * 100"></div>
+    </div>
+    <div class="progress-steps">
+      <button 
+        type="button"
+        class="step-dot" 
+        [class.active]="currentStep >= 1"
+        [class.current]="currentStep === 1"
+        (click)="goToStep(1)"
+        title="Informations générales">
+        👤
+      </button>
+      <button 
+        type="button"
+        class="step-dot" 
+        [class.active]="currentStep >= 2"
+        [class.current]="currentStep === 2"
+        (click)="goToStep(2)"
+        title="Description du talent">
+        🎯
+      </button>
+      <button 
+        type="button"
+        class="step-dot" 
+        [class.active]="currentStep >= 3"
+        [class.current]="currentStep === 3"
+        (click)="goToStep(3)"
+        title="Compétences & Stats">
+        📊
+      </button>
+      <button 
+        type="button"
+        class="step-dot" 
+        [class.active]="currentStep >= 4"
+        [class.current]="currentStep === 4"
+        (click)="goToStep(4)"
+        title="Limites & Faiblesses">
+        ⚠️
+      </button>
+      <button 
+        type="button"
+        class="step-dot" 
+        [class.active]="currentStep >= 5"
+        [class.current]="currentStep === 5"
+        (click)="goToStep(5)"
+        title="Historique & Style">
+        📖
+      </button>
+      <button 
+        type="button"
+        class="step-dot" 
+        [class.active]="currentStep >= 6"
+        [class.current]="currentStep === 6"
+        (click)="goToStep(6)"
+        title="Finalisation">
+        🚀
+      </button>
+    </div>
+    <p class="progress-label">Étape {{ currentStep }} sur {{ totalSteps }}</p>
+  </div>
+
+  <form #talentForm="ngForm" (ngSubmit)="onSubmit()">
+    
+    <!-- STEP 1: Infos Générales -->
+    <section class="form-step" *ngIf="currentStep === 1">
+      <h2 class="step-title">👤 Informations Générales</h2>
+      <p class="step-desc">Les bases de votre profil talent</p>
+
+      <div class="form-grid">
+        <div class="form-group form-group--full">
+          <label>Nom complet <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.nom" 
+            name="nom" 
+            placeholder="Ex: Alexandra Martin" 
+            required
+            minlength="2"
+            #nomInput="ngModel">
+          <span class="error-msg" *ngIf="nomInput.invalid && nomInput.touched">
+            Le nom est obligatoire (min. 2 caractères)
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Âge</label>
+          <input type="number" [(ngModel)]="form.age" name="age" placeholder="Ex: 24" min="13" max="120">
+        </div>
+
+        <div class="form-group">
+          <label>Genre</label>
+          <select [(ngModel)]="form.genre" name="genre">
+            <option value="non-specifie">Non spécifié</option>
+            <option value="femme">Femme</option>
+            <option value="homme">Homme</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Origine</label>
+          <input type="text" [(ngModel)]="form.origine" name="origine" placeholder="Ex: Bretagne">
+        </div>
+
+        <div class="form-group">
+          <label>Nationalité</label>
+          <input type="text" [(ngModel)]="form.nationalite" name="nationalite" placeholder="Ex: Française">
+        </div>
+
+        <div class="form-group">
+          <label>Ville <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.ville" 
+            name="ville" 
+            placeholder="Ex: Lyon"
+            required
+            #villeInput="ngModel">
+          <span class="error-msg" *ngIf="villeInput.invalid && villeInput.touched">
+            La ville est obligatoire
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Promo / Formation <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.promo" 
+            name="promo" 
+            placeholder="Ex: CESI 2025"
+            required
+            #promoInput="ngModel">
+          <span class="error-msg" *ngIf="promoInput.invalid && promoInput.touched">
+            La promo est obligatoire
+          </span>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Email <span class="required">*</span></label>
+          <input 
+            type="email" 
+            [(ngModel)]="form.email" 
+            name="email" 
+            placeholder="email@example.com"
+            required
+            email
+            #emailInput="ngModel">
+          <span class="error-msg" *ngIf="emailInput.invalid && emailInput.touched">
+            Email invalide ou manquant
+          </span>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Couleur de l'avatar</label>
+          <div class="color-picker">
+            <button 
+              *ngFor="let color of avatarColors" 
+              type="button"
+              class="color-btn"
+              [style.background]="color"
+              [class.selected]="selectedColor === color"
+              (click)="selectColor(color)">
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: Description du Talent -->
+    <section class="form-step" *ngIf="currentStep === 2">
+      <h2 class="step-title">🎯 Description du Talent</h2>
+      <p class="step-desc">Décrivez votre talent principal</p>
+
+      <div class="form-grid">
+        <div class="form-group form-group--full">
+          <label>Titre du talent / Rôle <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.role" 
+            name="role" 
+            placeholder="Ex: Développeur Fullstack" 
+            required
+            minlength="3"
+            #roleInput="ngModel">
+          <span class="error-msg" *ngIf="roleInput.invalid && roleInput.touched">
+            Le rôle est obligatoire (min. 3 caractères)
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Niveau de maîtrise <span class="required">*</span></label>
+          <select [(ngModel)]="form.niveau" name="niveau" required>
+            <option *ngFor="let n of niveaux" [value]="n">{{ n }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Catégorie <span class="required">*</span></label>
+          <select [(ngModel)]="form.categorie" name="categorie" required>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Bio / Description <span class="required">*</span></label>
+          <textarea 
+            [(ngModel)]="form.bio" 
+            name="bio" 
+            rows="4" 
+            placeholder="Décrivez votre talent en quelques phrases..."
+            required
+            minlength="20"
+            #bioInput="ngModel"></textarea>
+          <span class="error-msg" *ngIf="bioInput.invalid && bioInput.touched">
+            Une description est requise (min. 20 caractères)
+          </span>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Spécificités / Sous-talents (séparés par des virgules)</label>
+          <input type="text" [(ngModel)]="form.specificites" name="specificites" placeholder="Ex: Design Thinking, Prototypage, User Research">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Domaines d'application (séparés par des virgules)</label>
+          <input type="text" [(ngModel)]="form.domainesApplication" name="domainesApplication" placeholder="Ex: Startups, ESN, Associations">
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3: Compétences & Stats -->
+    <section class="form-step" *ngIf="currentStep === 3">
+      <h2 class="step-title">📊 Compétences & Statistiques</h2>
+      <p class="step-desc">Vos skills et leurs niveaux</p>
+
+      <div class="form-grid">
+        <div class="form-group form-group--full">
+          <label>Compétences principales (séparées par des virgules) <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.competences" 
+            name="competences" 
+            placeholder="Ex: Angular, Node.js, UX Design, Figma" 
+            required
+            #compInput="ngModel">
+          <span class="error-msg" *ngIf="compInput.invalid && compInput.touched">
+            Au moins une compétence est requise
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Stat principale - Nom <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.statPrincipalNom" 
+            name="statPrincipalNom" 
+            placeholder="Ex: Créativité"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label>Stat principale - Valeur (0-100)</label>
+          <input type="range" [(ngModel)]="form.statPrincipalValeur" name="statPrincipalValeur" min="0" max="100">
+          <span class="range-value">{{ form.statPrincipalValeur }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>Stat secondaire 1</label>
+          <input type="text" [(ngModel)]="form.statSecondaire1Nom" name="statSecondaire1Nom" placeholder="Ex: Logique">
+        </div>
+
+        <div class="form-group">
+          <label>Valeur (0-100)</label>
+          <input type="range" [(ngModel)]="form.statSecondaire1Valeur" name="statSecondaire1Valeur" min="0" max="100">
+          <span class="range-value">{{ form.statSecondaire1Valeur }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>Impact global</label>
+          <select [(ngModel)]="form.impact" name="impact">
+            <option *ngFor="let i of impacts" [value]="i">{{ i }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Taux de réussite (%)</label>
+          <input type="range" [(ngModel)]="form.tauxReussite" name="tauxReussite" min="0" max="100">
+          <span class="range-value">{{ form.tauxReussite }}%</span>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Forces principales (séparées par des virgules)</label>
+          <input type="text" [(ngModel)]="form.forcesPrincipales" name="forcesPrincipales" placeholder="Ex: Vision utilisateur, Synthèse, Animation">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Effets spéciaux / Bonus (séparés par des virgules)</label>
+          <input type="text" [(ngModel)]="form.effetsSpeciaux" name="effetsSpeciaux" placeholder="Ex: Déblocage créatif, Alignement équipe">
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: Limites & Faiblesses -->
+    <section class="form-step" *ngIf="currentStep === 4">
+      <h2 class="step-title">⚠️ Limites & Faiblesses</h2>
+      <p class="step-desc">Tout talent a ses limites</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Énergie requise (0-100)</label>
+          <input type="range" [(ngModel)]="form.energie" name="energie" min="0" max="100">
+          <span class="range-value">{{ form.energie }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>Fatigue générée (0-100)</label>
+          <input type="range" [(ngModel)]="form.fatigue" name="fatigue" min="0" max="100">
+          <span class="range-value">{{ form.fatigue }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>Risque d'échec (%)</label>
+          <input type="range" [(ngModel)]="form.risqueEchec" name="risqueEchec" min="0" max="100">
+          <span class="range-value">{{ form.risqueEchec }}%</span>
+        </div>
+
+        <div class="form-group">
+          <label>Durée d'effet</label>
+          <input type="text" [(ngModel)]="form.dureeEffet" name="dureeEffet" placeholder="Ex: 2-4 heures">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Conditions d'activation (séparées par des virgules)</label>
+          <input type="text" [(ngModel)]="form.conditions" name="conditions" placeholder="Ex: Équipe min. 3 personnes, Espace calme">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Contre-indications (séparées par des virgules)</label>
+          <input type="text" [(ngModel)]="form.contreIndications" name="contreIndications" placeholder="Ex: Projets très techniques, Deadlines courtes">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Défauts naturels (séparés par des virgules)</label>
+          <input type="text" [(ngModel)]="form.defautsNaturels" name="defautsNaturels" placeholder="Ex: Perfectionnisme, Impatience">
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5: Historique & Style -->
+    <section class="form-step" *ngIf="currentStep === 5">
+      <h2 class="step-title">📖 Historique & Style</h2>
+      <p class="step-desc">L'histoire derrière votre talent</p>
+
+      <div class="form-grid">
+        <div class="form-group form-group--full">
+          <label>Comment avez-vous acquis ce talent ?</label>
+          <textarea [(ngModel)]="form.acquisition" name="acquisition" rows="3" placeholder="Formation, autodidacte, expérience..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Mentor(s)</label>
+          <input type="text" [(ngModel)]="form.mentor" name="mentor" placeholder="Ex: Senior dev chez Google">
+        </div>
+
+        <div class="form-group">
+          <label>Formation</label>
+          <input type="text" [(ngModel)]="form.formation" name="formation" placeholder="Ex: Master UX Design">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Événement déclencheur</label>
+          <input type="text" [(ngModel)]="form.evenementDeclencheur" name="evenementDeclencheur" placeholder="Ex: Hackathon 2022 - Prix du meilleur UX">
+        </div>
+
+        <div class="form-group">
+          <label>Surnom lié au talent</label>
+          <input type="text" [(ngModel)]="form.surnom" name="surnom" placeholder="Ex: Le Debugger">
+        </div>
+
+        <div class="form-group">
+          <label>Signature / Marque de fabrique</label>
+          <input type="text" [(ngModel)]="form.signature" name="signature" placeholder="Ex: Toujours un croquis avant le digital">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Citation favorite</label>
+          <input type="text" [(ngModel)]="form.citation" name="citation" placeholder="Ex: Un bon design est invisible, seul l'impact reste">
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 6: Finalisation -->
+    <section class="form-step" *ngIf="currentStep === 6">
+      <h2 class="step-title">🚀 Finalisation</h2>
+      <p class="step-desc">Les derniers détails</p>
+
+      <div class="form-grid">
+        <div class="form-group form-group--full">
+          <label>Langues parlées (séparées par des virgules) <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.langues" 
+            name="langues" 
+            placeholder="Ex: FR, EN, ES" 
+            required
+            #languesInput="ngModel">
+          <span class="error-msg" *ngIf="languesInput.invalid && languesInput.touched">
+            Au moins une langue est requise
+          </span>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Passions (séparées par des virgules) <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.passions" 
+            name="passions" 
+            placeholder="Ex: Jeux vidéo, Open source, Musique"
+            required
+            #passionsInput="ngModel">
+          <span class="error-msg" *ngIf="passionsInput.invalid && passionsInput.touched">
+            Au moins une passion est requise
+          </span>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Projets réalisés (séparés par des virgules)</label>
+          <input type="text" [(ngModel)]="form.projets" name="projets" placeholder="Ex: App mobile, Plateforme talents, Bot Discord">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label>Tags / Mots-clés (séparés par des virgules) <span class="required">*</span></label>
+          <input 
+            type="text" 
+            [(ngModel)]="form.tags" 
+            name="tags" 
+            placeholder="Ex: UX, Angular, Innovation, Leadership"
+            required
+            #tagsInput="ngModel">
+          <span class="error-msg" *ngIf="tagsInput.invalid && tagsInput.touched">
+            Au moins un tag est requis
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>XP actuel</label>
+          <input type="number" [(ngModel)]="form.xpActuel" name="xpActuel" placeholder="0" min="0">
+        </div>
+
+        <div class="form-group">
+          <label>XP nécessaire pour évoluer</label>
+          <input type="number" [(ngModel)]="form.xpNecessaire" name="xpNecessaire" placeholder="2000" min="0">
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="form.verified" name="verified">
+            <span>Demander le badge "Talent Verified"</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION -->
+    <div class="form-nav">
+      <button type="button" class="btn btn--secondary" (click)="prevStep()" *ngIf="currentStep > 1">
+        ← Précédent
+      </button>
+      <div class="spacer"></div>
+      <button type="button" class="btn btn--primary" (click)="nextStep()" *ngIf="currentStep < totalSteps">
+        Suivant →
+      </button>
+      <button type="submit" class="btn btn--success" *ngIf="currentStep === totalSteps" [disabled]="talentForm.invalid">
+        ✓ Créer ma carte talent
+      </button>
+    </div>
+
+  </form>
+</div>

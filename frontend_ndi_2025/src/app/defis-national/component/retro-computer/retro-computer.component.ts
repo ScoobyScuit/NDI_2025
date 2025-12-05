@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, signal, Input, Output, EventEmitter, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatModalComponent } from '../../../defis/chat-bruti/component/chat-modal/chat-modal.component';
 
@@ -11,16 +11,16 @@ import { ChatModalComponent } from '../../../defis/chat-bruti/component/chat-mod
 })
 export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() isNear: boolean = false;
-
+  @Output() computerClick = new EventEmitter<void>();
+  
   displayLines = signal<string[]>([]);
   isChatOpen = signal(false);
-
-  // Ajoute la classe 'chat-open' quand le chat est ouvert
+  
   @HostBinding('class.chat-open')
   get chatOpenClass() {
     return this.isChatOpen();
   }
-  
+
   private messages = [
     "SYSTEME NIRD v1.0",
     "CONNEXION...",
@@ -28,7 +28,7 @@ export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
     "SCANNEURS ACTIFS",
     "ATTENTE PILOTE..."
   ];
-
+  
   private intervalId: any;
 
   ngOnInit() {
@@ -45,7 +45,6 @@ export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
 
   private bootSequence() {
     let lineIndex = 0;
-    
     this.intervalId = setInterval(() => {
       if (lineIndex < this.messages.length) {
         this.displayLines.update(lines => [...lines, this.messages[lineIndex]]);
@@ -54,6 +53,12 @@ export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
         clearInterval(this.intervalId);
       }
     }, 800);
+  }
+
+  // Appelé au clic sur l'ordinateur (comme les planètes)
+  onClick() {
+    this.computerClick.emit();
+    this.openChat();
   }
 
   openChat() {

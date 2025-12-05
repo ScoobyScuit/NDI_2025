@@ -1,5 +1,5 @@
 @if (!isChatOpen()) {
-    <div class="monitor-chassis" (click)="openChat()">
+    <div class="monitor-chassis" [class.near]="isNear" (click)="onClick()">
       <div class="monitor-bezel">
         <div class="screen-surface">
           <div class="crt-overlay"></div>
@@ -21,7 +21,8 @@
       @if (isNear) {
         <div class="interact-hint">"ESPACE" pour appeler le Chat Bruti</div>
       }
-    </div>
+      
+  </div>
   }
   
   @if (isChatOpen()) {
