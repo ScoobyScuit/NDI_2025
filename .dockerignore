@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.*
+dist
+.angular
+.cache
+*.md
+.idea
+.vscode
+frontend_ndi_2025/node_modules
+backend_ndi_2025/node_modules
+frontend_ndi_2025/dist
+backend_ndi_2025/dist
+frontend_ndi_2025/.angular
