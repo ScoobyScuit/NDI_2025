@@ -80,7 +80,7 @@ Ce projet s'inscrit dans le cadre de la **Nuit de l'Info 2025**, marathon de dé
 - **Trou noir central** avec attraction gravitationnelle et effet de spaghettification
 - **4 objets interactifs** positionnés aux coins de l'univers :
   - Ordinateur rétro (Chat Bruti IA)
-  - Media player rétro (Visualiseur audio)
+  - Media player rétro (Retro Visualizer - Lecteur audio avec visualisations)
   - Carte des talents
   - Formulaire de contact
 
@@ -90,6 +90,39 @@ Ce projet s'inscrit dans le cadre de la **Nuit de l'Info 2025**, marathon de dé
 - Répond aux questions sur le projet NIRD
 - Interface rétro terminal
 - Accessible via l'ordinateur in-game ou le portail dimensionnel
+
+### Retro Visualizer - Lecteur Audio Immersif
+
+- **Lecteur audio rétro** inspiré des lecteurs années 90 (Winamp, Sonique)
+- **8 univers visuels** dynamiques réagissant à la musique :
+  - **OUTRUN** : Soleil synthwave et grille rétro perspective
+  - **LAVA LAMP** : Blobs fluides interactifs avec particules lumineuses
+  - **NEON BARS** : Barres d'égaliseur néon style discothèque
+  - **POLAR BLOB** : Forme circulaire réagissant aux fréquences
+  - **TOXIC** : Effets verts radioactifs avec shake
+  - **COSMIC** : Spirale cosmique tournante
+  - **OSCILLOSCOPE** : Forme d'onde haute résolution
+  - **CELESTIAL** : Ondes lumineuses Three.js avec shaders GLSL
+- **CINE: PINGUIN** : Mode vidéo avec effets glitch sur les aigus
+- **Analyse audio temps réel** : FFT, détection basses/médiums/aigus
+- **Interactions** :
+  - Contrôles Play/Pause, Volume, Mute
+  - Changement d'univers dynamique
+  - Sélecteur de couleur personnalisable
+  - Barre de progression avec seek
+  - Support fichiers MP3, WAV, OGG
+- **Design** :
+  - Boîtier noir style cassette avec lueur néon rose/cyan
+  - Écran CRT avec scanlines et effet glare
+  - Police VT323 monospace rétro
+  - Indicateur REC animé
+  - Menu burger pour navigation
+- **Technologies** :
+  - Web Audio API pour l'analyse spectrale
+  - Canvas 2D pour les rendus visuels
+  - Three.js + Shaders GLSL pour les effets 3D
+  - Angular Signals pour la réactivité
+- Accessible via le media player in-game ou directement via l'URL `/retro-visualizer`
 
 ### Design Rétro
 
@@ -127,6 +160,7 @@ Ce projet s'inscrit dans le cadre de la **Nuit de l'Info 2025**, marathon de dé
 - `nird-space` - Expérience spatiale interactive 8-bit (jeu principal)
 - `carte-talents` - Page de présentation de l'équipe et collaborations
 - `chat-bruti` - Interface de chat avec IA Mistral
+- `retro-visualizer` - Lecteur audio avec visualisations dynamiques
 - `ergonomie` - Tests et défis d'accessibilité
 - `gros-pixel` - Effets et composants pixel art
 
@@ -145,7 +179,7 @@ Ce projet s'inscrit dans le cadre de la **Nuit de l'Info 2025**, marathon de dé
 **Modules principaux** :
 - `chat-bruti` - Service de chat avec IA Mistral
 - `carte-talents` - Gestion des profils d'équipe
-- `visualisation-audio` - Traitement audio
+- `visualisation-audio` - API pour le Retro Visualizer (métadonnées, streaming)
 - `ergonomie` - Métriques UX
 - `gros-pixel` - Effets pixel art
 
@@ -184,6 +218,11 @@ ndi_2025/
 │   │   │   └── defis/                           # Pages des défis NDI
 │   │   │       ├── carte-talents/               # Défi Carte des Talents
 │   │   │       ├── chat-bruti/                  # Défi Chat Bruti
+│   │   │       ├── retro-visualizer/            # Défi Visualisation Audio
+│   │   │       │   └── component/
+│   │   │       │       ├── retro-visualizer.component.ts    # 1477 lignes
+│   │   │       │       ├── retro-visualizer.component.html  # Interface lecteur
+│   │   │       │       └── retro-visualizer.component.css   # 500+ lignes de style
 │   │   │       ├── ergonomie/                   # Défi Ergonomie
 │   │   │       └── gros-pixel/                  # Défi Gros Pixel
 │   │   │
@@ -320,9 +359,34 @@ Assistant conversationnel IA intégré au jeu permettant de poser des questions 
 
 Saisie de formulaire de la manière la moins ergonomique possible
 
-### Défi Visualisation Audio
+### Défi Visualisation Audio - Retro Visualizer 
 
-Lecteur audio rétro style Winamp années 90 accessible in-game (coin inférieur gauche).
+**Lecteur audio immersif avec visualisations dynamiques** inspiré des lecteurs mythiques des années 90-2000.
+
+**Fonctionnalités principales** :
+- **8 univers visuels** réagissant à la musique en temps réel (OUTRUN, LAVA LAMP, NEON BARS, POLAR BLOB, TOXIC, COSMIC, OSCILLOSCOPE, CELESTIAL)
+- **Mode vidéo cinématographique** avec effets glitch synchronisés
+- **Analyse audio avancée** : FFT 2048 points, détection basses/médiums/aigus, lissage spectral
+- **Effets visuels** :
+  - Canvas 2D pour les effets rétro (grilles, blobs, barres)
+  - Three.js + Shaders GLSL pour les effets 3D complexes
+  - Effets de particules, lueurs, scanlines CRT
+  - Interactions souris (LAVA LAMP repousse les blobs)
+- **Interface utilisateur** :
+  - Design cassette VHS avec boîtier noir et lueur néon
+  - Contrôles complets (Play/Pause, Volume, Mute, Seek)
+  - Sélecteur de couleur pour personnalisation
+  - Affichage temps MM:SS et barre de progression
+  - Indicateur REC animé
+  - 5 boutons de contrôle style arcade
+- **Technologies** :
+  - Web Audio API (AnalyserNode, FFT)
+  - Canvas 2D API
+  - Three.js (WebGLRenderer, ShaderMaterial)
+  - GLSL (Fragment/Vertex Shaders)
+  - Angular Signals pour la réactivité
+
+**Accès** : Via le media player in-game (coin inférieur gauche) ou URL directe `/retro-visualizer`
 
 ### Défi Carte des Talents
 
@@ -347,6 +411,8 @@ Découvrez l'application en action sur : https://ndi2025-production.up.railway.a
 - **Jeu spatial** : Univers 8-bit avec fusée pilotable
 - **Interface planète** : Modales informatives thématiques
 - **Chat Bruti** : Interface de chat avec IA
+- **Retro Visualizer** : Lecteur audio avec 8 univers visuels dynamiques
+- **Carte des Talents** : Profils d'équipe interactifs
 
 ---
 
@@ -389,6 +455,9 @@ Ce projet est développé dans le cadre de la Nuit de l'Info 2025.
 
 - **Site en production** : https://ndi2025-production.up.railway.app
 - **Jeu NIRD Space** : https://ndi2025-production.up.railway.app/nird
+- **Retro Visualizer** : https://ndi2025-production.up.railway.app/retro-visualizer
+- **Chat Bruti** : https://ndi2025-production.up.railway.app/chat-bruti
+- **Carte des Talents** : https://ndi2025-production.up.railway.app/carte-talents
 - **Documentation défi : On veut du gros pixel !** : [readme.8bit](./readme.8bit)
 - **Site officiel NIRD** : https://nird.forge.apps.education.fr
 
