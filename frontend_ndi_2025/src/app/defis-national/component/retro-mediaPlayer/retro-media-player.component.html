@@ -1,0 +1,61 @@
+<div class="retro-player" [class.playing]="isPlaying()">
+  <!-- Vis aux coins -->
+  <div class="screw tl"></div>
+  <div class="screw tr"></div>
+  <div class="screw bl"></div>
+  <div class="screw br"></div>
+
+  <!-- Header -->
+  <div class="header-brand">DIMENSION PLAYER</div>
+
+  <!-- Écran LCD -->
+  <div class="lcd-screen">
+    <div class="lcd-content">
+      <div class="track-info">
+        <span class="track-number">TRACK {{ currentTrack().toString().padStart(2, '0') }}</span>
+        <span class="track-name">{{ trackName() }}</span>
+      </div>
+      <div class="visualizer">
+        @for (bar of [1,2,3,4,5,6,7,8,9,10]; track bar) {
+          <div class="bar" [class.active]="isPlaying()" [style.animation-delay.ms]="bar * 50"></div>
+        }
+      </div>
+      <div class="time-display">
+        <span class="current-time">02:34</span>
+        <span class="separator">/</span>
+        <span class="total-time">04:21</span>
+      </div>
+    </div>
+    <div class="lcd-scanlines"></div>
+  </div>
+
+  <!-- Contrôles -->
+  <div class="controls">
+    <button class="ctrl-btn prev" (click)="prevTrack()">
+      <span>⏮</span>
+    </button>
+    <button class="ctrl-btn play" [class.playing]="isPlaying()" (click)="togglePlay()">
+      <span>{{ isPlaying() ? '⏸' : '▶' }}</span>
+    </button>
+    <button class="ctrl-btn next" (click)="nextTrack()">
+      <span>⏭</span>
+    </button>
+  </div>
+
+  <!-- Volume -->
+  <div class="volume-section">
+    <span class="volume-label">VOL</span>
+    <div class="volume-bar">
+      <div class="volume-fill" [style.width.%]="volume()"></div>
+    </div>
+    <span class="volume-value">{{ volume() }}</span>
+  </div>
+
+  <!-- LEDs indicateurs -->
+  <div class="led-indicators">
+    <div class="led power" [class.on]="true"></div>
+    <div class="led stereo" [class.on]="isPlaying()"></div>
+    <div class="led bass" [class.on]="isPlaying()"></div>
+  </div>
+</div>
+

@@ -7,6 +7,7 @@ import { ArcadeCabinetComponent } from '../../component/arcade-cabinet/arcade-ca
 import { InfoModalComponent } from '../../component/info-modal/info-modal.component';
 import { StarsBackgroundComponent } from '../../component/stars-background/stars-background.component';
 import { RetroComputerComponent } from '../../component/retro-computer/retro-computer.component';
+import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/retro-media-player.component';
 
 @Component({
   selector: 'app-nird-space',
@@ -19,7 +20,8 @@ import { RetroComputerComponent } from '../../component/retro-computer/retro-com
     ArcadeCabinetComponent,
     InfoModalComponent,
     StarsBackgroundComponent,
-    RetroComputerComponent
+    RetroComputerComponent,
+    RetroMediaPlayerComponent
   ],
   templateUrl: './nird-space.component.html',
   styleUrl: './nird-space.component.css'
@@ -54,6 +56,20 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     const dist = Math.sqrt(
       Math.pow(this.rocketX() - this.computerPos.x, 2) + 
       Math.pow(this.rocketY() - this.computerPos.y, 2)
+    );
+    return dist < 12; // Rayon de détection
+  });
+
+  // --- CONFIGURATION RETRO MEDIA PLAYER ---
+  // Position fixe du media player (bas gauche, légèrement décalé)
+  mediaPlayerPos = { x: 8, y: 78 };
+  
+  // Calcul de proximité pour l'animation
+  isNearMediaPlayer = computed(() => {
+    if (!this.gameStarted()) return false;
+    const dist = Math.sqrt(
+      Math.pow(this.rocketX() - this.mediaPlayerPos.x, 2) + 
+      Math.pow(this.rocketY() - this.mediaPlayerPos.y, 2)
     );
     return dist < 12; // Rayon de détection
   });
