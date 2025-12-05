@@ -8,16 +8,22 @@ config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Activer CORS pour permettre les requêtes depuis le frontend
+  // Activer CORS
+  // En production, accepter toutes les origines
+  // En développement, utiliser l'URL locale du frontend
+  const isProduction = process.env.NODE_ENV === 'production';
+  
   app.enableCors({
-    origin: 'http://localhost:4200', // URL du frontend Angular
+    origin: isProduction ? '*' : 'http://localhost:4200',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    credentials: !isProduction, // Désactiver credentials si origin est '*'
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port, '0.0.0.0'); // Écouter sur toutes les interfaces
+  
   console.log(
-    `🚀 Backend démarré sur http://localhost:${process.env.PORT ?? 3000}`,
+    `🚀 Backend démarré sur le port ${port} (${isProduction ? 'production' : 'development'})`,
   );
 }
 bootstrap();

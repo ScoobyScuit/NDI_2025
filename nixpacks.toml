@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = [
+  "cd frontend_ndi_2025 && npm ci",
+  "cd backend_ndi_2025 && npm ci"
+]
+
+[phases.build]
+cmds = [
+  "cd frontend_ndi_2025 && npm run build",
+  "cd backend_ndi_2025 && npm run build"
+]
+
+[start]
+cmd = "cd backend_ndi_2025 && npm run start:prod"
+
