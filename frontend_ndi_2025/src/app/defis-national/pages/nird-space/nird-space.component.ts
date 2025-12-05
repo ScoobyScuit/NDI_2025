@@ -27,6 +27,7 @@ import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/ret
   styleUrl: './nird-space.component.css'
 })
 export class NirdSpaceComponent implements OnInit, OnDestroy {
+
   // Rocket position
   rocketX = signal(50);
   rocketY = signal(85);
@@ -231,7 +232,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   }
 
   private checkInteractions() {
-    // 1. Check Planètes
+    // Check Planètes uniquement - le computer est géré par clic direct
     const rocket = { x: this.rocketX(), y: this.rocketY() };
     for (const planet of this.planets()) {
       const distance = Math.sqrt(Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2));
@@ -239,11 +240,6 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
           this.openPlanetInfo(planet); 
           return; 
       }
-    }
-    
-    // 2. Check Computer (Si tu veux ajouter une action plus tard)
-    if (this.isNearComputer()) {
-       // Action future...
     }
   }
 

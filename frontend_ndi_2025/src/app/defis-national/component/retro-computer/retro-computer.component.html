@@ -1,6 +1,6 @@
-<!-- Monitor (visible quand le chat n'est pas ouvert ou toujours visible derrière) -->
+<!-- Monitor -->
 @if (!isChatOpen()) {
-  <div class="monitor-chassis" (click)="openChat()">
+  <div class="monitor-chassis" [class.near]="isNear" (click)="onClick()">
     <div class="monitor-bezel">
       <div class="screen-surface">
         <div class="crt-overlay"></div>
@@ -18,6 +18,11 @@
         <span></span><span></span><span></span>
       </div>
     </div>
+    
+    <!-- Hint d'interaction (comme les planètes) -->
+    @if (isNear) {
+      <div class="interact-hint">ESPACE</div>
+    }
   </div>
 }
 
