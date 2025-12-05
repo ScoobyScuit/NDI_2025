@@ -14,6 +14,20 @@
     [isNear]="isNearMediaPlayer()"
     [class.near]="isNearMediaPlayer()"
   />
+
+  <app-card-talents
+    [style.left.%]="cardTalentsPos.x"
+    [style.top.%]="cardTalentsPos.y"
+    [isNear]="isNearCardTalents()"
+    [class.near]="isNearCardTalents()"
+  />
+
+  <app-retro-form
+    [style.left.%]="retroFormPos.x"
+    [style.top.%]="retroFormPos.y"
+    [isNear]="isNearRetroForm()"
+    [class.near]="isNearRetroForm()"
+  />
   
   <div class="hud">
     <div class="hud-left">

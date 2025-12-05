@@ -53,8 +53,8 @@
     0 0 60px rgba(51, 255, 0, 0.6),
     0 20px 40px rgba(0,0,0,0.9);
   width: 170px;
-  transform: rotate(-2deg);
-  transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transform: rotate(-4deg);
+  transition: border-color 0.3s ease, transform 0.2s ease;
   pointer-events: auto;
   cursor: pointer;
 }
