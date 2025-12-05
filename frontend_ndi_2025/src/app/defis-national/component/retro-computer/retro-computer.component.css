@@ -47,10 +47,14 @@
   border: 3px solid #a0a0a0;
   border-right-color: #606060;
   border-bottom-color: #606060;
-  box-shadow: -3px 3px 8px rgba(0,0,0,0.5);
+  box-shadow: 
+    inset 2px 2px 5px rgba(255,255,255,0.1),
+    inset -2px -2px 5px rgba(0,0,0,0.8),
+    0 0 60px rgba(51, 255, 0, 0.6),
+    0 20px 40px rgba(0,0,0,0.9);
   width: 170px;
   transform: rotate(-2deg);
-  transition: border-color 0.3s ease, transform 0.2s ease;
+  transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   pointer-events: auto;
   cursor: pointer;
 }
@@ -135,8 +139,8 @@
 }
 
 .power-btn {
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 5px;
   background-color: #ff3333;
   border-radius: 50%;
   border: 1px solid #aa0000;
@@ -160,7 +164,7 @@
 /* --- MESSAGE D'AIDE (HINT) --- */
 .interact-hint {
   position: absolute;
-  bottom: -45px; /* Positionné sous l'écran */
+  bottom: -60px; /* Positionné sous l'écran avec plus d'espace */
   left: 50%;
   transform: translateX(-50%);
   

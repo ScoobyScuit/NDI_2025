@@ -62,9 +62,10 @@
     <app-arcade-cabinet (startGame)="startGame()" />
   }
 
-  @if (allVisited()) {
+  @if (showVictoryBanner()) {
     <div class="victory-banner">
       <div class="victory-content">
+        <button class="victory-close-btn" (click)="closeVictoryBanner()" aria-label="Fermer">×</button>
         <span class="victory-icon">🏆</span>
         <span class="victory-text">MISSION ACCOMPLIE !</span>
         <span class="victory-sub">Tu es maintenant un résistant NIRD !</span>
