@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CollaborationService, CollaborationRequest } from '../../services/collaboration.service';
+import { PortalBurgerComponent } from '../../../../defis-national/component/portal-burger/portal-burger.component';
 
 @Component({
   selector: 'app-collaborations-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PortalBurgerComponent],
   templateUrl: './collaborations-page.html',
   styleUrls: ['./collaborations-page.css']
 })

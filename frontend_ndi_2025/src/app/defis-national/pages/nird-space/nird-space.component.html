@@ -51,7 +51,7 @@
       [blackHole]="blackHole"
       [isNear]="isNearBlackHole()"
       [speedMultiplier]="blackHoleSpeedMultiplier()"
-      (openChatRequest)="onOpenChatFromPortal()"
+      (openPortal)="openPortalMenu()"
     />
 
     @for (planet of planets(); track planet.id) {
@@ -92,6 +92,13 @@
     <app-info-modal
       [planet]="currentPlanet()!"
       (closeModal)="closeModal()"
+    />
+  }
+
+  @if (showPortalMenu()) {
+    <app-portal-menu
+      (closeMenu)="closePortalMenu()"
+      (openChatRequest)="onOpenChatFromPortal()"
     />
   }
 

@@ -6,6 +6,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { PortalBurgerComponent } from '../../../../defis-national/component/portal-burger/portal-burger.component';
 
 declare const gsap: any;
 declare const ScrollTrigger: any;
@@ -13,7 +14,7 @@ declare const ScrollTrigger: any;
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PortalBurgerComponent],
   templateUrl: './landing-page.html',
   styleUrls: ['./landing-page.css']
 })

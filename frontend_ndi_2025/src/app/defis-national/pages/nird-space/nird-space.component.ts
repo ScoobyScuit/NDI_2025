@@ -10,6 +10,7 @@ import { RetroComputerComponent } from '../../component/retro-computer/retro-com
 import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/retro-media-player.component';
 import { CardTalentsComponent } from '../../component/card-talents/card-talents.component';
 import { RetroFormComponent } from '../../component/retro-form/retro-form.component';
+import { PortalMenuComponent } from '../../component/portal-menu/portal-menu.component';
 
 @Component({
   selector: 'app-nird-space',
@@ -25,7 +26,8 @@ import { RetroFormComponent } from '../../component/retro-form/retro-form.compon
     RetroComputerComponent,
     RetroMediaPlayerComponent,
     CardTalentsComponent,
-    RetroFormComponent
+    RetroFormComponent,
+    PortalMenuComponent
   ],
   templateUrl: './nird-space.component.html',
   styleUrl: './nird-space.component.css'
@@ -36,7 +38,6 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   @ViewChild(CardTalentsComponent) cardTalents!: CardTalentsComponent;
   @ViewChild(RetroFormComponent) retroForm!: RetroFormComponent;
   @ViewChild(RetroMediaPlayerComponent) retroMediaPlayer!: RetroMediaPlayerComponent;
-  @ViewChild(BlackHoleComponent) blackHoleComponent!: BlackHoleComponent;
 
   // Rocket position
   rocketX = signal(50);
@@ -50,6 +51,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   gameStarted = signal(false);
   allVisited = signal(false);
   showVictoryBanner = signal(false);
+  showPortalMenu = signal(false);
 
   // Configuration Trou Noir
   blackHole: BlackHole = {
@@ -62,14 +64,14 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   // Position fixe de l'ordinateur
   computerPos = { x: 89, y: 20}; 
   
-  // Calcul de proximité pour l'animation
+  // Calcul de proximité pour l'animation - rayon réduit pour ne pas gêner
   isNearComputer = computed(() => {
     if (!this.gameStarted()) return false;
     const dist = Math.sqrt(
       Math.pow(this.rocketX() - this.computerPos.x, 2) + 
       Math.pow(this.rocketY() - this.computerPos.y, 2)
     );
-    return dist < 12; // Rayon de détection
+    return dist < 8; // Rayon de détection réduit
   });
 
   // --- CONFIGURATION RETRO MEDIA PLAYER ---
@@ -133,7 +135,8 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
 
   rocketScale = computed(() => 1 - (this.proximityRatio() * 0.95));
   blackHoleSpeedMultiplier = computed(() => 1 + (Math.pow(this.proximityRatio(), 2) * 40));
-  isNearBlackHole = computed(() => this.rocketDistanceToBlackHole() < 18);
+  // Rayon de 20 pour l'indication visuelle ET l'interaction
+  isNearBlackHole = computed(() => this.rocketDistanceToBlackHole() < 20);
   
   private keys = new Set<string>();
   private animationFrame: number | null = null;
@@ -241,8 +244,8 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     // Si le chat est ouvert, on empêche tout mouvement, mais le composant Chat gère ses propres touches
     if (this.retroComputer && this.retroComputer.isChatOpen()) return;
     
-    // Si le menu du portail (trou noir) est ouvert, le composant gère ses propres touches
-    if (this.blackHoleComponent && this.blackHoleComponent.isPortalMenuOpen()) return;
+    // Si le menu du portail est ouvert, le composant PortalMenu gère ses propres touches
+    if (this.showPortalMenu()) return;
     
     // Si le jeu n'est pas lancé ou si une planète est ouverte
     if (!this.gameStarted() || this.showModal()) return;
@@ -262,9 +265,8 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     const gameLoop = () => {
       // Le jeu se fige visuellement (pas de mouvement) si le chat, le portail ou une modale est ouvert
       const isChatOpen = this.retroComputer && this.retroComputer.isChatOpen();
-      const isPortalOpen = this.blackHoleComponent && this.blackHoleComponent.isPortalMenuOpen();
       
-      if (this.gameStarted() && !this.showModal() && !isChatOpen && !isPortalOpen) {
+      if (this.gameStarted() && !this.showModal() && !isChatOpen && !this.showPortalMenu()) {
         this.updateRocketPosition();
       }
       this.animationFrame = requestAnimationFrame(gameLoop);
@@ -307,8 +309,21 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   }
 
   private checkInteractions() {
-    // Check Planètes uniquement - le computer est géré par clic direct
     const rocket = { x: this.rocketX(), y: this.rocketY() };
+    
+    // 1. Check Trou Noir EN PREMIER - Ouvre le menu portail dimensionnel
+    // On utilise un rayon de 20 pour l'interaction menu
+    const distToBlackHole = Math.sqrt(
+      Math.pow(rocket.x - this.blackHole.x, 2) + 
+      Math.pow(rocket.y - this.blackHole.y, 2)
+    );
+    if (distToBlackHole < 20) {
+       this.keys.clear();
+       this.openPortalMenu();
+       return;
+    }
+    
+    // 2. Check Planètes
     for (const planet of this.planets()) {
       const distance = Math.sqrt(Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2));
       if (distance < 12) { 
@@ -317,40 +332,29 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
       }
     }
     
-    // 1. Check Trou Noir - Ouvre le menu portail dimensionnel
-    if (this.isNearBlackHole()) {
-       this.keys.clear();
-       this.blackHoleComponent.openMenu();
-       return;
-    }
-    
-    // 2. Check Computer - Appel Manuel
+    // 3. Check Computer - Appel Manuel
     // Si on est proche et qu'on appuie sur Espace, on ouvre le chat
     if (this.isNearComputer()) {
-       // On vide les touches pour ne pas que la fusée continue d'avancer "toute seule" en arrière plan
        this.keys.clear();
        this.retroComputer.openChat();
        return;
     }
     
-    // 3. Check Card Talents - Navigation vers la page talents
-    // Si on est proche et qu'on appuie sur Espace, on redirige vers /talents
+    // 4. Check Card Talents - Navigation vers la page talents
     if (this.isNearCardTalents()) {
        this.keys.clear();
        this.cardTalents.navigateToTalents();
        return;
     }
     
-    // 4. Check Retro Form - Navigation vers le formulaire
-    // Si on est proche et qu'on appuie sur Espace, on redirige vers /add-talent
+    // 5. Check Retro Form - Navigation vers le formulaire
     if (this.isNearRetroForm()) {
        this.keys.clear();
        this.retroForm.navigateToForm();
        return;
     }
     
-    // 5. Check Retro Media Player - Navigation vers le visualizer
-    // Si on est proche et qu'on appuie sur Espace, on redirige vers /retro-visualizer
+    // 6. Check Retro Media Player - Navigation vers le visualizer
     if (this.isNearMediaPlayer()) {
        this.keys.clear();
        this.retroMediaPlayer.navigateToVisualizer();
@@ -379,7 +383,16 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     return Math.sqrt(Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2)) < 12;
   }
   
-  // Appelé depuis le menu portail du trou noir quand on sélectionne "Chat Bruti"
+  // --- GESTION DU MENU PORTAIL ---
+  openPortalMenu() {
+    this.showPortalMenu.set(true);
+  }
+  
+  closePortalMenu() {
+    this.showPortalMenu.set(false);
+  }
+  
+  // Appelé depuis le menu portail quand on sélectionne "Chat Bruti"
   onOpenChatFromPortal() {
     if (this.retroComputer) {
       this.keys.clear();

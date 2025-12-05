@@ -6,6 +6,7 @@ import { MissingLetterFieldComponent } from '../../component/missing-letter-fiel
 import { ButtonPressureFieldComponent } from '../../component/button-pressure-field/button-pressure-field.component';
 import { ActionSequenceFieldComponent } from '../../component/action-sequence-field/action-sequence-field.component';
 import { MovingDragDropFieldComponent } from '../../component/moving-drag-drop-field/moving-drag-drop-field.component';
+import { PortalBurgerComponent } from '../../../../defis-national/component/portal-burger/portal-burger.component';
 
 /**
  * @brief Test page for ergonomie fields
@@ -13,8 +14,9 @@ import { MovingDragDropFieldComponent } from '../../component/moving-drag-drop-f
 @Component({
   selector: 'app-temporal-maze-test',
   standalone: true,
-  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent, MissingLetterFieldComponent, ButtonPressureFieldComponent, ActionSequenceFieldComponent, MovingDragDropFieldComponent],
+  imports: [CommonModule, DateMazeFieldComponent, AddressPuzzleFieldComponent, MissingLetterFieldComponent, ButtonPressureFieldComponent, ActionSequenceFieldComponent, MovingDragDropFieldComponent, PortalBurgerComponent],
   template: `
+    <app-portal-burger />
     <div class="test-container">
       <h1>Défis Ergonomie</h1>
       <app-date-maze-field (dateSelected)="onDateSelected($event)" />
