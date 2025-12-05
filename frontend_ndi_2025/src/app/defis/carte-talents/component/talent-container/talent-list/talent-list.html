@@ -1,0 +1,93 @@
+<div class="talent-list">
+  <!-- NAV BAR -->
+  <nav class="talent-list__nav">
+    <a routerLink="/landing-page" class="nav-home">
+      <span>🏠</span> Accueil
+    </a>
+    <div class="nav-logo">TALENTS</div>
+    <div class="nav-actions">
+      <a routerLink="/collaborations" class="nav-collab">
+        <span>🤝</span> Collabs
+      </a>
+      <a routerLink="/add-talent" class="nav-create">
+        <span>✨</span> Créer
+      </a>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="talent-list__header">
+    <div>
+      <p class="talent-list__kicker">Explorer les profils</p>
+      <h1 class="talent-list__title">Découvrez les talents</h1>
+      <p class="talent-list__subtitle">
+        Parcourez les profils, trouvez des collaborateurs et connectez-vous 
+        avec des personnes partageant vos passions.
+      </p>
+    </div>
+    <div class="talent-list__actions">
+      <a routerLink="/add-talent" class="btn btn--create">
+        <span>✨</span> Créer ma carte
+      </a>
+      <div class="talent-list__badge">
+        <span class="dot"></span>
+        <span>{{ filteredTalents.length }} talents</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FILTRES -->
+  <section class="filters">
+    <div class="filters__row">
+      <div class="filters__field filters__field--wide">
+        <label>🔍 Recherche</label>
+        <input
+          type="text"
+          placeholder="Nom, compétence, projet, ville..."
+          [(ngModel)]="search"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+
+      <div class="filters__field">
+        <label>📍 Ville</label>
+        <select [(ngModel)]="villeFilter" (ngModelChange)="applyFilters()">
+          <option value="">Toutes les villes</option>
+          @for (v of villes; track v) {
+            <option [value]="v">{{ v }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filters__toggle">
+        <label class="filters__checkbox">
+          <input
+            type="checkbox"
+            [(ngModel)]="onlyVerified"
+            (change)="applyFilters()"
+          />
+          <span>✓ Talents vérifiés uniquement</span>
+        </label>
+      </div>
+    </div>
+
+    <p class="filters__result">
+      <strong>{{ filteredTalents.length }}</strong> talent(s) trouvé(s) sur {{ allTalents.length }}
+    </p>
+  </section>
+
+  <!-- LISTE DES CARTES -->
+  <section class="cards-grid">
+    @for (t of filteredTalents; track t.id; let i = $index) {
+      <app-card [talent]="t" [colorIndex]="i"></app-card>
+    }
+
+    @if (filteredTalents.length === 0) {
+      <div class="cards-grid__empty">
+        <span class="empty-icon">🔍</span>
+        <p>Aucun talent ne correspond à cette recherche.</p>
+        <a routerLink="/add-talent" class="btn btn--create">Créer le premier !</a>
+      </div>
+    }
+  </section>
+</div>

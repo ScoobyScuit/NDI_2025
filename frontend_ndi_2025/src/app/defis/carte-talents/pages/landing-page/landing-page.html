@@ -1,0 +1,331 @@
+<div class="landing" #landingRoot>
+  <!-- HEADER -->
+  <header class="landing__header" data-anim="header">
+    <nav class="nav-left">
+      <a routerLink="/talents" class="nav-link">Explorer</a>
+      <a routerLink="/add-talent" class="nav-link">Créer</a>
+    </nav>
+
+    <div class="landing__logo">
+      <span class="logo-text">TALENTS</span>
+    </div>
+
+    <nav class="nav-right">
+      <a routerLink="/talents" class="btn btn--header">Découvrir →</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- ---------------------- HERO ---------------------- -->
+    <section class="hero">
+      <div class="hero__content" data-anim="hero-content">
+        <div class="hero__badge">✨ Nuit de l'Info 2025</div>
+        <h1 class="hero__title">
+          <span class="hero__title-line" data-anim="title">Révélez</span>
+          <span class="hero__title-line hero__title-line--yellow" data-anim="title">vos talents</span>
+        </h1>
+        <p class="hero__text">
+          Créez votre carte talent unique avec effet holographique, 
+          découvrez les compétences des autres et trouvez 
+          les collaborateurs parfaits pour vos projets.
+        </p>
+        
+        <div class="hero__stats">
+          <div class="hero__stat">
+            <span class="hero__stat-number">∞</span>
+            <span class="hero__stat-label">Talents</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-number">12</span>
+            <span class="hero__stat-label">Catégories</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-number">100%</span>
+            <span class="hero__stat-label">Gratuit</span>
+          </div>
+        </div>
+        
+        <div class="hero__cta">
+          <a class="btn btn--yellow btn--large" routerLink="/add-talent">
+            🚀 Créer ma carte
+          </a>
+          <a class="btn btn--outline btn--large" routerLink="/talents">
+            Explorer les talents
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__visual" data-anim="hero-visual">
+        <!-- Decorative shapes -->
+        <div class="hero__shapes">
+          <div class="hero__shape hero__shape--circle"></div>
+          <div class="hero__shape hero__shape--ring"></div>
+          <div class="hero__shape hero__shape--dots"></div>
+        </div>
+
+        <!-- Main preview card -->
+        <div class="hero__card-stack">
+          <!-- Back card (blurred) -->
+          <div class="hero__card hero__card--back">
+            <div class="hero__card-glow"></div>
+          </div>
+          
+          <!-- Front card -->
+          <div class="hero__card hero__card--front" #floatingCard>
+            <div class="hero__card-header">
+              <span class="hero__card-level">Niv. 5</span>
+              <span class="hero__card-name">Votre Nom</span>
+              <span class="hero__card-xp">⚡ 2450 XP</span>
+            </div>
+            <div class="hero__card-avatar">
+              <span class="hero__card-initial">?</span>
+              <div class="hero__card-verified">✓</div>
+            </div>
+            <div class="hero__card-role">
+              <span class="hero__card-category">🎯</span>
+              <span>Votre Talent</span>
+            </div>
+            <div class="hero__card-skills">
+              <div class="hero__card-skill">
+                <span class="skill-dot skill-dot--fire"></span>
+                <span>Compétence 1</span>
+                <span class="skill-pts">+80</span>
+              </div>
+              <div class="hero__card-skill">
+                <span class="skill-dot skill-dot--water"></span>
+                <span>Compétence 2</span>
+                <span class="skill-pts">+65</span>
+              </div>
+            </div>
+            <div class="hero__card-footer">
+              <span>📍 Votre ville</span>
+              <span>🌍 FR, EN</span>
+            </div>
+            <!-- Holo effect overlay -->
+            <div class="hero__card-holo"></div>
+          </div>
+        </div>
+        
+        <!-- Floating badges -->
+        <div class="hero__badges-float">
+          <span class="float-badge float-badge--1">Angular</span>
+          <span class="float-badge float-badge--2">React</span>
+          <span class="float-badge float-badge--3">Design</span>
+          <span class="float-badge float-badge--4">Python</span>
+          <span class="float-badge float-badge--5">Node.js</span>
+          <span class="float-badge float-badge--6">UX/UI</span>
+        </div>
+
+        <!-- Floating icons -->
+        <div class="hero__icons-float">
+          <span class="float-icon float-icon--1">⚡</span>
+          <span class="float-icon float-icon--2">🎯</span>
+          <span class="float-icon float-icon--3">🚀</span>
+          <span class="float-icon float-icon--4">💡</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------- WHAT IS IT ---------------------- -->
+    <section class="what-section" data-scroll="what">
+      <div class="what__header">
+        <span class="what__label">C'est quoi ?</span>
+        <h2 class="what__title">La Carte des Talents</h2>
+        <p class="what__subtitle">
+          Une plateforme collaborative où chaque personne peut créer sa propre 
+          carte talent unique, inspirée des cartes de collection.
+        </p>
+      </div>
+
+      <div class="what__grid">
+        <div class="what-card" data-anim="what-card">
+          <div class="what-card__icon">🎯</div>
+          <h3 class="what-card__title">Votre identité</h3>
+          <p class="what-card__text">
+            Créez une carte qui vous représente avec vos compétences, 
+            passions, projets et ce qui vous rend unique.
+          </p>
+        </div>
+
+        <div class="what-card" data-anim="what-card">
+          <div class="what-card__icon">🔍</div>
+          <h3 class="what-card__title">Recherche facile</h3>
+          <p class="what-card__text">
+            Trouvez des profils par compétence, ville, projet ou passion. 
+            Filtrez pour trouver exactement ce que vous cherchez.
+          </p>
+        </div>
+
+        <div class="what-card" data-anim="what-card">
+          <div class="what-card__icon">🤝</div>
+          <h3 class="what-card__title">Collaboration</h3>
+          <p class="what-card__text">
+            Identifiez les bonnes personnes pour vos projets. 
+            Trouvez des collaborateurs qui partagent vos intérêts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------- FEATURES ICONS ---------------------- -->
+    <section class="features-icons" data-scroll="icons">
+      <div class="feature-icon" data-anim="icon">
+        <div class="feature-icon__circle">👤</div>
+        <span>Profil complet</span>
+      </div>
+      <div class="feature-icon" data-anim="icon">
+        <div class="feature-icon__circle">📊</div>
+        <span>Statistiques</span>
+      </div>
+      <div class="feature-icon" data-anim="icon">
+        <div class="feature-icon__circle">🔍</div>
+        <span>Recherche</span>
+      </div>
+      <div class="feature-icon" data-anim="icon">
+        <div class="feature-icon__circle">✓</div>
+        <span>Vérification</span>
+      </div>
+      <div class="feature-icon" data-anim="icon">
+        <div class="feature-icon__circle">🌍</div>
+        <span>Multi-langues</span>
+      </div>
+      <div class="feature-icon" data-anim="icon">
+        <div class="feature-icon__circle">🚀</div>
+        <span>Projets</span>
+      </div>
+    </section>
+
+    <!-- ---------------------- WHAT YOU FIND ---------------------- -->
+    <section class="find-section" data-scroll="find">
+      <div class="find__content">
+        <span class="find__label">Sur le site</span>
+        <h2 class="find__title">
+          Que pouvez-vous<br>
+          <span class="find__title--accent">y trouver ?</span>
+        </h2>
+      </div>
+
+      <div class="find__grid">
+        <article class="find-card find-card--yellow" data-anim="find">
+          <div class="find-card__number">01</div>
+          <div class="find-card__icon">🃏</div>
+          <h3 class="find-card__title">Cartes Talent</h3>
+          <p class="find-card__text">
+            Des cartes uniques pour chaque personne avec effet holographique, 
+            niveau, XP et statistiques détaillées.
+          </p>
+        </article>
+
+        <article class="find-card find-card--teal" data-anim="find">
+          <div class="find-card__number">02</div>
+          <div class="find-card__icon">⚡</div>
+          <h3 class="find-card__title">Compétences</h3>
+          <p class="find-card__text">
+            Chaque carte affiche les compétences avec des points de dégâts, 
+            comme dans un jeu de cartes à collectionner.
+          </p>
+        </article>
+
+        <article class="find-card find-card--coral" data-anim="find">
+          <div class="find-card__number">03</div>
+          <div class="find-card__icon">❤️</div>
+          <h3 class="find-card__title">Passions</h3>
+          <p class="find-card__text">
+            Découvrez les centres d'intérêt, passions et projets personnels 
+            de chaque talent pour mieux les connaître.
+          </p>
+        </article>
+
+        <article class="find-card find-card--mint" data-anim="find">
+          <div class="find-card__number">04</div>
+          <div class="find-card__icon">✓</div>
+          <h3 class="find-card__title">Vérification</h3>
+          <p class="find-card__text">
+            Les talents vérifiés ont un badge spécial garantissant 
+            l'authenticité de leurs informations.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ---------------------- HOW IT WORKS ---------------------- -->
+    <section class="how-section" data-scroll="how">
+      <h2 class="section-title" data-anim="section-title">
+        Comment ça marche ?
+      </h2>
+      
+      <div class="how__steps">
+        <div class="how-step" data-anim="step">
+          <div class="how-step__number">1</div>
+          <div class="how-step__content">
+            <h3>Créez votre profil</h3>
+            <p>Remplissez vos informations : nom, compétences, langues, passions et projets réalisés.</p>
+          </div>
+        </div>
+
+        <div class="how-step" data-anim="step">
+          <div class="how-step__number">2</div>
+          <div class="how-step__content">
+            <h3>Générez votre carte</h3>
+            <p>Votre carte talent unique est créée avec un effet holographique et vos statistiques.</p>
+          </div>
+        </div>
+
+        <div class="how-step" data-anim="step">
+          <div class="how-step__number">3</div>
+          <div class="how-step__content">
+            <h3>Explorez & Connectez</h3>
+            <p>Parcourez les autres talents, trouvez des collaborateurs et créez des projets ensemble.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------- CTA FOOTER ---------------------- -->
+    <section class="cta-footer" data-scroll="cta">
+      <div class="cta-footer__content">
+        <h2 class="cta-footer__title">
+          Prêt à créer<br>
+          <span>votre carte ?</span>
+        </h2>
+        <p class="cta-footer__text">
+          Rejoignez la communauté et montrez vos talents au monde !
+        </p>
+        <div class="cta-footer__buttons">
+          <a class="btn btn--large btn--white" routerLink="/add-talent">
+            Créer ma carte →
+          </a>
+          <a class="btn btn--large btn--outline-white" routerLink="/talents">
+            Explorer d'abord
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------- FOOTER ---------------------- -->
+    <footer class="landing__footer">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <span class="logo-text logo-text--small">TALENTS</span>
+          <p>La plateforme des talents</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>Navigation</h4>
+            <a routerLink="/talents">Explorer les talents</a>
+            <a routerLink="/add-talent">Créer ma carte</a>
+          </div>
+          <div class="footer__col">
+            <h4>Fonctionnalités</h4>
+            <a href="#">Cartes uniques</a>
+            <a href="#">Recherche avancée</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2025 Tommy Chouangmala - Tous droits réservés</p>
+      </div>
+    </footer>
+  </main>
+</div>

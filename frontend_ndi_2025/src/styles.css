@@ -1,54 +1,148 @@
-/* Global Styles for NIRD Space Mission */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* ===========================
+ *  HIPPEAS-INSPIRED PLAYFUL STYLE
+ *  Nuit de l'Info 2025
+ * =========================== */
 
-* {
-  margin: 0;
-  padding: 0;
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
+:root {
+  /* HIPPEAS Color Palette */
+  --yellow: #F5D547;
+  --yellow-light: #FFF0B3;
+  --yellow-dark: #E5C537;
+  
+  --teal: #3DB4AD;
+  --teal-light: #5ECEC7;
+  --teal-dark: #1B4D4A;
+  
+  --mint: #B8E5D6;
+  --cream: #FFF8E7;
+  --coral: #FF7F6B;
+  --orange: #FFA54F;
+  
+  --white: #FFFFFF;
+  --black: #1a1a1a;
+  --gray: #666666;
+  --gray-light: #f5f5f5;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+  
+  /* Border Radius - Very rounded */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 30px;
+  --radius-xl: 50px;
+  --radius-full: 9999px;
+  
+  /* Typography */
+  --font-display: 'Fredoka', sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+}
+
+*,
+::before,
+::after {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: 'Press Start 2P', monospace;
-  background: #0a0a1a;
-  color: #fff;
+html {
+  scroll-behavior: smooth;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0d0d2d;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #4ecdc4;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #5eddd4;
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--black);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Selection */
 ::selection {
-  background: #4ecdc4;
-  color: #000;
+  background: var(--yellow);
+  color: var(--black);
 }
 
-/* Focus outline */
-:focus-visible {
-  outline: 2px solid #4ecdc4;
-  outline-offset: 2px;
+/* Scrollbar Playful */
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-/* Disable text selection during gameplay */
-.game-container {
-  user-select: none;
-  -webkit-user-select: none;
+::-webkit-scrollbar-track {
+  background: var(--cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--teal);
+  border-radius: var(--radius-full);
+  border: 3px solid var(--cream);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--teal-dark);
+}
+
+/* Links */
+a {
+  color: var(--teal-dark);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--coral);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Buttons Base */
+button, .btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-full);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+button:hover, .btn:hover {
+  transform: translateY(-3px);
+}
+
+/* Input Base */
+input, select, textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 1rem 1.5rem;
+  border: 3px solid var(--gray-light);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  color: var(--black);
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(61, 180, 173, 0.15);
+}
+
+input::placeholder {
+  color: var(--gray);
 }

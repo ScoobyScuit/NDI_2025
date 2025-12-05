@@ -1,0 +1,164 @@
+<div class="collaborations-page">
+  <!-- NAV BAR -->
+  <nav class="collab__nav">
+    <a routerLink="/landing-page" class="nav-home">
+      <span>🏠</span> Accueil
+    </a>
+    <div class="nav-logo">COLLABORATIONS</div>
+    <a routerLink="/talents" class="nav-talents">
+      <span>👥</span> Talents
+    </a>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="collab__header">
+    <div class="header-content">
+      <h1>🤝 Mes Collaborations</h1>
+      <p>Gérez vos demandes de mise en relation</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-box stat-box--pending">
+        <span class="stat-number">{{ getPendingRequests().length }}</span>
+        <span class="stat-label">En attente</span>
+      </div>
+      <div class="stat-box stat-box--accepted">
+        <span class="stat-number">{{ getAcceptedRequests().length }}</span>
+        <span class="stat-label">Acceptées</span>
+      </div>
+      <div class="stat-box stat-box--total">
+        <span class="stat-number">{{ requests.length }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" *ngIf="requests.length === 0">
+    <div class="empty-icon">📭</div>
+    <h2>Aucune demande</h2>
+    <p>Vous n'avez pas encore reçu ou envoyé de demande de collaboration.</p>
+    <a routerLink="/talents" class="btn-explore">
+      <span>👥</span> Explorer les talents
+    </a>
+  </div>
+
+  <!-- REQUESTS LIST -->
+  <div class="requests-container" *ngIf="requests.length > 0">
+    
+    <!-- PENDING REQUESTS -->
+    <section class="requests-section" *ngIf="getPendingRequests().length > 0">
+      <h2 class="section-title">
+        <span class="section-icon">⏳</span>
+        En attente ({{ getPendingRequests().length }})
+      </h2>
+      
+      <div class="requests-grid">
+        <article class="request-card request-card--pending" *ngFor="let request of getPendingRequests()">
+          <div class="request-header">
+            <div class="request-avatar">{{ request.fromName.charAt(0).toUpperCase() }}</div>
+            <div class="request-info">
+              <h3>{{ request.fromName }}</h3>
+              <span class="request-email">{{ request.fromEmail }}</span>
+            </div>
+            <span class="request-type">{{ getProjectTypeLabel(request.projectType) }}</span>
+          </div>
+          
+          <div class="request-target">
+            <span class="target-label">Pour :</span>
+            <span class="target-name">{{ request.toTalentName }}</span>
+          </div>
+          
+          <p class="request-message">{{ request.message }}</p>
+          
+          <div class="request-skills" *ngIf="request.skills.length > 0">
+            <span class="skill-tag" *ngFor="let skill of request.skills">{{ skill }}</span>
+          </div>
+          
+          <div class="request-footer">
+            <span class="request-date">{{ formatDate(request.createdAt) }}</span>
+            <div class="request-actions">
+              <button class="btn-action btn-accept" (click)="acceptRequest(request.id)" title="Accepter">
+                ✅
+              </button>
+              <button class="btn-action btn-decline" (click)="declineRequest(request.id)" title="Refuser">
+                ❌
+              </button>
+              <button class="btn-action btn-email" (click)="openEmail(request.fromEmail, request)" title="Répondre par email">
+                📧
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ACCEPTED REQUESTS -->
+    <section class="requests-section" *ngIf="getAcceptedRequests().length > 0">
+      <h2 class="section-title">
+        <span class="section-icon">✅</span>
+        Acceptées ({{ getAcceptedRequests().length }})
+      </h2>
+      
+      <div class="requests-grid">
+        <article class="request-card request-card--accepted" *ngFor="let request of getAcceptedRequests()">
+          <div class="request-header">
+            <div class="request-avatar request-avatar--accepted">{{ request.fromName.charAt(0).toUpperCase() }}</div>
+            <div class="request-info">
+              <h3>{{ request.fromName }}</h3>
+              <span class="request-email">{{ request.fromEmail }}</span>
+            </div>
+            <span class="request-status status--accepted">{{ getStatusLabel(request.status) }}</span>
+          </div>
+          
+          <p class="request-message">{{ request.message }}</p>
+          
+          <div class="request-footer">
+            <span class="request-date">{{ formatDate(request.createdAt) }}</span>
+            <div class="request-actions">
+              <button class="btn-action btn-email" (click)="openEmail(request.fromEmail, request)" title="Contacter">
+                📧 Contacter
+              </button>
+              <button class="btn-action btn-delete" (click)="deleteRequest(request.id)" title="Supprimer">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- DECLINED REQUESTS -->
+    <section class="requests-section" *ngIf="getDeclinedRequests().length > 0">
+      <h2 class="section-title section-title--muted">
+        <span class="section-icon">❌</span>
+        Refusées ({{ getDeclinedRequests().length }})
+      </h2>
+      
+      <div class="requests-grid">
+        <article class="request-card request-card--declined" *ngFor="let request of getDeclinedRequests()">
+          <div class="request-header">
+            <div class="request-avatar request-avatar--declined">{{ request.fromName.charAt(0).toUpperCase() }}</div>
+            <div class="request-info">
+              <h3>{{ request.fromName }}</h3>
+              <span class="request-email">{{ request.fromEmail }}</span>
+            </div>
+            <span class="request-status status--declined">{{ getStatusLabel(request.status) }}</span>
+          </div>
+          
+          <p class="request-message">{{ request.message }}</p>
+          
+          <div class="request-footer">
+            <span class="request-date">{{ formatDate(request.createdAt) }}</span>
+            <div class="request-actions">
+              <button class="btn-action btn-delete" (click)="deleteRequest(request.id)" title="Supprimer">
+                🗑️ Supprimer
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </div>
+</div>
+
