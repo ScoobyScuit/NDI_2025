@@ -8,6 +8,7 @@ import { InfoModalComponent } from '../../component/info-modal/info-modal.compon
 import { StarsBackgroundComponent } from '../../component/stars-background/stars-background.component';
 import { RetroComputerComponent } from '../../component/retro-computer/retro-computer.component';
 import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/retro-media-player.component';
+import { CardTalentsComponent } from '../../component/card-talents/card-talents.component';
 
 @Component({
   selector: 'app-nird-space',
@@ -21,7 +22,8 @@ import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/ret
     InfoModalComponent,
     StarsBackgroundComponent,
     RetroComputerComponent,
-    RetroMediaPlayerComponent
+    RetroMediaPlayerComponent,
+    CardTalentsComponent
   ],
   templateUrl: './nird-space.component.html',
   styleUrl: './nird-space.component.css'
@@ -29,6 +31,7 @@ import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/ret
 export class NirdSpaceComponent implements OnInit, OnDestroy {
   // Référence essentielle pour commander l'ordinateur
   @ViewChild(RetroComputerComponent) retroComputer!: RetroComputerComponent;
+  @ViewChild(CardTalentsComponent) cardTalents!: CardTalentsComponent;
 
   // Rocket position
   rocketX = signal(50);
@@ -73,6 +76,20 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     const dist = Math.sqrt(
       Math.pow(this.rocketX() - this.mediaPlayerPos.x, 2) + 
       Math.pow(this.rocketY() - this.mediaPlayerPos.y, 2)
+    );
+    return dist < 12; // Rayon de détection
+  });
+
+  // --- CONFIGURATION CARD TALENTS ---
+  // Position fixe en bas à droite
+  cardTalentsPos = { x: 90, y: 80 };
+  
+  // Calcul de proximité pour l'animation
+  isNearCardTalents = computed(() => {
+    if (!this.gameStarted()) return false;
+    const dist = Math.sqrt(
+      Math.pow(this.rocketX() - this.cardTalentsPos.x, 2) + 
+      Math.pow(this.rocketY() - this.cardTalentsPos.y, 2)
     );
     return dist < 12; // Rayon de détection
   });
@@ -261,6 +278,14 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
        // On vide les touches pour ne pas que la fusée continue d'avancer "toute seule" en arrière plan
        this.keys.clear();
        this.retroComputer.openChat();
+       return;
+    }
+    
+    // 3. Check Card Talents - Navigation vers la page talents
+    // Si on est proche et qu'on appuie sur Espace, on redirige vers /talents
+    if (this.isNearCardTalents()) {
+       this.keys.clear();
+       this.cardTalents.navigateToTalents();
     }
   }
 
