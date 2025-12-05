@@ -3,6 +3,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { SpaController } from './spa.controller';
 import { ChatBrutiModule } from './defis/chat-bruti/chat-bruti.module';
 
 @Module({
@@ -14,7 +15,7 @@ import { ChatBrutiModule } from './defis/chat-bruti/chat-bruti.module';
       exclude: ['/api*'], // Exclure les routes API
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, SpaController],
   providers: [AppService],
 })
 export class AppModule {}
