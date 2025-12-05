@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ULTIMATE UNIVERSAL PLAYER (2D/3D/VIDEO)</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /* --- STYLES --- */
+        :root { --primary: #ff007f; --secondary: #00f3ff; --bg-color: #050011; --panel-grey: #222; }
+        body { margin: 0; background-color: var(--bg-color); height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'VT323', monospace; overflow: hidden; color: var(--secondary); transition: background-color 0.8s ease-in-out; }
+        #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.8; filter: blur(10px) contrast(1.2) brightness(1.0); transition: opacity 0.5s; }
+        .retro-player { width: 420px; background: var(--panel-grey); border: 4px solid #444; border-radius: 12px; box-shadow: inset 2px 2px 5px rgba(255,255,255,0.1), inset -2px -2px 5px rgba(0,0,0,0.8), 0 0 100px var(--primary), 0 30px 60px rgba(0,0,0,0.9); padding: 20px; position: relative; z-index: 10; transition: box-shadow 0.8s ease-in-out; }
+        .screw { position: absolute; width: 10px; height: 10px; background: #111; border-radius: 50%; border: 1px solid #555; box-shadow: inset 1px 1px 2px #000; }
+        .tl { top: 10px; left: 10px; } .tr { top: 10px; right: 10px; } .bl { bottom: 10px; left: 10px; } .br { bottom: 10px; right: 10px; }
+        .header-brand { text-align: center; font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 15px; text-shadow: 0 0 10px var(--primary); color: var(--primary); border-bottom: 2px solid #333; padding-bottom: 5px; transition: all 0.8s ease-in-out; }
+        .screen-container { position: relative; width: 100%; height: 240px; background: #000; border: 4px solid #111; border-radius: 8px; overflow: hidden; margin-bottom: 15px; box-shadow: inset 0 0 30px rgba(0,0,0,1); }
+        #canvas { width: 100%; height: 100%; display: block; filter: contrast(1.1) brightness(1.0); }
+        .scanlines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 3px 100%; pointer-events: none; z-index: 20; opacity: 0.3; }
+        .screen-glare { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.15), transparent 70%); pointer-events: none; z-index: 21; }
+        .track-info { display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 5px; }
+        .status-text { color: var(--secondary); animation: blink 2s infinite; text-shadow: 0 0 5px var(--secondary); }
+        .universe-name { color: var(--primary); font-weight: bold; }
+        .progress-container { margin-bottom: 15px; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: #111; height: 8px; border: 1px solid #333; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 20px; background: var(--secondary); border: 2px solid #000; cursor: pointer; box-shadow: 0 0 10px var(--secondary); transition: background 0.5s; }
+        .controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 10px; border-top: 2px solid #333; }
+        .btn { background: linear-gradient(#333, #111); border: 1px solid #555; color: #888; padding: 10px 10px; font-family: 'VT323', monospace; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; box-shadow: 2px 2px 0 #000; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .btn:active { transform: translate(2px, 2px); box-shadow: none; background: #000; color: var(--secondary); }
+        .btn.active { color: var(--secondary); text-shadow: 0 0 10px var(--secondary); border-color: var(--secondary); }
+        .btn-eject { background: linear-gradient(#444, #222); color: var(--primary); font-weight: bold; text-shadow: 0 0 5px var(--primary); }
+        .btn-universe { width: 120px; color: #fff; border-color: #666; }
+        .btn-universe:hover { border-color: var(--primary); color: var(--primary); }
+        .volume-control { display: flex; align-items: center; width: 80px; gap: 5px; }
+        input[type="file"] { display: none; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="retro-player">
+        <div class="screw tl"></div><div class="screw tr"></div>
+        <div class="screw bl"></div><div class="screw br"></div>
+        <div class="header-brand">DIMENSION PLAYER</div>
+        <div class="screen-container">
+            <div class="scanlines"></div>
+            <div class="screen-glare"></div>
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="track-info">
+            <span id="statusText" class="status-text">INSERT TAPE</span>
+            <span id="universeDisplay" class="universe-name">UNIVERSE: OUTRUN</span>
+        </div>
+        <div class="progress-container">
+            <input type="range" id="progressBar" value="0" min="0" max="100" step="0.1">
+        </div>
+        <div class="controls">
+            <label class="btn btn-eject" title="Charger MP3">
+                <i class="fas fa-eject"></i> <input type="file" id="fileInput" accept="audio/*">
+            </label>
+            <button class="btn" id="universeBtn"><i class="fas fa-globe"></i> THEME</button>
+            <button class="btn" id="playBtn" style="width: 50px;"><i class="fas fa-play"></i></button>
+            <div class="volume-control">
+                <i class="fas fa-volume-up"></i>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1">
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioElement"></audio>
+
+<script>/**
+ * DIMENSION PLAYER - CORE ENGINE
+ * Refactorisé en ES6 Class pour la stabilité et la performance.
+ */
+
+class DimensionPlayer {
+    constructor() {
+        // --- CONFIGURATION ---
+        this.videoConfig = [
+            { name: "PINGUIN", file: "Danse_pinguin.mp4", color: "#ff0000" },
+            { name: "CENA", file: "John_cena_danse.mp4", color: "#00ffff" }
+        ];
+
+        // --- DOM ELEMENTS ---
+        this.dom = {
+            fileInput: document.getElementById('fileInput'),
+            audio: document.getElementById('audioElement'),
+            playBtn: document.getElementById('playBtn'),
+            universeBtn: document.getElementById('universeBtn'),
+            progressBar: document.getElementById('progressBar'),
+            volumeSlider: document.getElementById('volumeSlider'),
+            statusText: document.getElementById('statusText'),
+            universeDisplay: document.getElementById('universeDisplay'),
+            canvas: document.getElementById('canvas'),
+            bgCanvas: document.getElementById('bgCanvas'),
+            root: document.documentElement
+        };
+
+        // --- CONTEXTS GRAPHIQUES ---
+        this.ctx = this.dom.canvas.getContext('2d');
+        this.bgCtx = this.dom.bgCanvas.getContext('2d');
+
+        // --- AUDIO ENGINE STATE ---
+        this.audioCtx = null;
+        this.analyser = null;
+        this.source = null;
+        this.dataArray = null;
+        this.smoothedData = null;
+        
+        // --- PLAYER STATE ---
+        this.isPlaying = false;
+        this.tick = 0;
+        this.musicTime = 0; // Temps accumulé pour le shader 3D
+        this.mouse = { x: -9999, y: -9999 };
+
+        // --- AUDIO METRICS (Analysés en temps réel) ---
+        this.metrics = {
+            bass: 0,
+            treble: 0,
+            volume: 0
+        };
+
+        // --- THREE.JS SYSTEM ---
+        this.three = {
+            renderer: null,
+            scene: null,
+            camera: null,
+            mesh: null,
+            uniforms: null,
+            clock: new THREE.Clock()
+        };
+
+        // --- ASSETS & UNIVERSES ---
+        this.lavaBlobs = [];
+        this.currentUniverseIndex = 0;
+        this.universes = this.initUniverses();
+
+        // --- INITIALISATION ---
+        this.initEvents();
+        this.resizeCanvas();
+        this.updateInterfaceColors();
+    }
+
+    // =================================================================
+    // 1. CONFIGURATION DES UNIVERS
+    // =================================================================
+    initUniverses() {
+        let list = [
+            {
+                name: "CELESTIAL", primary: "#ff00ff", secondary: "#00ffff", bg: "#000515",
+                type: '3d', draw: (c, w, h, isBg) => this.drawThreeJSScene(c, w, h, isBg, 'bloom')
+            },
+            {
+                name: "OUTRUN", primary: "#ff007f", secondary: "#00f3ff", bg: "#050011",
+                type: '2d', draw: (c, w, h, isBg) => this.drawOutrun(c, w, h, isBg)
+            },
+            {
+                name: "LAVA LAMP", primary: "#ff2200", secondary: "#ffaa00", bg: "#110000",
+                type: '2d', draw: (c, w, h, isBg) => this.drawLava(c, w, h, isBg, isBg ? 'bg' : 'fg')
+            },
+            {
+                name: "TOXIC", primary: "#39ff14", secondary: "#f0f0f0", bg: "#001100",
+                type: '2d', draw: (c, w, h, isBg) => this.drawToxic(c, w, h, isBg)
+            },
+            {
+                name: "COSMIC", primary: "#8a00ff", secondary: "#00aaff", bg: "#000510",
+                type: '2d', draw: (c, w, h, isBg) => this.drawCosmic(c, w, h, isBg)
+            }
+        ];
+
+        // Ajout des vidéos dynamiquement
+        this.videoConfig.forEach(conf => {
+            let vid = document.createElement('video');
+            vid.src = conf.file;
+            vid.loop = true;
+            vid.muted = true;
+            vid.preload = "auto";
+
+            list.push({
+                name: "CINE: " + conf.name,
+                primary: "#ffffff",
+                secondary: conf.color,
+                bg: "#000000",
+                type: 'video',
+                videoElement: vid,
+                draw: (c, w, h, isBg) => this.drawVideoCinema(c, w, h, isBg, vid, conf.color)
+            });
+        });
+
+        return list;
+    }
+
+    // =================================================================
+    // 2. GESTION DU DOM ET DES EVENTS
+    // =================================================================
+    initEvents() {
+        window.addEventListener('resize', () => this.resizeCanvas());
+        window.addEventListener('mousemove', (e) => { this.mouse.x = e.clientX; this.mouse.y = e.clientY; });
+
+        this.dom.universeBtn.addEventListener('click', () => this.switchUniverse());
+        
+        this.dom.playBtn.addEventListener('click', () => {
+            if (!this.dom.audio.src) return;
+            this.isPlaying ? this.pauseAudio() : this.playAudio();
+        });
+
+        this.dom.fileInput.onchange = (e) => {
+            if (e.target.files.length === 0) return;
+            this.dom.audio.src = URL.createObjectURL(e.target.files[0]);
+            this.dom.audio.load();
+            this.dom.statusText.innerText = "READY";
+            if (!this.audioCtx) this.initAudioEngine();
+            this.playAudio();
+        };
+
+        this.dom.audio.addEventListener('timeupdate', () => {
+            if (this.dom.audio.duration) this.dom.progressBar.value = (this.dom.audio.currentTime / this.dom.audio.duration) * 100;
+        });
+        
+        this.dom.progressBar.addEventListener('input', () => {
+            this.dom.audio.currentTime = (this.dom.progressBar.value / 100) * this.dom.audio.duration;
+        });
+        
+       this.dom.volumeSlider.addEventListener('input', (e) => {
+            const vol = parseFloat(e.target.value);
+            
+            // 1. Si on a initialisé le moteur audio, on utilise le GainNode
+            if (this.gainNode) {
+                this.gainNode.gain.value = vol;
+            } else {
+                // Fallback si l'audio n'a pas encore démarré
+                this.dom.audio.volume = vol; 
+            }
+        });
+    }
+
+    resizeCanvas() {
+        this.dom.canvas.width = this.dom.canvas.clientWidth;
+        this.dom.canvas.height = this.dom.canvas.clientHeight;
+        this.dom.bgCanvas.width = window.innerWidth;
+        this.dom.bgCanvas.height = window.innerHeight;
+        this.lavaBlobs = []; // Reset visual assets on resize
+    }
+
+    updateInterfaceColors() {
+        const u = this.universes[this.currentUniverseIndex];
+        this.dom.universeDisplay.innerText = "UNIVERSE: " + u.name;
+        this.dom.root.style.setProperty('--primary', u.primary);
+        this.dom.root.style.setProperty('--secondary', u.secondary);
+        this.dom.root.style.setProperty('--bg-color', u.bg);
+    }
+
+    switchUniverse() {
+        this.currentUniverseIndex = (this.currentUniverseIndex + 1) % this.universes.length;
+        this.updateInterfaceColors();
+
+        // Pause all videos
+        this.universes.forEach(u => { if (u.type === 'video' && u.videoElement) u.videoElement.pause(); });
+        this.lavaBlobs = []; // Clear lava
+
+        const newU = this.universes[this.currentUniverseIndex];
+        
+        // Init 3D if needed
+        if (newU.type === '3d') this.initThreeJS(this.dom.canvas.width, this.dom.canvas.height);
+
+        // Play video if needed (and if music is playing)
+        if (this.isPlaying && newU.type === 'video') {
+            newU.videoElement.play().catch(e => console.log("Loading video..."));
+        }
+    }
+
+    // =================================================================
+    // 3. MOTEUR AUDIO
+    // =================================================================
+  // =================================================================
+    // 3. MOTEUR AUDIO (CORRIGÉ : VISU INDÉPENDANTE DU VOLUME)
+    // =================================================================
+    initAudioEngine() {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.audioCtx = new AudioContext();
+        
+        // 1. La Source (Le fichier MP3)
+        this.source = this.audioCtx.createMediaElementSource(this.dom.audio);
+        
+        // 2. L'Analyseur (Pour les yeux)
+        // On le branche direct à la source. Il recevra toujours le signal à 100%
+        this.analyser = this.audioCtx.createAnalyser();
+        this.analyser.fftSize = 256;
+        this.source.connect(this.analyser);
+        
+        // 3. Le Gain (Pour les oreilles)
+        // C'est un "robinet" qui contrôle le volume vers les haut-parleurs
+        this.gainNode = this.audioCtx.createGain();
+        
+        // On branche la source au Gain, puis le Gain à la sortie (Destination)
+        this.source.connect(this.gainNode);
+        this.gainNode.connect(this.audioCtx.destination);
+
+        // Initialisation des tableaux de données
+        this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+        this.smoothedData = new Array(this.analyser.frequencyBinCount).fill(0);
+        
+        // On force le volume initial
+        this.gainNode.gain.value = this.dom.audio.volume;
+    }
+
+    playAudio() {
+        this.dom.audio.play();
+        this.isPlaying = true;
+        this.dom.playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        this.dom.playBtn.classList.add('active');
+        this.dom.statusText.innerText = "RUNNING";
+        
+        const currentU = this.universes[this.currentUniverseIndex];
+        if (currentU.type === 'video') currentU.videoElement.play();
+        
+        this.renderLoop();
+    }
+
+    pauseAudio() {
+        this.dom.audio.pause();
+        this.isPlaying = false;
+        this.dom.playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        this.dom.playBtn.classList.remove('active');
+        this.dom.statusText.innerText = "PAUSED";
+        
+        const currentU = this.universes[this.currentUniverseIndex];
+        if (currentU.type === 'video') currentU.videoElement.pause();
+    }
+
+    // =================================================================
+    // 4. BOUCLE DE RENDU PRINCIPALE
+    // =================================================================
+  renderLoop() {
+        if (!this.isPlaying) return;
+        requestAnimationFrame(() => this.renderLoop());
+
+        this.analyser.getByteFrequencyData(this.dataArray);
+
+        let tempBass = 0;
+        let tempMids = 0; // NOUVEAU : Pour la voix et la guitare
+        let tempTreble = 0;
+        let tempVol = 0;
+
+        // Analyse Audio
+        for (let i = 0; i < this.dataArray.length; i++) {
+            // Lissage
+            this.smoothedData[i] += (this.dataArray[i] - this.smoothedData[i]) * 0.3;
+            tempVol += this.dataArray[i];
+
+            // BASSES (0-5) : Kick / Basse
+            if (i < 5) tempBass += this.dataArray[i];
+
+            // MÉDIUMS (10-50) : C'est là que vivent la Voix et la Guitare
+            if (i > 10 && i < 50) tempMids += this.dataArray[i];
+            
+            // AIGUS (60+) : Cymbales / Détails
+            if (i > 60) tempTreble += this.dataArray[i];
+        }
+
+        // Calcul des moyennes
+        this.metrics.bass = tempBass / 5; 
+        this.metrics.mids = tempMids / 40; // Moyenne des médiums
+        this.metrics.treble = tempTreble / (this.dataArray.length - 60); 
+        this.metrics.volume = tempVol / this.dataArray.length;
+
+        this.tick++;
+
+        // Dessin
+        const u = this.universes[this.currentUniverseIndex];
+        u.draw(this.ctx, this.dom.canvas.width, this.dom.canvas.height, false);
+        u.draw(this.bgCtx, this.dom.bgCanvas.width, this.dom.bgCanvas.height, true);
+    }
+    // =================================================================
+    // 5. MOTEUR 3D (ULTRA RÉACTIF)
+    // =================================================================
+    initThreeJS(w, h) {
+        if (!this.three.renderer) {
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(w, h);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            this.three.renderer = renderer;
+            this.three.scene = scene;
+            this.three.camera = camera;
+        }
+    }
+
+drawThreeJSScene(c, w, h, isBg, shaderType) {
+        if (!this.three.renderer) this.initThreeJS(w, h);
+        const sys = this.three;
+
+        if (sys.renderer.domElement.width !== w || sys.renderer.domElement.height !== h) {
+            sys.renderer.setSize(w, h);
+            if(sys.uniforms) sys.uniforms.u_resolution.value.set(w, h);
+        }
+
+        const currentMaterialType = sys.mesh ? sys.mesh.name : null;
+        if (currentMaterialType !== shaderType) {
+            if (sys.mesh) sys.scene.remove(sys.mesh);
+            
+            const vert = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`;
+            const frag = `
+                precision mediump float;
+                uniform float u_time;
+                uniform vec2 u_resolution;
+                uniform float u_bass;
+                uniform float u_mids;
+                uniform float u_treble;
+                
+                // Fonction générique pour dessiner une vague
+                vec3 drawWaveLayer(vec2 uv, vec3 color, float freqBase, float ampBase, float thicknessBase, float speed, float intensityInput) {
+                    
+                    float intensity = 0.0;
+                    for (float i = 0.0; i < 4.0; i++) {
+                        float f = freqBase + (i * 0.5);
+                        float t = u_time * speed + (i * 0.3);
+                        float wave = sin(uv.y * f + t);
+                        float x = uv.x + wave * ampBase;
+                        float th = thicknessBase + (intensityInput * 0.015); // Épaisseur légèrement réduite
+                        
+                        // Sécurité anti-blanc renforcée (+0.03)
+                        intensity += th / (abs(x) + 0.03);
+                    }
+                    intensity *= (1.0 - abs(uv.y));
+                    
+                    // On applique la couleur. L'intensité est mise au carré pour
+                    // que les zones sombres soient plus sombres et les pics plus nets.
+                    return color * intensity * (intensityInput * intensityInput); 
+                }
+
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / min(u_resolution.x, u_resolution.y);
+                    
+                    float angle = u_time * 0.1; 
+                    mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+                    vec2 rotatedUv = rot * uv;
+
+                    vec3 finalColor = vec3(0.0);
+
+                    // ========================================================
+                    // === COULEURS PLUS PROFONDES (Moins de blanc) ===
+                    // ========================================================
+
+                    // 1. COUCHE BASSES (Bleu Profond au lieu de Bleu Cyan)
+                    vec3 colBass = vec3(0.05, 0.2, 0.8); 
+                    float bassInput = u_bass * 2.5; // Input boosté pour compenser la couleur sombre
+                    if(bassInput > 0.1) {
+                         finalColor += drawWaveLayer(rotatedUv, colBass, 6.0, 0.15, 0.002, 1.5, bassInput);
+                    }
+
+                    // 2. COUCHE VOIX/MIDS (Pourpre profond au lieu de Magenta vif)
+                    vec3 colMids = vec3(0.6, 0.0, 0.8); 
+                    float midsInput = u_mids * 2.0;
+                    if(midsInput > 0.1) {
+                        vec2 midUv = rotatedUv + vec2(0.5, 0.0);
+                        finalColor += drawWaveLayer(midUv, colMids, 2.0, 0.4, 0.001, 0.5, midsInput);
+                    }
+
+                    // 3. COUCHE AIGUS (Turquoise sombre au lieu de Cyan fluo)
+                    vec3 colTreble = vec3(0.0, 0.7, 0.5); 
+                    float trebleInput = u_treble * 1.5;
+                    if(trebleInput > 0.1) {
+                        vec2 trebleUv = rotatedUv - vec2(0.5, 0.0);
+                        finalColor += drawWaveLayer(trebleUv, colTreble, 10.0, 0.05, 0.001, 0.8, trebleInput);
+                    }
+
+                    // ========================================================
+                    // === POST PROCESSING CALMÉ ===
+                    // ========================================================
+
+                    // Limiteur global : On réduit la luminosité totale de 20% pour éviter la saturation
+                    finalColor *= 0.8;
+
+                    // Flash Bang : Beaucoup plus subtil (opacité 0.25 au lieu de 0.4)
+                    float flash = smoothstep(0.85, 1.5, u_bass);
+                    finalColor += vec3(0.4, 0.6, 1.0) * flash * 0.25;
+
+                    // Saturation "Onctueuse" : On augmente le seuil min (0.9) pour moins de contraste violent
+                    float smoothness = 1.4 - ((u_bass + u_mids) * 0.3);
+                    finalColor = pow(finalColor, vec3(max(0.9, smoothness)));
+
+                    // Scanlines
+                    finalColor *= 0.8 + 0.2 * sin(gl_FragCoord.y * 12.0);
+
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    u_time: { value: 0 },
+                    u_resolution: { value: new THREE.Vector2(w, h) },
+                    u_bass: { value: 0 },
+                    u_mids: { value: 0 },
+                    u_treble: { value: 0 }
+                },
+                vertexShader: vert, fragmentShader: frag,
+                blending: THREE.AdditiveBlending,
+                transparent: true
+            });
+
+            const geometry = new THREE.PlaneGeometry(2, 2);
+            sys.mesh = new THREE.Mesh(geometry, material);
+            sys.mesh.name = shaderType;
+            sys.scene.add(sys.mesh);
+            sys.uniforms = material.uniforms;
+        }
+
+        // --- ENVOI DES DONNÉES (JS) - BOOSTS RÉDUITS ---
+        if (sys.uniforms) {
+            let speed = 0.2 + (this.metrics.volume / 60);
+            this.musicTime += 0.01 * speed;
+            sys.uniforms.u_time.value = this.musicTime;
+
+            // BASSES : Boost réduit de 2.0 à 1.5
+            let b = (this.metrics.bass / 255);
+            if(b < 0.3) b = 0; 
+            let targetBass = b * 1.5; 
+            sys.uniforms.u_bass.value += (targetBass - sys.uniforms.u_bass.value) * 0.4;
+
+            // MIDS : Boost réduit de 2.5 à 2.0
+            let m = (this.metrics.mids / 255);
+            let targetMids = m * 2.0; 
+            sys.uniforms.u_mids.value += (targetMids - sys.uniforms.u_mids.value) * 0.1;
+
+            // AIGUS
+            let t = (this.metrics.treble / 255);
+            sys.uniforms.u_treble.value += (t - sys.uniforms.u_treble.value) * 0.2;
+        }
+
+        sys.renderer.render(sys.scene, sys.camera);
+        c.drawImage(sys.renderer.domElement, 0, 0, w, h);
+        
+        c.globalCompositeOperation = 'source-over';
+        // Scanlines un peu plus opaques pour assombrir le résultat final
+        c.fillStyle = "rgba(0, 0, 0, 0.35)"; 
+        for (let i = 0; i < h; i += 4) c.fillRect(0, i, w, 1);
+    }
+   
+    // =================================================================
+    // 6. VIDEO & CINEMA (GLITCH)
+    // =================================================================
+ drawVideoCinema(c, w, h, isBg, vidElement, flashColor) {
+        c.globalCompositeOperation = 'source-over';
+
+        // Sécurité si la vidéo n'est pas chargée
+        if (!vidElement || vidElement.readyState < 2) {
+            c.fillStyle = Math.random() > 0.5 ? "#111" : "#000";
+            c.fillRect(0, 0, w, h);
+            return;
+        }
+
+        // =========================================================
+        // 1. GESTION DE LA VITESSE (MODIFIÉ : VITESSE NORMALE)
+        // =========================================================
+        // On force la vitesse à 1.0 pour annuler toute accélération précédente
+        vidElement.playbackRate = 1.0; 
+
+        // =========================================================
+        // 2. CALCULS DES EFFETS VISUELS (ZOOM & TREMBLEMENT)
+        // =========================================================
+        
+        // Zoom léger sur les basses (Scale)
+        let scale = 1.0 + (this.metrics.bass > 100 ? (this.metrics.bass - 100) / 1000 : 0);
+        if (isBg) scale *= 1.1; // Le fond est toujours un peu plus zoomé pour éviter les bords
+
+        // Tremblement de l'écran sur le volume fort (Shake)
+        let shakeIntensity = (this.metrics.volume > 150) ? (this.metrics.volume - 150) / 10 : 0;
+        let dx = (Math.random() - 0.5) * shakeIntensity * (isBg ? 5 : 2);
+        let dy = (Math.random() - 0.5) * shakeIntensity * (isBg ? 5 : 2);
+
+        // Centrage de la vidéo avec les effets appliqués
+        let nw = w * scale;
+        let nh = h * scale;
+        let nx = (w - nw) / 2 + dx;
+        let ny = (h - nh) / 2 + dy;
+
+        c.save();
+
+        // =========================================================
+        // 3. EFFET GLITCH (SUR LES AIGUS)
+        // =========================================================
+        if (this.metrics.treble > 100 && !isBg) {
+            c.globalAlpha = 0.8;
+            c.drawImage(vidElement, nx, ny, nw, nh);
+            c.globalAlpha = 1.0;
+            c.globalCompositeOperation = 'lighter';
+
+            // Découpage de bandes horizontales aléatoires
+            let slices = Math.floor(this.metrics.treble / 20);
+            for (let i = 0; i < slices; i++) {
+                let sliceH = Math.random() * (h / 4);
+                let sliceY = Math.random() * h;
+                let offset = (Math.random() - 0.5) * (this.metrics.treble); // Décalage latéral
+                try {
+                    // On dessine une tranche de vidéo décalée
+                    c.drawImage(vidElement, 0, sliceY / scale, vidElement.videoWidth, sliceH / scale, nx + offset, ny + sliceY, nw, sliceH);
+                } catch (e) {}
+            }
+            
+            // Flash coloré par dessus
+            c.fillStyle = flashColor;
+            c.globalCompositeOperation = 'overlay';
+            c.fillRect(0, 0, w, h);
+        } else {
+            // Rendu Normal (avec un peu de contraste dynamique)
+            if (!isBg) c.filter = `contrast(${1 + this.metrics.bass / 300}) brightness(${1 + this.metrics.treble / 400})`;
+            c.drawImage(vidElement, nx, ny, nw, nh);
+            c.filter = 'none';
+        }
+        c.restore();
+
+        // =========================================================
+        // 4. POST-PROCESSING (FLASH & VIGNETTE)
+        // =========================================================
+        
+        // Gros Flash sur les kicks violents (> 220)
+        if (this.metrics.bass > 220) {
+            c.globalCompositeOperation = 'add';
+            c.fillStyle = flashColor;
+            c.globalAlpha = (this.metrics.bass - 220) / 100;
+            c.fillRect(0, 0, w, h);
+            c.globalAlpha = 1.0;
+        }
+
+        // Vignette sombre (contours de l'écran)
+        c.globalCompositeOperation = 'source-over';
+        let gradient = c.createRadialGradient(w / 2, h / 2, h * 0.3, w / 2, h / 2, h * 0.8);
+        gradient.addColorStop(0, "rgba(0,0,0,0)");
+        gradient.addColorStop(1, "rgba(0,0,0,0.6)");
+        c.fillStyle = gradient;
+        c.fillRect(0, 0, w, h);
+
+        // Scanlines TV discrètes
+        c.fillStyle = "rgba(0, 0, 0, 0.2)";
+        for (let i = 0; i < h; i += 4) c.fillRect(0, i, w, 1);
+    }
+    // =================================================================
+    // 7. EFFETS 2D (PORTAGE DIRECT)
+    // =================================================================
+drawOutrun(c, w, h, isBg) {
+        let horizon = h * 0.5; // La ligne de coupure
+        let cx = w / 2;
+
+        // ============================================================
+        // 1. LE CIEL (ARRIÈRE-PLAN)
+        // ============================================================
+        c.globalCompositeOperation = 'source-over';
+        
+        // Dégradé du ciel (Bleu nuit vers Violet)
+        let skyGrad = c.createLinearGradient(0, 0, 0, horizon); 
+        skyGrad.addColorStop(0, "#050011"); 
+        skyGrad.addColorStop(1, "#2a0033");
+        c.fillStyle = skyGrad; 
+        c.fillRect(0, 0, w, horizon);
+
+        // ============================================================
+        // 2. LE SOLEIL (DERRIÈRE LES MONTAGNES)
+        // ============================================================
+        c.save();
+        c.shadowBlur = isBg ? 80 : 40; 
+        c.shadowColor = "#ff0055";
+        
+        let sunSize = isBg ? h * 0.25 : h * 0.2;
+        // Le soleil reste fixe ou pulse légèrement, il est centré sur l'horizon
+        let sunPulse = (this.metrics.bass / 255) * 15; 
+        
+        let sunGrad = c.createLinearGradient(0, horizon - sunSize, 0, horizon + sunSize);
+        sunGrad.addColorStop(0, "#ffaa00"); // Jaune
+        sunGrad.addColorStop(0.5, "#ff0055"); // Rouge
+        sunGrad.addColorStop(1, "#800080"); // Violet bas
+        
+        c.fillStyle = sunGrad; 
+        c.beginPath(); 
+        // On le dessine un peu plus haut pour qu'il ne soit pas coupé mochement
+        c.arc(cx, horizon - (sunSize * 0.3), sunSize + sunPulse, 0, Math.PI * 2); 
+        c.fill();
+        c.restore();
+
+        // ============================================================
+        // 3. LES MONTAGNES SONORES (MONTENT VERS LE CIEL)
+        // ============================================================
+        c.globalCompositeOperation = 'lighter'; // Fusion lumineuse des montagnes
+
+        const drawMountainLayer = (color, dataOffset, ampMultiplier, widthSpread) => {
+            c.shadowBlur = isBg ? 20 : 10; 
+            c.shadowColor = color;
+            c.fillStyle = color;
+            
+            c.beginPath(); 
+            // On part de l'horizon à gauche
+            c.moveTo(0, horizon);
+
+            let step = w / 60; // Résolution
+            
+            for(let i = 0; i <= 60; i++) {
+                let dataIndex = Math.floor(i * widthSpread) + dataOffset;
+                if (dataIndex >= this.smoothedData.length) dataIndex = this.smoothedData.length - 1;
+
+                let val = this.smoothedData[dataIndex] || 0;
+                
+                // Formule de hauteur : On SOUSTRAIT val à horizon pour aller vers le HAUT
+                let mountainHeight = val * ampMultiplier * (isBg ? 1.5 : 0.8);
+                
+                // Facteur "Montagne" : Plus c'est au centre, plus c'est grand
+                // Plus c'est sur les bords, plus c'est petit (effet de fuite)
+                let centerFade = 1 - Math.pow(Math.abs((i * step - cx) / (w/2)), 2); 
+                
+                let y = horizon - (mountainHeight * centerFade);
+                
+                c.lineTo(i * step, y);
+            }
+            // On ferme la forme en redescendant à l'horizon à droite
+            c.lineTo(w, horizon); 
+            c.fill();
+        };
+
+        // --- Les 3 Couches "Fire & Ice" ---
+        // Basses (Violet, le plus gros, derrière)
+        drawMountainLayer("rgba(80, 0, 180, 0.5)", 0, 1.4, 0.5); 
+        // Mids (Cyan, moyen, milieu)
+        drawMountainLayer("rgba(0, 200, 255, 0.4)", 10, 1.0, 0.8);
+        // Aigus (Orange, petit et nerveux, devant)
+        drawMountainLayer("rgba(255, 50, 0, 0.6)", 30, 0.7, 1.2);
+
+        // ============================================================
+        // 4. LE SOL (COUVRE LE BAS DES MONTAGNES)
+        // ============================================================
+        c.globalCompositeOperation = 'source-over'; // Retour en mode normal (opaque)
+        
+        // On dessine un rectangle noir/violet qui part de l'horizon vers le bas
+        // Cela crée la séparation nette : les montagnes ne peuvent pas dépasser en bas
+        let groundGrad = c.createLinearGradient(0, horizon, 0, h);
+        groundGrad.addColorStop(0, "#150020"); // Noir violet à l'horizon
+        groundGrad.addColorStop(1, "#0a0010"); // Plus sombre vers le bas
+        
+        c.fillStyle = groundGrad;
+        c.fillRect(0, horizon, w, h - horizon);
+
+        // ============================================================
+        // 5. LA GRILLE (DESSINÉE SUR LE SOL)
+        // ============================================================
+        c.strokeStyle = "rgba(255, 0, 127, 0.5)"; // Rose néon classique
+        c.shadowBlur = 5;
+        c.shadowColor = "#ff007f";
+        c.lineWidth = 2;
+        c.beginPath();
+        
+        // Lignes Verticales (Perspective)
+        // Elles partent toutes du centre de l'horizon (point de fuite)
+        // Mais on ne les dessine qu'à partir de `horizon` vers le bas
+        for(let i = -w; i < w * 2; i += w / 10) { 
+            // Astuce math : on calcule le vecteur direction
+            // Mais pour faire simple ici, on trace juste des rayons
+            c.moveTo(cx, horizon); 
+            c.lineTo(i, h); // On vise plus large que l'écran pour l'effet grand angle
+        } 
+        
+        // Lignes Horizontales (Vitesse)
+        // Elles avancent vers nous
+        let speed = (this.tick * 3) % 100; // Vitesse de défilement
+        
+        // On dessine des lignes horizontales avec un espacement exponentiel (perspective)
+        for(let i = 0; i < 20; i++) { 
+            // z est la "profondeur" simulée
+            let z = 100 + i * 50 - speed;
+            if (z < 10) z += 1000; // Boucle
+            
+            // Projection 3D simple vers 2D
+            let p = 400 / z; // Facteur de projection
+            let y = horizon + (p * h * 0.5); // Position Y sur l'écran
+            
+            if(y >= horizon && y < h) {
+                c.moveTo(0, y); 
+                c.lineTo(w, y); 
+            }
+        }
+        c.stroke();
+    } 
+  drawLava(c, w, h, isBg, contextId) {
+        // --- 1. INITIALISATION ---
+        if (!this.lavaBlobs[contextId]) this.lavaBlobs[contextId] = [];
+        if (!this.lavaLights) this.lavaLights = {}; 
+        if (!this.lavaLights[contextId]) this.lavaLights[contextId] = [];
+
+        let blobs = this.lavaBlobs[contextId];
+        let lights = this.lavaLights[contextId];
+        let numBlobs = isBg ? 12 : 8;
+        let numLights = isBg ? 50 : 30;
+
+        if (blobs.length < numBlobs) {
+            for (let i = blobs.length; i < numBlobs; i++) {
+                blobs.push({ x: Math.random() * w, y: Math.random() * h, vy: (Math.random() * 0.4 + 0.1) * (Math.random() > 0.5 ? 1 : -1), vx: (Math.random() - 0.5) * 0.3, radius: (isBg ? 80 : 25) + Math.random() * (isBg ? 120 : 40), colorHue: Math.random() * 30 });
+            }
+        }
+
+        if (lights.length < numLights) {
+            for (let i = lights.length; i < numLights; i++) {
+                lights.push({ 
+                    x: Math.random() * w, 
+                    y: Math.random() * h, 
+                    vy: 0.5 + Math.random(), 
+                    radius: 1 + Math.random() * 2,
+                    offset: Math.random() * 100 // Pour décaler la respiration
+                });
+            }
+        }
+        
+        // --- 2. FOND ---
+        c.globalCompositeOperation = 'source-over';
+        let bgGrad = c.createLinearGradient(0, 0, 0, h); 
+        bgGrad.addColorStop(0, "#0f0000"); 
+        bgGrad.addColorStop(1, "#2a0000");
+        c.fillStyle = bgGrad; 
+        c.fillRect(0, 0, w, h);
+
+        // --- 3. LUMIÈRES INTELLIGENTES (Threshold System) ---
+        c.globalCompositeOperation = 'lighter'; 
+        
+        // Intensité globale (0.0 à 1.0)
+        let intensity = this.metrics.bass / 255;
+        
+        // LE SEUIL : En dessous de 0.35 (35%), c'est considéré comme "Calme"
+        let threshold = 0.35; 
+
+        lights.forEach(light => {
+            // Mouvement vertical constant + boost si intense
+            light.y -= light.vy * (1 + (intensity > threshold ? intensity * 3 : 0)); 
+            
+            if (light.y < -10) { 
+                light.y = h + 10; 
+                light.x = Math.random() * w; 
+            }
+
+            let alpha = 0;
+            let radiusMultiplier = 1;
+
+            if (intensity < threshold) {
+                // === MODE CALME (Respiration) ===
+                // Math.sin crée une vague douce (-1 à 1) basée sur le temps (this.tick)
+                // On ajoute 'light.offset' pour qu'elles ne clignotent pas toutes synchro
+                let breath = Math.sin(this.tick * 0.05 + light.offset); 
+                
+                // Opacité entre 0.1 et 0.3 (très doux)
+                alpha = 0.2 + (breath * 0.1); 
+                radiusMultiplier = 1; // Taille normale
+            } else {
+                // === MODE NERVEUX (Stroboscope) ===
+                // On calcule de combien on dépasse le seuil
+                let excess = intensity - threshold; // Si intensity est 0.8, excess est 0.45
+                
+                // Le strobe est multiplié par l'excès.
+                // Si on dépasse à peine le seuil, ça scintille à peine.
+                // Si on explose le seuil, ça clignote fort.
+                let strobe = Math.random();
+                
+                // Base 0.2 + chaos
+                alpha = 0.2 + (excess * strobe * 4.0); 
+                
+                // La taille explose aussi selon l'excès
+                radiusMultiplier = 1 + (excess * strobe * 5.0);
+            }
+
+            // Cap pour éviter les bugs visuels
+            if (alpha > 1) alpha = 1;
+            if (alpha < 0) alpha = 0;
+
+            let r = light.radius * radiusMultiplier;
+
+            // COULEUR : Vire au blanc si l'intensité est extrême (> 0.8)
+            if (intensity > 0.8 && Math.random() > 0.5) {
+                 c.fillStyle = `rgba(255, 255, 200, ${alpha})`; // Flash Blanc
+            } else {
+                 c.fillStyle = `rgba(255, 200, 50, ${alpha})`; // Or
+            }
+
+            c.beginPath();
+            c.arc(light.x, light.y, r, 0, Math.PI * 2);
+            c.fill();
+        });
+
+        // --- 4. BLOBS LAVA (Code inchangé) ---
+        c.globalCompositeOperation = 'lighter';
+        let localMouseX = this.mouse.x; let localMouseY = this.mouse.y;
+        if (!isBg) {
+            const rect = this.dom.canvas.getBoundingClientRect();
+            localMouseX = (this.mouse.x - rect.left) * (this.dom.canvas.width / rect.width);
+            localMouseY = (this.mouse.y - rect.top) * (this.dom.canvas.height / rect.height);
+        }
+
+        blobs.forEach(blob => {
+            blob.y -= blob.vy * (1 + this.metrics.bass / 250);
+            blob.x += blob.vx * (1 + this.metrics.bass / 400);
+            
+            let dx = blob.x - localMouseX; let dy = blob.y - localMouseY;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < (isBg ? 300 : 100)) {
+                let force = ((isBg ? 300 : 100) - dist) / (isBg ? 300 : 100);
+                blob.x += (dx / dist) * force * (isBg ? 8 : 4);
+                blob.y += (dy / dist) * force * (isBg ? 8 : 4);
+            }
+
+            if (blob.y > h + blob.radius) blob.y = -blob.radius; if (blob.y < -blob.radius) blob.y = h + blob.radius;
+            if (blob.x > w + blob.radius) blob.x = -blob.radius; if (blob.x < -blob.radius) blob.x = w + blob.radius;
+            
+            let grad = c.createRadialGradient(blob.x, blob.y, 0, blob.x, blob.y, blob.radius);
+            let hue = blob.colorHue + (this.metrics.bass / 20);
+            grad.addColorStop(0, `hsla(${hue}, 100%, 50%, 1)`);
+            grad.addColorStop(0.7, `hsla(${hue + 10}, 100%, 40%, 0.5)`);
+            grad.addColorStop(1, "rgba(0,0,0,0)");
+            c.fillStyle = grad; c.beginPath(); c.arc(blob.x, blob.y, blob.radius, 0, Math.PI * 2); c.fill();
+        });
+    }
+drawToxic(c, w, h, isBg) {
+        c.globalCompositeOperation = 'source-over';
+        c.fillStyle = "rgba(0, 10, 0, 0.3)"; c.fillRect(0, 0, w, h);
+        c.globalCompositeOperation = 'lighter';
+        c.shadowBlur = isBg ? 15 : 5; c.shadowColor = "#39ff14"; c.fillStyle = "#39ff14";
+        let bars = 40; let step = w / bars;
+        let shakeX = (this.metrics.bass > 200) ? (Math.random() - 0.5) * 10 : 0;
+        for (let i = 0; i < bars; i++) {
+            let val = this.smoothedData[i * 2] || 0;
+            let barH = val * (isBg ? 2 : 1);
+            c.fillRect(i * step + 2 + shakeX, h / 2 - barH, step - 4, barH * 2);
+        }
+        c.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        c.beginPath(); c.moveTo(0, h / 2 + Math.sin(this.tick * 0.1) * h / 2); c.lineTo(w, h / 2 + Math.sin(this.tick * 0.1) * h / 2); c.stroke();
+    }
+
+    drawCosmic(c, w, h, isBg) {
+        c.globalCompositeOperation = 'source-over';
+        c.fillStyle = "rgba(0, 5, 20, 0.1)"; c.fillRect(0, 0, w, h);
+        let cx = w / 2; let cy = h / 2;
+        c.globalCompositeOperation = 'lighter';
+        c.shadowBlur = isBg ? 50 : 20; c.shadowColor = "#8a00ff"; c.strokeStyle = "#00aaff"; c.lineWidth = isBg ? 4 : 2;
+        c.beginPath();
+        let radius = isBg ? h * 0.3 : h * 0.2;
+        for (let i = 0; i <= 60; i++) {
+            let angle = (i / 60) * Math.PI * 2;
+            let val = this.smoothedData[i % 40];
+            let r = radius + (val * (isBg ? 1.5 : 0.6));
+            let rot = this.tick * 0.01;
+            let x = cx + Math.cos(angle + rot) * r;
+            let y = cy + Math.sin(angle + rot) * r;
+            if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+        }
+        c.closePath(); c.stroke();
+    }
+}
+
+// Lancement de l'application
+window.addEventListener('load', () => {
+    new DimensionPlayer();
+});
+</script>
+</body>
+</html>

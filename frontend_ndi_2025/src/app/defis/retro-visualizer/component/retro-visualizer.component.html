@@ -1,0 +1,75 @@
+<canvas #bgCanvas id="bgCanvas"></canvas>
+
+<div class="retro-player">
+  <div class="screw tl"></div><div class="screw tr"></div>
+  <div class="screw bl"></div><div class="screw br"></div>
+
+  <div class="header-brand">DIMENSION PLAYER</div>
+
+  <!-- NOUVEAU: Ligne d'état avec REC, Nom de Fichier et Sélecteur de Couleur -->
+  <div class="file-status-line">
+    <div class="rec-indicator" [class.recording]="playerState().isPlaying">REC</div>
+    <span class="file-name-display">{{ playerState().fileName || 'NO FILE LOADED' }}</span>
+
+    <!-- Sélecteur de couleur d'accentuation -->
+    <label class="color-picker-label" title="Couleur d'accentuation">
+      <input type="color" [value]="playerState().primaryColor" (input)="setPrimaryColor($event)">
+    </label>
+  </div>
+  <!-- FIN NOUVELLE LIGNE D'ÉTAT -->
+
+  <div class="screen-container">
+    <div class="scanlines"></div>
+    <div class="screen-glare"></div>
+    <canvas #canvas id="canvas"></canvas>
+  </div>
+
+  <div class="track-info">
+    <span id="statusText" class="status-text">{{ playerState().statusText }}</span>
+    <span id="universeDisplay" class="universe-name">UNIVERSE: {{ currentUniverse.name }}</span>
+  </div>
+
+  <div class="progress-container">
+    <input type="range" id="progressBar" [value]="playerState().progressValue" (input)="seek($event)"
+           min="0" max="100" step="0.1" [disabled]="!playerState().isLoaded" (change)="updateProgress()">
+  </div>
+
+  <!-- NOUVEAU: Affichage du temps MM:SS -->
+  <div class="time-display">
+    <span id="currentTime">{{ playerState().currentTimeDisplay }}</span>
+    <span>/</span>
+    <span id="duration">{{ playerState().durationDisplay }}</span>
+  </div>
+  <!-- FIN AFFICHAGE TEMPS -->
+
+
+  <div class="controls">
+    <label class="btn btn-eject" title="Charger MP3">
+      <i class="fas fa-eject"></i>
+      <input type="file" (change)="handleFile($event)" accept="audio/*">
+    </label>
+
+    <button class="btn btn-universe" (click)="changeUniverse()">
+      <i class="fas fa-globe"></i> THEME
+    </button>
+
+    <button class="btn" id="playBtn" style="width: 50px;"
+            [class.active]="playerState().isPlaying"
+            [disabled]="!playerState().isLoaded"
+            (click)="togglePlayPause()">
+      <i class="fas" [ngClass]="{'fa-pause': playerState().isPlaying, 'fa-play': !playerState().isPlaying}"></i>
+    </button>
+
+    <!-- NOUVEAU: Bouton Mute -->
+    <button class="btn" (click)="toggleMute()" title="Mute/Unmute">
+      <i class="fas" [ngClass]="{'fa-volume-mute': playerState().isMuted, 'fa-volume-up': !playerState().isMuted}"></i>
+    </button>
+
+    <div class="volume-control">
+      <i class="fas fa-volume-up"></i>
+      <input type="range" id="volumeSlider" [value]="playerState().volume" (input)="setVolume($event)" min="0" max="1" step="0.05">
+    </div>
+  </div>
+</div>
+
+<audio #audioElement></audio>
