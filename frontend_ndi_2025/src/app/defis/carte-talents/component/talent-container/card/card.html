@@ -50,7 +50,7 @@
 
       <!-- SKILLS -->
       <section class="card__skills">
-        <div class="skill-row" *ngIf="talent.competences?.[0]">
+        <div class="skill-row" *ngIf="talent.competences[0]">
           <div class="skill-energies">
             <span class="energy" [ngClass]="'energy--' + getEnergyType(0)"></span>
           </div>
@@ -58,7 +58,7 @@
           <span class="skill-damage">+{{ getSkillDamage(0) }}</span>
         </div>
 
-        <div class="skill-row" *ngIf="talent.competences?.[1]">
+        <div class="skill-row" *ngIf="talent.competences[1]">
           <div class="skill-energies">
             <span class="energy" [ngClass]="'energy--' + getEnergyType(1)"></span>
             <span class="energy energy--rainbow"></span>
@@ -67,7 +67,7 @@
           <span class="skill-damage">+{{ getSkillDamage(1) }}</span>
         </div>
 
-        <div class="skill-row skill-row--special" *ngIf="talent.passions?.[0]">
+        <div class="skill-row skill-row--special" *ngIf="talent.passions[0]">
           <div class="skill-energies">
             <span class="energy energy--rainbow"></span>
             <span class="energy energy--rainbow"></span>
@@ -80,26 +80,26 @@
           <span class="skill-damage">{{ getImpactDamage() }}</span>
         </div>
 
-        <p class="skill-quote">"{{ talent.style?.citation || 'Un talent unique' }}"</p>
+        <p class="skill-quote">"{{ talent.style.citation || 'Un talent unique' }}"</p>
       </section>
 
       <!-- FOOTER -->
       <footer class="card__footer">
         <div class="footer-stat">
           <span class="footer-stat__label">Risque</span>
-          <span class="footer-stat__value footer-stat__value--risk">{{ talent.limites?.risqueEchec || 10 }}%</span>
+          <span class="footer-stat__value footer-stat__value--risk">{{ talent.limites.risqueEchec || 10 }}%</span>
         </div>
 
         <div class="footer-stat">
           <span class="footer-stat__label">Langues</span>
           <div class="footer-langs">
-            <span class="lang-tag" *ngFor="let lang of talent.langues?.slice(0, 3)">{{ lang }}</span>
+            <span class="lang-tag" *ngFor="let lang of talent.langues.slice(0, 3)">{{ lang }}</span>
           </div>
         </div>
 
         <div class="footer-stat">
           <span class="footer-stat__label">Projets</span>
-          <span class="footer-stat__value">{{ talent.projets?.length || 0 }}</span>
+          <span class="footer-stat__value">{{ talent.projets.length || 0 }}</span>
         </div>
       </footer>
 
@@ -165,7 +165,7 @@
               </div>
               <span class="detail-stat__value">{{ talent.stats.principale.valeur }}%</span>
             </div>
-            <div class="detail-stat" *ngFor="let stat of talent.stats?.secondaires">
+            <div class="detail-stat" *ngFor="let stat of talent.stats.secondaires">
               <span class="detail-stat__name">{{ stat.nom }}</span>
               <div class="detail-stat__bar">
                 <div class="detail-stat__fill" [style.width.%]="stat.valeur"></div>
@@ -186,7 +186,7 @@
           </div>
         </div>
 
-        <div class="detail-section" *ngIf="talent.passions?.length">
+        <div class="detail-section" *ngIf="talent.passions.length">
           <h3 class="detail-section__title">❤️ Passions</h3>
           <div class="detail-passions">
             <span class="detail-passion" *ngFor="let passion of talent.passions">{{ passion }}</span>
@@ -203,28 +203,28 @@
           </ul>
         </div>
 
-        <div class="detail-section" *ngIf="talent.langues?.length">
+        <div class="detail-section" *ngIf="talent.langues.length">
           <h3 class="detail-section__title">🌍 Langues</h3>
           <div class="detail-langs">
             <span class="detail-lang" *ngFor="let lang of talent.langues">{{ lang }}</span>
           </div>
         </div>
 
-        <div class="detail-section" *ngIf="talent.projets?.length">
+        <div class="detail-section" *ngIf="talent.projets.length">
           <h3 class="detail-section__title">🚀 Projets</h3>
           <ul class="detail-list detail-list--projects">
             <li *ngFor="let projet of talent.projets">{{ projet }}</li>
           </ul>
         </div>
 
-        <div class="detail-section" *ngIf="talent.tags?.length">
+        <div class="detail-section" *ngIf="talent.tags.length">
           <h3 class="detail-section__title">🏷️ Tags</h3>
           <div class="detail-tags">
             <span class="detail-tag" *ngFor="let tag of talent.tags">{{ tag }}</span>
           </div>
         </div>
 
-        <div class="detail-quote" *ngIf="talent.style?.citation">
+        <div class="detail-quote" *ngIf="talent.style.citation">
           <span class="quote-icon">"</span>
           <p>{{ talent.style.citation }}</p>
         </div>

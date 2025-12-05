@@ -384,8 +384,8 @@
   width: 80px;
   height: 4px;
   background: 
-    /* Queue pixelisée */
-    linear-gradient(90deg, 
+    /* Queue pixelisée - la traînée part de la tête (right) et va vers l'arrière (left) */
+    linear-gradient(270deg, 
       #ffffff 0%, 
       #ffffff 10%,
       #aaffff 20%,
@@ -403,14 +403,14 @@
 .shooting-star::before {
   content: '';
   position: absolute;
-  left: 0;
+  right: 0;
   top: -2px;
   width: 8px;
   height: 8px;
   background: #ffffff;
   box-shadow: 
-    2px 0 0 0 #aaffff,
-    4px 0 0 0 #88ddff;
+    -2px 0 0 0 #aaffff,
+    -4px 0 0 0 #88ddff;
 }
 
 @keyframes shoot {

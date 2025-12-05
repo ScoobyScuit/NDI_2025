@@ -50,7 +50,7 @@ export class BlackHoleComponent implements AfterViewInit {
     this.animation = this.rotatingGroupRef.nativeElement.animate(
       [
         { transform: 'rotate(0deg)' },
-        { transform: 'rotate(360deg)' }
+        { transform: 'rotate(-360deg)' }
       ],
       {
         duration: 20000,

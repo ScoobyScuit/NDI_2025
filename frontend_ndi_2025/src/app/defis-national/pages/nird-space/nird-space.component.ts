@@ -41,7 +41,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
 
   // Rocket position
   rocketX = signal(50);
-  rocketY = signal(85);
+  rocketY = signal(75);
   rocketRotation = signal(0);
   
   // Game state
@@ -142,7 +142,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   private animationFrame: number | null = null;
   private readonly speed = 0.8;
 
-  // --- PLANÈTES ---
+  // --- PLANETES ---
   planets = signal<Planet[]>([
     {
       id: 'constat',
@@ -150,12 +150,12 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
       x: 30, y: 25, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: ' ', 
       title: '🔴 LE CONSTAT : La menace Big Tech', 
       content: [
-        '💥 <strong>LE DÉCLENCHEUR :</strong> Fin du support Windows 10 en octobre 2025 - Microsoft force la mise à jour vers Windows 11',
-        '🗑️ <strong>OBSOLESCENCE PROGRAMMÉE :</strong> Des millions d\'ordinateurs parfaitement fonctionnels seront déclarés "incompatibles" simplement parce qu\'ils ne supportent pas Windows 11',
-        '🌍 <strong>DÉSASTRE ÉCOLOGIQUE :</strong> Jeter du matériel qui marche encore crée des tonnes de déchets électroniques - un scandale environnemental !',
+        '💥 <strong>LE DECLENCHEUR :</strong> Fin du support Windows 10 en octobre 2025, Microsoft force la mise à jour vers Windows 11',
+        '🗑️ <strong>OBSOLESCENCE PROGRAMMEE :</strong> Des millions d\'ordinateurs parfaitement fonctionnels seront déclarés "incompatibles" simplement parce qu\'ils ne supportent pas Windows 11',
+        '🌍 <strong>DESASTRE ECOLOGIQUE :</strong> Jeter du matériel qui marche encore crée des tonnes de déchets électroniques, un scandale environnemental !',
         '💸 <strong>GOUFFRE FINANCIER :</strong> Licences Windows coûteuses (100-200€/poste), abonnements Microsoft 365, renouvellement forcé du parc informatique',
-        '🔒 <strong>PERTE DE SOUVERAINETÉ :</strong> Données des élèves stockées hors UE (serveurs américains), écosystèmes fermés dont on devient captif',
-        '⛓️ <strong>DÉPENDANCE TOTALE :</strong> Format de fichiers propriétaires, mises à jour imposées, fonctionnalités supprimées sans préavis',
+        '🔒 <strong>PERTE DE SOUVERAINETE :</strong> Données des élèves stockées hors UE (serveurs américains), écosystèmes fermés dont on devient captif',
+        '⛓️ <strong>DEPENDANCE TOTALE :</strong> Format de fichiers propriétaires, mises à jour imposées, fonctionnalités supprimées sans préavis',
         '🏫 <strong>IMPACT SCOLAIRE :</strong> Les établissements sont pieds et poings liés face aux décisions des géants du numérique (GAFAM)'
       ], 
       visited: false 
@@ -166,67 +166,67 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
       x: 75, y: 35, size: 100, color: '#4ecdc4', glowColor: '#00ffcc80', icon: ' ', 
       title: '🐧 LEVIER TECHNIQUE : Passer au Libre', 
       content: [
-        '🔄 <strong>LINUX, LA SOLUTION :</strong> Système d\'exploitation 100% libre et gratuit - alternative complète à Windows sans aucune licence à payer',
+        '🔄 <strong>LINUX, LA SOLUTION :</strong> Système d\'exploitation 100% libre et gratuit, alternative complète à Windows sans aucune licence à payer',
         '💻 <strong>SECONDE VIE :</strong> Linux fonctionne parfaitement sur des ordinateurs de 10-15 ans ! Les machines "refusées" par Windows 11 reprennent vie',
         '📦 <strong>LOGICIELS LIBRES :</strong> LibreOffice (suite bureautique), Firefox (navigateur), GIMP (retouche photo), VLC (lecteur multimédia)...',
-        '🏛️ <strong>LA FORGE DES COMMUNS :</strong> Plateforme nationale de ressources libres pour l\'éducation - apps.education.fr',
-        '🔐 <strong>SÉCURITÉ RENFORCÉE :</strong> Le code open source est audité par des milliers de développeurs - moins de failles, plus de transparence',
-        '🛡️ <strong>INDÉPENDANCE TOTALE :</strong> Plus de mises à jour forcées, plus de télémétrie, plus de publicités intégrées dans l\'OS',
-        '🇫🇷 <strong>SOUVERAINETÉ :</strong> Vos données restent en France, sous contrôle de l\'établissement - conformité RGPD garantie',
-        '🎓 <strong>COMPÉTENCES TRANSFÉRABLES :</strong> Les élèves découvrent le fonctionnement réel d\'un ordinateur, au-delà des interfaces fermées'
+        '🏛️ <strong>LA FORGE DES COMMUNS :</strong> Plateforme nationale de ressources libres pour l\'éducation, apps.education.fr',
+        '🔐 <strong>SECURITE RENFORCEE :</strong> Le code open source est audité par des milliers de développeurs, moins de failles, plus de transparence',
+        '🛡️ <strong>INDEPENDANCE TOTALE :</strong> Plus de mises à jour forcées, plus de télémétrie, plus de publicités intégrées dans l\'OS',
+        '🇫🇷 <strong>SOUVERAINETE :</strong> Vos données restent en France, sous contrôle de l\'établissement, conformité RGPD garantie',
+        '🎓 <strong>COMPETENCES TRANSFERABLES :</strong> Les élèves découvrent le fonctionnement réel d\'un ordinateur, au-delà des interfaces fermées'
       ], 
       visited: false 
     },
     {
       id: 'materiel',
-      name: 'MATÉRIEL',
+      name: 'MATERIEL',
       x: 25, y: 55, size: 85, color: '#f9ca24', glowColor: '#ffcc0080', icon: ' ', 
-      title: '🔧 LEVIER MATÉRIEL : Reconditionnement', 
+      title: '🔧 LEVIER MATERIEL : Reconditionnement', 
       content: [
-        '🚫 <strong>STOP AU GASPILLAGE :</strong> Un ordinateur peut fonctionner 15-20 ans avec Linux - arrêtons de jeter ce qui marche !',
-        '📦 <strong>RÉCUPÉRATION :</strong> Entreprises, administrations, particuliers donnent leurs anciennes machines - une mine d\'or inexploitée',
+        '🚫 <strong>STOP AU GASPILLAGE :</strong> Un ordinateur peut fonctionner 15-20 ans avec Linux, arrêtons de jeter ce qui marche !',
+        '📦 <strong>RECUPERATION :</strong> Entreprises, administrations, particuliers donnent leurs anciennes machines, une mine d\'or inexploitée',
         '🔄 <strong>RECONDITIONNEMENT :</strong> Nettoyage, remplacement de pièces usées (RAM, SSD), installation de Linux = PC comme neuf',
-        '💰 <strong>ÉCONOMIES MASSIVES :</strong> Un PC reconditionné coûte 50-100€ contre 500-800€ pour un neuf - budget divisé par 5 à 10 !',
-        '🌱 <strong>IMPACT ÉCOLOGIQUE :</strong> Réduction drastique de l\'empreinte carbone - fabriquer un PC neuf = 300kg de CO2',
-        '🤝 <strong>ÉCONOMIE CIRCULAIRE :</strong> Collaboration avec les entreprises locales qui renouvellent leur parc - gagnant-gagnant',
+        '💰 <strong>ECONOMIES MASSIVES :</strong> Un PC reconditionné coûte 50-100€ contre 500-800€ pour un neuf, budget divisé par 5 à 10 !',
+        '🌱 <strong>IMPACT ECOLOGIQUE :</strong> Réduction drastique de l\'empreinte carbone, fabriquer un PC neuf = 300kg de CO2',
+        '🤝 <strong>ECONOMIE CIRCULAIRE :</strong> Collaboration avec les entreprises locales qui renouvellent leur parc, gagnant-gagnant',
         '📊 <strong>EXEMPLE CONCRET :</strong> Le lycée Carnot a reconditionné +200 PC qui auraient fini à la déchetterie',
-        '⚡ <strong>PERFORMANCE :</strong> Un vieux PC avec SSD et Linux démarre en 15 secondes - plus rapide qu\'un neuf avec Windows !'
+        '⚡ <strong>PERFORMANCE :</strong> Un vieux PC avec SSD et Linux démarre en 15 secondes, plus rapide qu\'un neuf avec Windows !'
       ], 
       visited: false 
     },
     {
       id: 'pedagogique',
-      name: 'PÉDAGOGIE',
+      name: 'PEDAGOGIE',
       x: 70, y: 65, size: 95, color: '#a55eea', glowColor: '#9900ff80', icon: ' ', 
-      title: '👨‍🎓 LEVIER PÉDAGOGIQUE : Élèves vers Élèves', 
+      title: '👨‍🎓 LEVIER PEDAGOGIQUE : Elèves vers Elèves', 
       content: [
-        '🎓 <strong>ÉLÈVES ACTEURS :</strong> Ce ne sont pas des techniciens externes mais les élèves eux-mêmes qui reconditionnent les PC !',
+        '🎓 <strong>ELEVES ACTEURS :</strong> Ce ne sont pas des techniciens externes mais les élèves eux-mêmes qui reconditionnent les PC !',
         '💻 <strong>APPRENTISSAGE PRATIQUE :</strong> Démontage, nettoyage, diagnostic, remplacement de composants, installation de Linux',
-        '🤝 <strong>TRANSMISSION :</strong> Les élèves formés deviennent formateurs pour leurs camarades - effet boule de neige',
-        '🌟 <strong>ÉCO-DÉLÉGUÉS :</strong> Au cœur du dispositif, ils portent le projet et sensibilisent toute la communauté scolaire',
+        '🤝 <strong>TRANSMISSION :</strong> Les élèves formés deviennent formateurs pour leurs camarades, effet boule de neige',
+        '🌟 <strong>ECO-DELEGUES :</strong> Au cœur du dispositif, ils portent le projet et sensibilisent toute la communauté scolaire',
         '🚀 <strong>TRANSFORMATION :</strong> De "consommateur passif" de technologie à "acteur éclairé" qui comprend et maîtrise son outil',
-        '📚 <strong>COMPÉTENCES ACQUISES :</strong> Hardware, software, réseau, sécurité, travail en équipe, transmission de savoirs',
-        '🎯 <strong>VALORISATION :</strong> Les élèves peuvent valoriser cette expérience sur Parcoursup et leur CV - compétences recherchées !',
+        '📚 <strong>COMPETENCES ACQUISES :</strong> Hardware, software, réseau, sécurité, travail en équipe, transmission de savoirs',
+        '🎯 <strong>VALORISATION :</strong> Les élèves peuvent valoriser cette expérience sur Parcoursup et leur CV, compétences recherchées !',
         '💡 <strong>ESPRIT CRITIQUE :</strong> Comprendre les enjeux du numérique, l\'obsolescence programmée, la souveraineté des données',
-        '🏆 <strong>FIERTÉ :</strong> "J\'ai donné une seconde vie à un ordinateur qui allait à la poubelle !"'
+        '🏆 <strong>FIERTE :</strong> "J\'ai donné une seconde vie à un ordinateur qui allait à la poubelle !"'
       ], 
       visited: false 
     },
     {
       id: 'methode',
-      name: 'MÉTHODE',
+      name: 'METHODE',
       x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: ' ', 
-      title: '📋 LA MÉTHODE NIRD : 3 Jalons', 
+      title: '📋 LA METHODE NIRD : 3 Jalons', 
       content: [
         '🏁 <strong>JALON 1 - MOBILISATION :</strong> Un enseignant volontaire se désigne comme "référent NIRD", informe la direction et contacte la collectivité locale',
         '📢 <strong>SENSIBILISATION :</strong> Présentation du projet en conseil pédagogique, réunion avec les éco-délégués, information aux familles',
-        '🧪 <strong>JALON 2 - EXPÉRIMENTATION :</strong> Installation de Linux sur 5-10 postes (neufs ou reconditionnés) pour tester en conditions réelles',
-        '📊 <strong>PREUVE DE CONCEPT :</strong> Les professeurs et élèves testent pendant quelques mois - retours d\'expérience documentés',
-        '✅ <strong>JALON 3 - INTÉGRATION :</strong> La démarche est généralisée et inscrite dans le projet d\'établissement',
+        '🧪 <strong>JALON 2 - EXPERIMENTATION :</strong> Installation de Linux sur 5-10 postes (neufs ou reconditionnés) pour tester en conditions réelles',
+        '📊 <strong>PREUVE DE CONCEPT :</strong> Les professeurs et élèves testent pendant quelques mois, retours d\'expérience documentés',
+        '✅ <strong>JALON 3 - INTEGRATION :</strong> La démarche est généralisée et inscrite dans le projet d\'établissement',
         '🏛️ <strong>SOUTIEN INSTITUTIONNEL :</strong> Partenariat officiel avec la collectivité (mairie, département, région) pour pérenniser',
-        '🌐 <strong>COMMUNAUTÉ NIRD :</strong> Rejoignez le réseau national des établissements engagés - entraide et partage d\'expériences',
-        '🎯 <strong>L\'OBJECTIF FINAL :</strong> Passer de "David contre Goliath" à "Village Gaulois Résistant" - autonome, solidaire et astucieux !',
-        '🔗 <strong>SITE OFFICIEL :</strong> nird.forge.apps.education.fr - ressources, guides, témoignages et contact'
+        '🌐 <strong>COMMUNAUTE NIRD :</strong> Rejoignez le réseau national des établissements engagés, entraide et partage d\'expériences',
+        '🎯 <strong>L\'OBJECTIF FINAL :</strong> Passer de "David contre Goliath" à "Village Gaulois Résistant", autonome, solidaire et astucieux !',
+        '🔗 <strong>SITE OFFICIEL :</strong> nird.forge.apps.education.fr, ressources, guides, témoignages et contact'
       ], 
       visited: false 
     },
@@ -367,7 +367,6 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     this.planets.update(planets => planets.map(p => p.id === planet.id ? { ...p, visited: true } : p));
     if (this.planets().filter(p => p.visited).length === this.totalPlanets()) {
       this.allVisited.set(true);
-      this.showVictoryBanner.set(true);
     }
   }
 
@@ -375,7 +374,16 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     this.showVictoryBanner.set(false);
   }
 
-  closeModal() { this.showModal.set(false); this.currentPlanet.set(null); }
+  closeModal() { 
+    this.showModal.set(false); 
+    this.currentPlanet.set(null);
+    // Afficher le message de félicitation avec un délai après la fermeture de la modal
+    if (this.allVisited() && !this.showVictoryBanner()) {
+      setTimeout(() => {
+        this.showVictoryBanner.set(true);
+      }, 500);
+    }
+  }
   onPlanetClick(planet: Planet) { if (this.gameStarted()) this.openPlanetInfo(planet); }
   
   isNearPlanet(planet: Planet): boolean {
