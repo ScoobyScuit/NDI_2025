@@ -1,0 +1,1575 @@
+/* Modal de choix de pseudo */
+.pseudo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.pseudo-modal-container {
+  background: linear-gradient(135deg, #1a0a2e 0%, #16213e 100%);
+  border: 2px solid #ff00ff;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 
+    0 0 30px rgba(255, 0, 255, 0.5),
+    0 0 60px rgba(0, 255, 255, 0.3),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.4s ease;
+}
+
+.pseudo-modal-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.pseudo-modal-title {
+  color: #00ffff;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.pseudo-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pseudo-modal-description {
+  color: #e0e0e0;
+  text-align: center;
+  font-size: 16px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.pseudo-input-wrapper {
+  position: relative;
+}
+
+.pseudo-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #ff00ff;
+  border-radius: 8px;
+  color: #00ffff;
+  font-size: 18px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.pseudo-input:focus {
+  border-color: #00ffff;
+  box-shadow: 
+    0 0 15px rgba(255, 0, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.pseudo-input::placeholder {
+  color: rgba(0, 255, 255, 0.5);
+}
+
+.pseudo-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pseudo-button {
+  padding: 12px 24px;
+  border: 2px solid;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  min-width: 120px;
+}
+
+.pseudo-button-primary {
+  background: #ff00ff;
+  border-color: #ff00ff;
+  color: #000;
+}
+
+.pseudo-button-primary:hover:not(:disabled) {
+  background: #ff33ff;
+  border-color: #ff33ff;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 255, 0.8),
+    0 0 40px rgba(255, 0, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.pseudo-button-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pseudo-button-secondary {
+  background: transparent;
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
+.pseudo-button-secondary:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.5),
+    0 0 30px rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn 0.2s ease;
+  overflow: hidden;
+}
+
+/* Fond animé rétro */
+.retro-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
+  z-index: 998;
+  overflow: hidden;
+}
+
+/* Lune */
+.moon {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at 30% 30%, #fff9e6 0%, #f0e68c 50%, #dda15e 100%);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 40px rgba(255, 249, 230, 0.6),
+    0 0 80px rgba(240, 230, 140, 0.4),
+    inset -20px -20px 0 rgba(0, 0, 0, 0.1);
+  animation: moonGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes moonGlow {
+  from {
+    box-shadow: 
+      0 0 40px rgba(255, 249, 230, 0.6),
+      0 0 80px rgba(240, 230, 140, 0.4),
+      inset -20px -20px 0 rgba(0, 0, 0, 0.1);
+  }
+  to {
+    box-shadow: 
+      0 0 60px rgba(255, 249, 230, 0.8),
+      0 0 120px rgba(240, 230, 140, 0.6),
+      inset -20px -20px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Étoiles */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Étoiles filantes */
+.shooting-star {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.shooting-star-1 {
+  top: 20%;
+  left: -100px;
+  transform: rotate(45deg);
+  animation: shootingStar1 8s linear infinite;
+}
+
+.shooting-star-2 {
+  top: 40%;
+  left: -100px;
+  transform: rotate(30deg);
+  animation: shootingStar2 12s linear infinite;
+  animation-delay: 3s;
+}
+
+.shooting-star-3 {
+  top: 60%;
+  left: -100px;
+  transform: rotate(60deg);
+  animation: shootingStar3 10s linear infinite;
+  animation-delay: 6s;
+}
+
+@keyframes shootingStar1 {
+  0% {
+    left: -100px;
+    top: 20%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 120%;
+    top: 80%;
+    opacity: 0;
+  }
+}
+
+@keyframes shootingStar2 {
+  0% {
+    left: -100px;
+    top: 40%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 120%;
+    top: 90%;
+    opacity: 0;
+  }
+}
+
+@keyframes shootingStar3 {
+  0% {
+    left: -100px;
+    top: 60%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 120%;
+    top: 10%;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-container {
+  width: 90%;
+  max-width: 800px;
+  height: 80vh;
+  max-height: 700px;
+  background: var(--bg-color, #1e1e1e);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+  transition: background-color 0.3s ease, border 0.3s ease;
+  border: 2px solid var(--border-color, #3d3d3d);
+  position: relative;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+/* Effets spéciaux pour le thème rétro */
+.modal-container.theme-retro {
+  box-shadow: 
+    0 0 20px rgba(255, 0, 255, 0.5),
+    0 0 40px rgba(0, 255, 255, 0.3),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid #ff00ff !important;
+  animation: retroGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes retroGlow {
+  from {
+    box-shadow: 
+      0 0 20px rgba(255, 0, 255, 0.5),
+      0 0 40px rgba(0, 255, 255, 0.3),
+      0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  to {
+    box-shadow: 
+      0 0 30px rgba(255, 0, 255, 0.8),
+      0 0 60px rgba(0, 255, 255, 0.5),
+      0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Effets pour le thème cyberpunk */
+.modal-container.theme-cyberpunk {
+  box-shadow: 
+    0 0 15px rgba(255, 107, 53, 0.4),
+    0 0 30px rgba(88, 166, 255, 0.2),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid #ff6b35 !important;
+}
+
+/* Effets pour le thème Matrix */
+.modal-container.theme-matrix {
+  box-shadow: 
+    0 0 25px rgba(0, 255, 0, 0.6),
+    0 0 50px rgba(0, 255, 0, 0.3),
+    0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  background: var(--surface-color, #2d2d2d);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color, #3d3d3d);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.character-button {
+  background: var(--surface-secondary, #1e1e1e);
+  border: 1px solid var(--border-color, #3d3d3d);
+  color: var(--text-color, #d4d4d4);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.character-button:hover {
+  background: var(--border-color, #3d3d3d);
+  transform: translateY(-1px);
+}
+
+.character-icon {
+  font-size: 16px;
+}
+
+.character-name {
+  font-size: 12px;
+}
+
+.theme-button {
+  background: var(--surface-secondary, #1e1e1e);
+  border: 1px solid var(--border-color, #3d3d3d);
+  color: var(--text-color, #d4d4d4);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.theme-button:hover {
+  background: var(--border-color, #3d3d3d);
+  transform: translateY(-1px);
+}
+
+.theme-icon {
+  font-size: 16px;
+}
+
+.theme-name {
+  font-size: 12px;
+}
+
+.character-selector {
+  background: var(--surface-color, #2d2d2d);
+  border-bottom: 1px solid var(--border-color, #3d3d3d);
+  padding: 12px 20px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  animation: slideDown 0.2s ease;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.theme-selector {
+  background: var(--surface-color, #2d2d2d);
+  border-bottom: 1px solid var(--border-color, #3d3d3d);
+  padding: 12px 20px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  animation: slideDown 0.2s ease;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 120px;
+  }
+}
+
+.theme-option {
+  background: var(--surface-secondary, #1e1e1e);
+  border: 1px solid var(--border-color, #3d3d3d);
+  color: var(--text-color, #d4d4d4);
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.theme-option:hover {
+  background: var(--border-color, #3d3d3d);
+  transform: translateY(-2px);
+}
+
+.theme-option.active {
+  background: var(--button-primary, #4ec9b0);
+  color: var(--button-text, #1e1e1e);
+  border-color: var(--button-primary, #4ec9b0);
+  font-weight: 600;
+}
+
+.theme-option-icon {
+  font-size: 16px;
+}
+
+.theme-option-name {
+  font-size: 12px;
+}
+
+.character-option {
+  background: var(--surface-secondary, #1e1e1e);
+  border: 1px solid var(--border-color, #3d3d3d);
+  color: var(--text-color, #d4d4d4);
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  min-width: 200px;
+  flex: 1;
+  max-width: 300px;
+}
+
+.character-option:hover {
+  background: var(--border-color, #3d3d3d);
+  transform: translateY(-2px);
+}
+
+.character-option.active {
+  background: var(--button-primary, #4ec9b0);
+  color: var(--button-text, #1e1e1e);
+  border-color: var(--button-primary, #4ec9b0);
+  font-weight: 600;
+}
+
+.character-option-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.character-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.character-option-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.character-option-desc {
+  font-size: 11px;
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Indicateur d'émotion */
+.emotion-indicator {
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.emotion-icon {
+  font-size: 24px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+/* Affichage du pseudo utilisateur */
+.user-pseudo-display {
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: var(--surface-secondary, #1e1e1e);
+  border: 1px solid var(--border-color, #3d3d3d);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+}
+
+.user-pseudo-display:hover {
+  background: var(--border-color, #3d3d3d);
+  transform: translateY(-1px);
+}
+
+.pseudo-label {
+  color: var(--text-muted, #6a6a6a);
+  font-weight: 600;
+}
+
+.pseudo-value {
+  color: var(--user-role, #569cd6);
+  font-weight: 600;
+}
+
+.terminal-indicator {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot-red {
+  background: var(--dot-red, #ff5f56);
+}
+
+.dot-yellow {
+  background: var(--dot-yellow, #ffbd2e);
+}
+
+.dot-green {
+  background: var(--dot-green, #27c93f);
+}
+
+.modal-title {
+  margin: 0;
+  color: var(--text-secondary, #e0e0e0);
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  transition: color 0.3s ease;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #a0a0a0);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: var(--border-color, #3d3d3d);
+  color: var(--text-secondary, #e0e0e0);
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--bg-color, #1e1e1e);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  transition: background-color 0.3s ease;
+}
+
+.messages-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, #2d2d2d);
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #555);
+  border-radius: 4px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb, #666);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: messageSlide 0.3s ease;
+}
+
+@keyframes messageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.message-role {
+  color: var(--assistant-role, #4ec9b0);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.user-message .message-role {
+  color: var(--user-role, #569cd6);
+}
+
+.message-time {
+  color: var(--text-muted, #6a6a6a);
+  font-size: 11px;
+}
+
+.message-content {
+  color: var(--assistant-message, #d4d4d4);
+  line-height: 1.6;
+  padding: 8px 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  transition: color 0.3s ease;
+}
+
+.user-message .message-content {
+  color: var(--user-message, #ce9178);
+}
+
+.typing-indicator {
+  display: inline-flex;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--assistant-role, #4ec9b0);
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.input-container {
+  padding: 16px 20px;
+  background: var(--surface-color, #2d2d2d);
+  border-top: 1px solid var(--border-color, #3d3d3d);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--input-bg, #1e1e1e);
+  border: 1px solid var(--input-border, #3d3d3d);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: border-color 0.2s ease, background-color 0.3s ease;
+}
+
+.input-wrapper:focus-within {
+  border-color: var(--button-primary, #4ec9b0);
+  box-shadow: 0 0 10px rgba(var(--button-primary-rgb, 78, 201, 176), 0.3);
+}
+
+/* Effet néon pour le thème rétro */
+.modal-container.theme-retro .input-wrapper:focus-within {
+  box-shadow: 
+    0 0 10px rgba(255, 0, 255, 0.6),
+    0 0 20px rgba(0, 255, 255, 0.4);
+  border-color: #ff00ff !important;
+  animation: inputPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes inputPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px rgba(255, 0, 255, 0.6),
+      0 0 20px rgba(0, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 
+      0 0 15px rgba(255, 0, 255, 0.8),
+      0 0 30px rgba(0, 255, 255, 0.6);
+  }
+}
+
+.input-prompt {
+  color: var(--user-role, #569cd6);
+  font-weight: 600;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--input-text, #d4d4d4);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  transition: color 0.3s ease;
+}
+
+.chat-input::placeholder {
+  color: var(--text-muted, #6a6a6a);
+}
+
+.chat-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.send-button {
+  background: var(--button-primary, #4ec9b0);
+  border: none;
+  color: var(--button-text, #1e1e1e);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.send-button:hover:not(:disabled) {
+  background: var(--button-primary-hover, #3db89a);
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(var(--button-primary-rgb, 78, 201, 176), 0.4);
+}
+
+/* Effet néon pour le bouton dans le thème rétro */
+.modal-container.theme-retro .send-button:hover:not(:disabled) {
+  box-shadow: 
+    0 0 15px rgba(255, 0, 255, 0.8),
+    0 0 30px rgba(255, 0, 255, 0.5),
+    0 4px 15px rgba(255, 0, 255, 0.3);
+  animation: buttonGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes buttonGlow {
+  from {
+    box-shadow: 
+      0 0 15px rgba(255, 0, 255, 0.8),
+      0 0 30px rgba(255, 0, 255, 0.5),
+      0 4px 15px rgba(255, 0, 255, 0.3);
+  }
+  to {
+    box-shadow: 
+      0 0 20px rgba(255, 0, 255, 1),
+      0 0 40px rgba(255, 0, 255, 0.7),
+      0 4px 20px rgba(255, 0, 255, 0.5);
+  }
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.send-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Améliorations visuelles */
+.modal-container {
+  backdrop-filter: blur(10px);
+}
+
+.message {
+  padding: 12px;
+  border-radius: 8px;
+  background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.message:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.user-message {
+  align-self: flex-end;
+  max-width: 80%;
+}
+
+.assistant-message {
+  align-self: flex-start;
+  max-width: 80%;
+}
+
+.message-content {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.user-message .message-content {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .character-button .character-name,
+  .theme-button .theme-name {
+    display: none;
+  }
+
+  .character-selector {
+    max-height: 150px;
+    padding: 8px 12px;
+  }
+
+  .character-option {
+    min-width: auto;
+    max-width: 100%;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .character-option-icon {
+    font-size: 20px;
+  }
+
+  .character-option-name {
+    font-size: 12px;
+  }
+
+  .character-option-desc {
+    font-size: 10px;
+  }
+
+  .theme-selector {
+    max-height: 100px;
+    padding: 8px 12px;
+  }
+
+  .theme-option {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .theme-option-name {
+    font-size: 11px;
+  }
+}
+
+/* Animations d'émotions pour la modal */
+.modal-container.emotion-happy {
+  animation: happyBounce 0.6s ease-in-out;
+}
+
+@keyframes happyBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-10px) scale(1.02);
+  }
+  50% {
+    transform: translateY(0) scale(1.05);
+  }
+  75% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
+
+.modal-container.emotion-happy .emotion-icon {
+  animation: happySpin 1s ease-in-out infinite;
+}
+
+@keyframes happySpin {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-10deg) scale(1.2);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.3);
+  }
+  75% {
+    transform: rotate(-5deg) scale(1.2);
+  }
+}
+
+.modal-container.emotion-sad {
+  animation: sadShake 0.8s ease-in-out;
+}
+
+@keyframes sadShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.modal-container.emotion-sad .emotion-icon {
+  animation: sadDrop 1.5s ease-in-out infinite;
+}
+
+@keyframes sadDrop {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(5px);
+    opacity: 0.7;
+  }
+}
+
+.modal-container.emotion-angry {
+  animation: angryShake 0.5s ease-in-out;
+}
+
+@keyframes angryShake {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px) rotate(-2deg);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px) rotate(2deg);
+  }
+}
+
+.modal-container.emotion-angry .emotion-icon {
+  animation: angryPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes angryPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    transform: scale(1.3);
+    filter: hue-rotate(10deg) brightness(1.2);
+  }
+}
+
+.modal-container.emotion-excited {
+  animation: excitedJump 0.6s ease-in-out;
+}
+
+@keyframes excitedJump {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-15px) scale(1.05);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+  }
+  75% {
+    transform: translateY(-10px) scale(1.05);
+  }
+}
+
+.modal-container.emotion-excited .emotion-icon {
+  animation: excitedSparkle 1s ease-in-out infinite;
+}
+
+@keyframes excitedSparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.4) rotate(90deg);
+    filter: brightness(1.5);
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+    filter: brightness(1.8);
+  }
+  75% {
+    transform: scale(1.3) rotate(270deg);
+    filter: brightness(1.5);
+  }
+}
+
+.modal-container.emotion-sleepy {
+  animation: sleepySway 2s ease-in-out infinite;
+}
+
+@keyframes sleepySway {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(3px) rotate(1deg);
+  }
+  50% {
+    transform: translateX(0) rotate(0deg);
+  }
+  75% {
+    transform: translateX(-3px) rotate(-1deg);
+  }
+}
+
+.modal-container.emotion-sleepy .emotion-icon {
+  animation: sleepyBlink 2s ease-in-out infinite;
+}
+
+@keyframes sleepyBlink {
+  0%, 45%, 55%, 100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  48%, 52% {
+    opacity: 0.3;
+    transform: scaleY(0.1);
+  }
+}
+
+.modal-container.emotion-confused {
+  animation: confusedWobble 1s ease-in-out;
+}
+
+@keyframes confusedWobble {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-3deg);
+  }
+}
+
+.modal-container.emotion-confused .emotion-icon {
+  animation: confusedTilt 2s ease-in-out infinite;
+}
+
+@keyframes confusedTilt {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+.modal-container.emotion-love {
+  animation: loveFloat 1.5s ease-in-out infinite;
+}
+
+@keyframes loveFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+.modal-container.emotion-love .emotion-icon {
+  animation: loveHeartbeat 1.2s ease-in-out infinite;
+}
+
+@keyframes loveHeartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+}
+
+.modal-container.emotion-neutral .emotion-icon {
+  animation: neutralBreathe 3s ease-in-out infinite;
+}
+
+@keyframes neutralBreathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+/* Particules d'émotion */
+.emotion-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0;
+  animation: particleFloat 3s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) translateX(0) scale(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) translateX(calc(var(--random-x, 0) * 100px)) scale(1.5);
+  }
+}
+
+.particle:nth-child(1) { left: 10%; --random-x: 0.5; }
+.particle:nth-child(2) { left: 20%; --random-x: -0.3; animation-delay: 0.2s; }
+.particle:nth-child(3) { left: 30%; --random-x: 0.7; animation-delay: 0.4s; }
+.particle:nth-child(4) { left: 40%; --random-x: -0.5; animation-delay: 0.6s; }
+.particle:nth-child(5) { left: 50%; --random-x: 0.2; animation-delay: 0.8s; }
+.particle:nth-child(6) { left: 60%; --random-x: -0.8; animation-delay: 1s; }
+.particle:nth-child(7) { left: 70%; --random-x: 0.4; animation-delay: 1.2s; }
+.particle:nth-child(8) { left: 80%; --random-x: -0.2; animation-delay: 1.4s; }
+.particle:nth-child(9) { left: 90%; --random-x: 0.6; animation-delay: 1.6s; }
+.particle:nth-child(10) { left: 15%; --random-x: -0.4; animation-delay: 1.8s; }
+
+/* Changements visuels selon l'émotion - Bordures et lueurs */
+.modal-container.emotion-happy {
+  border-color: var(--emotion-primary, #ffd700) !important;
+  box-shadow: 
+    0 0 20px var(--emotion-glow, rgba(255, 215, 0, 0.5)),
+    0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-container.emotion-sad {
+  border-color: var(--emotion-primary, #6b8dd6) !important;
+  box-shadow: 
+    0 0 15px var(--emotion-glow, rgba(107, 141, 214, 0.3)),
+    0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(0.95);
+}
+
+.modal-container.emotion-angry {
+  border-color: var(--emotion-primary, #ff4444) !important;
+  box-shadow: 
+    0 0 25px var(--emotion-glow, rgba(255, 68, 68, 0.6)),
+    0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(1.1) contrast(1.05);
+}
+
+.modal-container.emotion-excited {
+  border-color: var(--emotion-primary, #ff6b9d) !important;
+  box-shadow: 
+    0 0 30px var(--emotion-glow, rgba(255, 107, 157, 0.6)),
+    0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(1.05) saturate(1.2);
+}
+
+.modal-container.emotion-sleepy {
+  border-color: var(--emotion-primary, #9b9b9b) !important;
+  box-shadow: 
+    0 0 10px var(--emotion-glow, rgba(155, 155, 155, 0.2)),
+    0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(0.9) contrast(0.95);
+}
+
+.modal-container.emotion-confused {
+  border-color: var(--emotion-primary, #ffa500) !important;
+  box-shadow: 
+    0 0 20px var(--emotion-glow, rgba(255, 165, 0, 0.4)),
+    0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-container.emotion-love {
+  border-color: var(--emotion-primary, #ff69b4) !important;
+  box-shadow: 
+    0 0 25px var(--emotion-glow, rgba(255, 105, 180, 0.5)),
+    0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(1.02) saturate(1.1);
+}
+
+/* Messages avec couleurs d'émotion */
+.modal-container.emotion-happy .assistant-message .message-content {
+  background: var(--emotion-message-bg, rgba(255, 215, 0, 0.1)) !important;
+  border-left: 3px solid var(--emotion-primary, #ffd700);
+}
+
+.modal-container.emotion-sad .assistant-message .message-content {
+  background: var(--emotion-message-bg, rgba(107, 141, 214, 0.08)) !important;
+  border-left: 3px solid var(--emotion-primary, #6b8dd6);
+}
+
+.modal-container.emotion-angry .assistant-message .message-content {
+  background: var(--emotion-message-bg, rgba(255, 68, 68, 0.1)) !important;
+  border-left: 3px solid var(--emotion-primary, #ff4444);
+}
+
+.modal-container.emotion-excited .assistant-message .message-content {
+  background: var(--emotion-message-bg, rgba(255, 107, 157, 0.12)) !important;
+  border-left: 3px solid var(--emotion-primary, #ff6b9d);
+}
+
+.modal-container.emotion-sleepy .assistant-message .message-content {
+  background: var(--emotion-message-bg, rgba(155, 155, 155, 0.05)) !important;
+  border-left: 3px solid var(--emotion-primary, #9b9b9b);
+}
+
+.modal-container.emotion-confused .assistant-message .message-content {
+  background: var(--emotion-message-bg, rgba(255, 165, 0, 0.08)) !important;
+  border-left: 3px solid var(--emotion-primary, #ffa500);
+}
+
+.modal-container.emotion-love .assistant-message .message-content {
+  background: var(--emotion-message-bg, rgba(255, 105, 180, 0.1)) !important;
+  border-left: 3px solid var(--emotion-primary, #ff69b4);
+}
+
+/* Couleur du rôle assistant selon l'émotion */
+.modal-container.emotion-happy .assistant-message .message-role {
+  color: var(--emotion-primary, #ffd700) !important;
+}
+
+.modal-container.emotion-sad .assistant-message .message-role {
+  color: var(--emotion-primary, #6b8dd6) !important;
+}
+
+.modal-container.emotion-angry .assistant-message .message-role {
+  color: var(--emotion-primary, #ff4444) !important;
+}
+
+.modal-container.emotion-excited .assistant-message .message-role {
+  color: var(--emotion-primary, #ff6b9d) !important;
+}
+
+.modal-container.emotion-sleepy .assistant-message .message-role {
+  color: var(--emotion-primary, #9b9b9b) !important;
+}
+
+.modal-container.emotion-confused .assistant-message .message-role {
+  color: var(--emotion-primary, #ffa500) !important;
+}
+
+.modal-container.emotion-love .assistant-message .message-role {
+  color: var(--emotion-primary, #ff69b4) !important;
+}
+
+/* Bouton d'envoi selon l'émotion */
+.modal-container.emotion-happy .send-button {
+  background: var(--emotion-primary, #ffd700) !important;
+  color: #000 !important;
+}
+
+.modal-container.emotion-happy .send-button:hover:not(:disabled) {
+  background: var(--emotion-secondary, #ffed4e) !important;
+  box-shadow: 0 0 20px var(--emotion-glow, rgba(255, 215, 0, 0.6)) !important;
+}
+
+.modal-container.emotion-sad .send-button {
+  background: var(--emotion-primary, #6b8dd6) !important;
+}
+
+.modal-container.emotion-sad .send-button:hover:not(:disabled) {
+  background: var(--emotion-secondary, #8fa8d4) !important;
+  box-shadow: 0 0 15px var(--emotion-glow, rgba(107, 141, 214, 0.4)) !important;
+}
+
+.modal-container.emotion-angry .send-button {
+  background: var(--emotion-primary, #ff4444) !important;
+}
+
+.modal-container.emotion-angry .send-button:hover:not(:disabled) {
+  background: var(--emotion-secondary, #ff6666) !important;
+  box-shadow: 0 0 25px var(--emotion-glow, rgba(255, 68, 68, 0.7)) !important;
+}
+
+.modal-container.emotion-excited .send-button {
+  background: var(--emotion-primary, #ff6b9d) !important;
+}
+
+.modal-container.emotion-excited .send-button:hover:not(:disabled) {
+  background: var(--emotion-secondary, #ff8fab) !important;
+  box-shadow: 0 0 25px var(--emotion-glow, rgba(255, 107, 157, 0.7)) !important;
+}
+
+.modal-container.emotion-sleepy .send-button {
+  background: var(--emotion-primary, #9b9b9b) !important;
+}
+
+.modal-container.emotion-sleepy .send-button:hover:not(:disabled) {
+  background: var(--emotion-secondary, #b8b8b8) !important;
+  box-shadow: 0 0 10px var(--emotion-glow, rgba(155, 155, 155, 0.3)) !important;
+}
+
+.modal-container.emotion-confused .send-button {
+  background: var(--emotion-primary, #ffa500) !important;
+}
+
+.modal-container.emotion-confused .send-button:hover:not(:disabled) {
+  background: var(--emotion-secondary, #ffb84d) !important;
+  box-shadow: 0 0 20px var(--emotion-glow, rgba(255, 165, 0, 0.5)) !important;
+}
+
+.modal-container.emotion-love .send-button {
+  background: var(--emotion-primary, #ff69b4) !important;
+}
+
+.modal-container.emotion-love .send-button:hover:not(:disabled) {
+  background: var(--emotion-secondary, #ff8cc8) !important;
+  box-shadow: 0 0 25px var(--emotion-glow, rgba(255, 105, 180, 0.6)) !important;
+}
+
+/* Input avec bordure selon l'émotion */
+.modal-container.emotion-happy .input-wrapper:focus-within {
+  border-color: var(--emotion-primary, #ffd700) !important;
+  box-shadow: 0 0 15px var(--emotion-glow, rgba(255, 215, 0, 0.4)) !important;
+}
+
+.modal-container.emotion-sad .input-wrapper:focus-within {
+  border-color: var(--emotion-primary, #6b8dd6) !important;
+  box-shadow: 0 0 12px var(--emotion-glow, rgba(107, 141, 214, 0.3)) !important;
+}
+
+.modal-container.emotion-angry .input-wrapper:focus-within {
+  border-color: var(--emotion-primary, #ff4444) !important;
+  box-shadow: 0 0 18px var(--emotion-glow, rgba(255, 68, 68, 0.5)) !important;
+}
+
+.modal-container.emotion-excited .input-wrapper:focus-within {
+  border-color: var(--emotion-primary, #ff6b9d) !important;
+  box-shadow: 0 0 20px var(--emotion-glow, rgba(255, 107, 157, 0.5)) !important;
+}
+
+.modal-container.emotion-sleepy .input-wrapper:focus-within {
+  border-color: var(--emotion-primary, #9b9b9b) !important;
+  box-shadow: 0 0 8px var(--emotion-glow, rgba(155, 155, 155, 0.2)) !important;
+}
+
+.modal-container.emotion-confused .input-wrapper:focus-within {
+  border-color: var(--emotion-primary, #ffa500) !important;
+  box-shadow: 0 0 15px var(--emotion-glow, rgba(255, 165, 0, 0.4)) !important;
+}
+
+.modal-container.emotion-love .input-wrapper:focus-within {
+  border-color: var(--emotion-primary, #ff69b4) !important;
+  box-shadow: 0 0 18px var(--emotion-glow, rgba(255, 105, 180, 0.5)) !important;
+}
+
+/* Prompt selon l'émotion */
+.modal-container.emotion-happy .input-prompt {
+  color: var(--emotion-primary, #ffd700) !important;
+}
+
+.modal-container.emotion-sad .input-prompt {
+  color: var(--emotion-primary, #6b8dd6) !important;
+}
+
+.modal-container.emotion-angry .input-prompt {
+  color: var(--emotion-primary, #ff4444) !important;
+}
+
+.modal-container.emotion-excited .input-prompt {
+  color: var(--emotion-primary, #ff6b9d) !important;
+}
+
+.modal-container.emotion-sleepy .input-prompt {
+  color: var(--emotion-primary, #9b9b9b) !important;
+}
+
+.modal-container.emotion-confused .input-prompt {
+  color: var(--emotion-primary, #ffa500) !important;
+}
+
+.modal-container.emotion-love .input-prompt {
+  color: var(--emotion-primary, #ff69b4) !important;
+}
+

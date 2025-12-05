@@ -8,3 +8,4 @@
 **/.env.test.production.local
 **/.env.test.development.local.example
 **/.env.test.production.local.example
+**/dist

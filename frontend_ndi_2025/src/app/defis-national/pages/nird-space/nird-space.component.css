@@ -72,6 +72,13 @@
 .nird:nth-child(2) { color: #4ecdc4; animation-delay: 0.5s; }
 .nird:nth-child(3) { color: #f9ca24; animation-delay: 1s; }
 .nird:nth-child(4) { color: #a55eea; animation-delay: 1.5s; }
+.nird:nth-child(5) { color: #f9ca24; animation-delay: 2s; }
+.nird:nth-child(6) { color: #a55eea; animation-delay: 2.5s; }
+.nird:nth-child(7) { color: #f9ca24; animation-delay: 3s; }
+.nird:nth-child(8) { color: #a55eea; animation-delay: 3.5s; }
+.nird:nth-child(9) { color: #f924f2; animation-delay: 4s; }
+.nird:nth-child(10) { color: #a55eea; animation-delay: 4.5s; }
+.nird:nth-child(11) { color: #24f939; animation-delay: 5s; }
 
 .subtitle {
   font-size: 10px;
@@ -97,7 +104,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
+  z-index: 95;
 }
 
 /* Victory Banner */
@@ -122,6 +129,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  position: relative;
 }
 
 .victory-icon {
@@ -138,6 +146,38 @@
 .victory-sub {
   font-size: 10px;
   color: #88ff88;
+}
+
+.victory-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-size: 28px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.3s ease;
+  padding: 0;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.victory-close-btn:hover {
+  background: #ffd700;
+  color: #1a1a3a;
+  box-shadow: 0 0 20px #ffd700;
+  transform: scale(1.1);
+}
+
+.victory-close-btn:active {
+  transform: scale(0.95);
 }
 
 @keyframes victoryPulse {
@@ -208,4 +248,3 @@
   pointer-events: none;
   z-index: 999;
 }
-

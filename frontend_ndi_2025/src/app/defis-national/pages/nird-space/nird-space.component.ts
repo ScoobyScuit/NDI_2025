@@ -1,24 +1,13 @@
-import { Component, signal, computed, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, computed, HostListener, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RocketComponent } from '../../component/rocket/rocket.component';
-import { PlanetComponent } from '../../component/planet/planet.component';
+import { PlanetComponent, Planet } from '../../component/planet/planet.component';
+import { BlackHoleComponent, BlackHole } from '../../component/black-hole/black-hole.component';
 import { ArcadeCabinetComponent } from '../../component/arcade-cabinet/arcade-cabinet.component';
 import { InfoModalComponent } from '../../component/info-modal/info-modal.component';
 import { StarsBackgroundComponent } from '../../component/stars-background/stars-background.component';
-
-export interface Planet {
-  id: string;
-  name: string;
-  x: number;
-  y: number;
-  size: number;
-  color: string;
-  glowColor: string;
-  icon: string;
-  title: string;
-  content: string[];
-  visited: boolean;
-}
+import { RetroComputerComponent } from '../../component/retro-computer/retro-computer.component';
+import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/retro-media-player.component';
 
 @Component({
   selector: 'app-nird-space',
@@ -27,14 +16,20 @@ export interface Planet {
     CommonModule,
     RocketComponent,
     PlanetComponent,
+    BlackHoleComponent,
     ArcadeCabinetComponent,
     InfoModalComponent,
-    StarsBackgroundComponent
+    StarsBackgroundComponent,
+    RetroComputerComponent,
+    RetroMediaPlayerComponent
   ],
   templateUrl: './nird-space.component.html',
   styleUrl: './nird-space.component.css'
 })
 export class NirdSpaceComponent implements OnInit, OnDestroy {
+  // Référence essentielle pour commander l'ordinateur
+  @ViewChild(RetroComputerComponent) retroComputer!: RetroComputerComponent;
+
   // Rocket position
   rocketX = signal(50);
   rocketY = signal(85);
@@ -46,146 +41,169 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   showModal = signal(false);
   gameStarted = signal(false);
   allVisited = signal(false);
+  showVictoryBanner = signal(false);
+
+  // Configuration Trou Noir
+  blackHole: BlackHole = {
+    id: 'central-singularity',
+    name: ' ',
+    x: 50, y: 50, size: 180, pullStrength: 5
+  };
+
+  // --- CONFIGURATION RETRO COMPUTER ---
+  // Position fixe de l'ordinateur
+  computerPos = { x: 89, y: 20}; 
   
-  // Movement
+  // Calcul de proximité pour l'animation
+  isNearComputer = computed(() => {
+    if (!this.gameStarted()) return false;
+    const dist = Math.sqrt(
+      Math.pow(this.rocketX() - this.computerPos.x, 2) + 
+      Math.pow(this.rocketY() - this.computerPos.y, 2)
+    );
+    return dist < 12; // Rayon de détection
+  });
+
+  // --- CONFIGURATION RETRO MEDIA PLAYER ---
+  // Position fixe du media player (bas gauche, légèrement décalé)
+  mediaPlayerPos = { x: 8, y: 78 };
+  
+  // Calcul de proximité pour l'animation
+  isNearMediaPlayer = computed(() => {
+    if (!this.gameStarted()) return false;
+    const dist = Math.sqrt(
+      Math.pow(this.rocketX() - this.mediaPlayerPos.x, 2) + 
+      Math.pow(this.rocketY() - this.mediaPlayerPos.y, 2)
+    );
+    return dist < 12; // Rayon de détection
+  });
+
+  // --- PHYSIQUE TROU NOIR ---
+  private rocketDistanceToBlackHole = computed(() => {
+    if (!this.gameStarted()) return 100;
+    const dx = this.rocketX() - this.blackHole.x;
+    const dy = this.rocketY() - this.blackHole.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  });
+
+  private proximityRatio = computed(() => {
+    const dist = this.rocketDistanceToBlackHole();
+    const startRadius = 16; 
+    const endRadius = 1;
+    if (dist > startRadius) return 0;
+    if (dist < endRadius) return 1;
+    return 1 - ((dist - endRadius) / (startRadius - endRadius));
+  });
+
+  rocketScale = computed(() => 1 - (this.proximityRatio() * 0.95));
+  blackHoleSpeedMultiplier = computed(() => 1 + (Math.pow(this.proximityRatio(), 2) * 40));
+  isNearBlackHole = computed(() => this.rocketDistanceToBlackHole() < 18);
+  
   private keys = new Set<string>();
   private animationFrame: number | null = null;
   private readonly speed = 0.8;
 
+  // --- PLANÈTES ---
   planets = signal<Planet[]>([
     {
       id: 'constat',
       name: 'CONSTAT',
-      x: 15,
-      y: 20,
-      size: 90,
-      color: '#ff6b6b',
-      glowColor: '#ff000080',
-      icon: '⚠️',
-      title: '🔴 LE CONSTAT : Pourquoi agir ?',
+      x: 15, y: 20, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: ' ', 
+      title: '🔴 LE CONSTAT', 
       content: [
         '💥 <strong>Le déclencheur :</strong> Fin du support Windows 10 en octobre 2025',
         '🗑️ Des millions d\'ordinateurs fonctionnels rendus obsolètes',
         '🌍 <strong>Problème écologique :</strong> Jeter du matériel qui marche = désastre environnemental',
         '💸 <strong>Problème économique :</strong> Licences coûteuses + renouvellement forcé',
         '🔒 <strong>Souveraineté :</strong> Données hors UE, écosystèmes fermés, dépendance totale'
-      ],
-      visited: false
+      ], 
+      visited: false 
     },
     {
       id: 'technique',
       name: 'TECHNIQUE',
-      x: 75,
-      y: 35,
-      size: 100,
-      color: '#4ecdc4',
-      glowColor: '#00ffcc80',
-      icon: '🐧',
-      title: '🐧 LEVIER TECHNIQUE : Le Libre',
-      content: [
+      x: 75, y: 35, size: 100, color: '#4ecdc4', glowColor: '#00ffcc80', icon: ' ', 
+      title: '🐧 TECHNIQUE', content: [
         '🔄 <strong>Remplacer Windows par Linux :</strong> système libre et gratuit',
         '♻️ Linux fonctionne sur ordinateurs anciens = prolonger la vie des machines',
         '📦 <strong>Logiciels Libres :</strong> LibreOffice, Firefox, GIMP...',
         '🏛️ La Forge des Communs Numériques : ressources libres pour l\'éducation',
         '🛡️ <strong>Résultat :</strong> Indépendance totale vis-à-vis des GAFAM'
-      ],
-      visited: false
+      ], 
+      visited: false 
     },
     {
       id: 'materiel',
       name: 'MATÉRIEL',
-      x: 25,
-      y: 55,
-      size: 85,
-      color: '#f9ca24',
-      glowColor: '#ffcc0080',
-      icon: '🔧',
-      title: '🔧 LEVIER MATÉRIEL : Reconditionnement',
-      content: [
+      x: 25, y: 55, size: 85, color: '#f9ca24', glowColor: '#ffcc0080', icon: ' ', 
+      title: '🔧 MATÉRIEL', content: [
         '🚫 <strong>Ne pas jeter :</strong> Lutter contre l\'obsolescence programmée',
         '📦 Récupérer les flottes d\'ordinateurs d\'entreprises',
         '🔄 Remettre à neuf avec Linux pour les élèves',
         '💰 Économies massives sur les budgets publics',
         '🌱 <strong>Impact :</strong> Réduction drastique des déchets électroniques'
-      ],
-      visited: false
+      ], 
+      visited: false 
     },
     {
       id: 'pedagogique',
       name: 'PÉDAGOGIE',
-      x: 70,
-      y: 65,
-      size: 95,
-      color: '#a55eea',
-      glowColor: '#9900ff80',
-      icon: '👨‍🎓',
-      title: '👨‍🎓 LEVIER PÉDAGOGIQUE : Élèves vers Élèves',
-      content: [
+      x: 70, y: 65, size: 95, color: '#a55eea', glowColor: '#9900ff80', icon: ' ', 
+      title: '👨‍🎓 PÉDAGOGIE', content: [
         '🎓 <strong>Les élèves acteurs :</strong> Ils apprennent à reconditionner',
         '💻 Installation de Linux par les élèves eux-mêmes',
         '🤝 Formation entre pairs : élèves forment leurs camarades',
         '🌟 Éco-délégués au cœur du dispositif',
         '🚀 <strong>Transformation :</strong> De consommateur passif à acteur éclairé'
-      ],
-      visited: false
+      ], visited: false 
     },
     {
       id: 'methode',
       name: 'MÉTHODE',
-      x: 50,
-      y: 15,
-      size: 110,
-      color: '#ff9ff3',
-      glowColor: '#ff66cc80',
-      icon: '📋',
-      title: '📋 LA MÉTHODE : Les 3 Jalons',
-      content: [
+      x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: ' ', 
+      title: '📋 MÉTHODE', content: [
         '🏁 <strong>Jalon 1 - MOBILISATION :</strong> Un enseignant volontaire lance la dynamique',
         '🧪 <strong>Jalon 2 - EXPÉRIMENTATION :</strong> Linux sur quelques postes de test',
         '✅ <strong>Jalon 3 - INTÉGRATION :</strong> Généralisation dans le projet d\'établissement',
         '🏛️ Soutien officiel de la collectivité (mairie, région)',
         '🎯 <strong>Objectif :</strong> Du "David contre Goliath" au "Village Résistant"'
-      ],
-      visited: false
-    }
+      ], 
+      visited: false 
+    },
   ]);
 
   visitedCount = computed(() => this.planets().filter((p: Planet) => p.visited).length);
   totalPlanets = computed(() => this.planets().length);
 
-  ngOnInit() {
-    this.startGameLoop();
-  }
-
-  ngOnDestroy() {
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-    }
-  }
-
-  startGame() {
-    this.gameStarted.set(true);
-    this.isFlying.set(true);
-  }
+  ngOnInit() { this.startGameLoop(); }
+  ngOnDestroy() { if (this.animationFrame) cancelAnimationFrame(this.animationFrame); }
+  startGame() { this.gameStarted.set(true); this.isFlying.set(true); }
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
+    // Si le chat est ouvert, on empêche tout mouvement, mais le composant Chat gère ses propres touches
+    if (this.retroComputer && this.retroComputer.isChatOpen()) return;
+    
+    // Si le jeu n'est pas lancé ou si une planète est ouverte
     if (!this.gameStarted() || this.showModal()) return;
+
     this.keys.add(event.key.toLowerCase());
     
+    // INTERACTION AVEC ESPACE OU ENTREE
     if (event.key === ' ' || event.key === 'Enter') {
-      this.checkPlanetCollision();
+        this.checkInteractions();
     }
   }
-
+  
   @HostListener('window:keyup', ['$event'])
-  onKeyUp(event: KeyboardEvent) {
-    this.keys.delete(event.key.toLowerCase());
-  }
+  onKeyUp(event: KeyboardEvent) { this.keys.delete(event.key.toLowerCase()); }
 
   private startGameLoop() {
     const gameLoop = () => {
-      if (this.gameStarted() && !this.showModal()) {
+      // Le jeu se fige visuellement (pas de mouvement) si le chat ou une modale est ouvert
+      const isChatOpen = this.retroComputer && this.retroComputer.isChatOpen();
+      
+      if (this.gameStarted() && !this.showModal() && !isChatOpen) {
         this.updateRocketPosition();
       }
       this.animationFrame = requestAnimationFrame(gameLoop);
@@ -194,74 +212,78 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
   }
 
   private updateRocketPosition() {
-    let dx = 0;
-    let dy = 0;
-
+    let dx = 0, dy = 0;
     if (this.keys.has('arrowup') || this.keys.has('z') || this.keys.has('w')) dy = -this.speed;
     if (this.keys.has('arrowdown') || this.keys.has('s')) dy = this.speed;
     if (this.keys.has('arrowleft') || this.keys.has('q') || this.keys.has('a')) dx = -this.speed;
     if (this.keys.has('arrowright') || this.keys.has('d')) dx = this.speed;
 
-    if (dx !== 0 || dy !== 0) {
-      const newX = Math.max(5, Math.min(95, this.rocketX() + dx));
-      const newY = Math.max(5, Math.min(90, this.rocketY() + dy));
-      this.rocketX.set(newX);
-      this.rocketY.set(newY);
+    const ratio = this.proximityRatio();
+    
+    if (ratio > 0) {
+      const dist = this.rocketDistanceToBlackHole();
+      const vecX = this.blackHole.x - this.rocketX();
+      const vecY = this.blackHole.y - this.rocketY();
+      const maxGravity = 0.7; 
+      const gravityStrength = (ratio * ratio) * maxGravity;
       
-      // Calculate rotation based on movement direction
-      const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+      dx += (vecX / dist) * gravityStrength;
+      dy += (vecY / dist) * gravityStrength;
+
+      const chaosIntensity = ratio * 3.0; 
+      dx += (Math.random() - 0.5) * chaosIntensity;
+      dy += (Math.random() - 0.5) * chaosIntensity;
+    }
+
+    if (dx !== 0 || dy !== 0) {
+      this.rocketX.set(Math.max(2, Math.min(98, this.rocketX() + dx)));
+      this.rocketY.set(Math.max(2, Math.min(98, this.rocketY() + dy)));
+      
+      let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+      if (ratio > 0) angle += (Math.random() - 0.5) * 360 * (ratio * ratio);
       this.rocketRotation.set(angle);
     }
   }
 
-  private checkPlanetCollision() {
+  private checkInteractions() {
+    // Check Planètes uniquement - le computer est géré par clic direct
     const rocket = { x: this.rocketX(), y: this.rocketY() };
-    
     for (const planet of this.planets()) {
-      const distance = Math.sqrt(
-        Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2)
-      );
-      
-      if (distance < 12) {
-        this.openPlanetInfo(planet);
-        break;
+      const distance = Math.sqrt(Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2));
+      if (distance < 12) { 
+          this.openPlanetInfo(planet); 
+          return; 
       }
+    }
+    
+    // 2. Check Computer - Appel Manuel
+    // Si on est proche et qu'on appuie sur Espace, on ouvre le chat
+    if (this.isNearComputer()) {
+       // On vide les touches pour ne pas que la fusée continue d'avancer "toute seule" en arrière plan
+       this.keys.clear();
+       this.retroComputer.openChat();
     }
   }
 
   openPlanetInfo(planet: Planet) {
     this.currentPlanet.set(planet);
     this.showModal.set(true);
-    
-    // Mark as visited
-    this.planets.update((planets: Planet[]) => 
-      planets.map((p: Planet) => p.id === planet.id ? { ...p, visited: true } : p)
-    );
-    
-    // Check if all visited
-    const allPlanetsVisited = this.planets().filter((p: Planet) => p.visited).length === this.totalPlanets();
-    if (allPlanetsVisited) {
+    this.planets.update(planets => planets.map(p => p.id === planet.id ? { ...p, visited: true } : p));
+    if (this.planets().filter(p => p.visited).length === this.totalPlanets()) {
       this.allVisited.set(true);
+      this.showVictoryBanner.set(true);
     }
   }
 
-  closeModal() {
-    this.showModal.set(false);
-    this.currentPlanet.set(null);
+  closeVictoryBanner() {
+    this.showVictoryBanner.set(false);
   }
 
-  onPlanetClick(planet: Planet) {
-    if (this.gameStarted()) {
-      this.openPlanetInfo(planet);
-    }
-  }
-
+  closeModal() { this.showModal.set(false); this.currentPlanet.set(null); }
+  onPlanetClick(planet: Planet) { if (this.gameStarted()) this.openPlanetInfo(planet); }
+  
   isNearPlanet(planet: Planet): boolean {
     const rocket = { x: this.rocketX(), y: this.rocketY() };
-    const distance = Math.sqrt(
-      Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2)
-    );
-    return distance < 12;
+    return Math.sqrt(Math.pow(rocket.x - planet.x, 2) + Math.pow(rocket.y - planet.y, 2)) < 12;
   }
 }
-

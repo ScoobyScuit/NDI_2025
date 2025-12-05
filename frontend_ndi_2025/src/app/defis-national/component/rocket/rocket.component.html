@@ -2,10 +2,9 @@
   class="rocket-container" 
   [style.left.%]="x" 
   [style.top.%]="y"
-  [style.transform]="'translate(-50%, -50%) rotate(' + rotation + 'deg)'"
+  [style.transform]="'translate(-50%, -50%) rotate(' + rotation + 'deg) scale(' + scale + ')'"
 >
   <div class="rocket" [class.flying]="isFlying">
-    <!-- Flame -->
     <div class="flame">
       <div class="flame-inner"></div>
       <div class="flame-particle p1"></div>
@@ -13,7 +12,6 @@
       <div class="flame-particle p3"></div>
     </div>
     
-    <!-- Rocket Body -->
     <div class="rocket-body">
       <div class="nose-cone"></div>
       <div class="body-main">
@@ -28,7 +26,5 @@
     </div>
   </div>
   
-  <!-- Glow Effect -->
   <div class="rocket-glow"></div>
 </div>
-

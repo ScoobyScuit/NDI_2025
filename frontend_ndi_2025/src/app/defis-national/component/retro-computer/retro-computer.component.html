@@ -1,0 +1,33 @@
+@if (!isChatOpen()) {
+    <div class="monitor-chassis" [class.near]="isNear" (click)="onClick()">
+      <div class="monitor-bezel">
+        <div class="screen-surface">
+          <div class="crt-overlay"></div>
+          <div class="screen-content">
+            @for (line of displayLines(); track $index) {
+              <div class="terminal-line">> {{ line }}</div>
+            }
+            <div class="terminal-line blink-cursor">_</div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-controls">
+        <div class="btn power-btn"></div>
+        <div class="vents">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+  
+      @if (isNear) {
+        <div class="interact-hint">"ESPACE" pour appeler le Chat Bruti</div>
+      }
+      
+  </div>
+  }
+  
+  @if (isChatOpen()) {
+    <app-chat-modal 
+      [isOpen]="isChatOpen()" 
+      (closeModal)="closeChat()">
+    </app-chat-modal>
+  }

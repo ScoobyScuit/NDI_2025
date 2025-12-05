@@ -1,0 +1,58 @@
+<div 
+  class="black-hole-container"
+  [style.left.%]="blackHole.x"
+  [style.top.%]="blackHole.y"
+  [style.width.px]="blackHole.size"
+  [style.height.px]="blackHole.size"
+  [class.pulling]="isNear"
+>
+  <svg class="black-hole-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    
+    <g class="rotating-spirals" #rotatingGroup>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(22.5, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(45, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(67.5, 100, 100)"/>
+      
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(90, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(112.5, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(135, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(157.5, 100, 100)"/>
+      
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(180, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(202.5, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(225, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(247.5, 100, 100)"/>
+      
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(270, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(292.5, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(315, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="1" stroke-linecap="round" transform="rotate(337.5, 100, 100)"/>
+    </g>
+
+    <circle 
+      class="black-hole-disk"
+      cx="100" 
+      cy="100" 
+      r="18"
+      [style.transform]="'scale(' + coreScale() + ')'"
+    />
+    
+    <circle 
+       class="event-horizon-glow"
+       cx="100" 
+       cy="100" 
+       r="18"
+       [style.transform]="'scale(' + coreScale() + ')'"
+    />
+
+  </svg>
+
+  <div class="black-hole-name">{{ blackHole.name }}</div>
+
+  @if (isNear) {
+    <div class="interact-hint">
+      <span>ALERTE GRAVITATIONNELLE</span>
+    </div>
+  }
+</div>

@@ -1,0 +1,209 @@
+@if (isOpen()) {
+  <!-- Modal de choix de pseudo (première visite ou modification) -->
+  @if (showPseudoModal()) {
+    <div class="pseudo-modal-overlay" (click)="showPseudoModal.set(false)">
+      <div class="pseudo-modal-container" (click)="$event.stopPropagation()">
+        <div class="pseudo-modal-header">
+          <h2 class="pseudo-modal-title">{{ userService.hasPseudo() ? 'Modifier votre pseudo' : 'Bienvenue ! 👋' }}</h2>
+        </div>
+        <div class="pseudo-modal-content">
+          <p class="pseudo-modal-description">
+            {{ userService.hasPseudo() ? 'Choisissez un nouveau pseudo' : 'Choisissez un pseudo pour personnaliser votre expérience de chat' }}
+          </p>
+          <div class="pseudo-input-wrapper">
+            <input
+              type="text"
+              class="pseudo-input"
+              [(ngModel)]="pseudoInput"
+              (keydown.enter)="savePseudo()"
+              placeholder="Votre pseudo..."
+              maxlength="20"
+              autofocus
+            />
+          </div>
+          <div class="pseudo-modal-actions">
+            <button class="pseudo-button pseudo-button-primary" (click)="savePseudo()" [disabled]="!pseudoInput().trim() || pseudoInput().trim().length < 2">
+              {{ userService.hasPseudo() ? 'Enregistrer' : 'Commencer' }}
+            </button>
+            @if (!userService.hasPseudo()) {
+              <button class="pseudo-button pseudo-button-secondary" (click)="skipPseudo()">
+                Passer
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="modal-overlay" (click)="close()" [style.background]="getThemeStyles()['--overlay']">
+    <!-- Fond animé rétro avec étoiles, étoiles filantes et lune -->
+    <div class="retro-background">
+      <!-- Lune -->
+      <div class="moon"></div>
+      
+      <!-- Étoiles -->
+      @for (star of stars(); track $index) {
+        <div 
+          class="star" 
+          [style.left.%]="star.x"
+          [style.top.%]="star.y"
+          [style.width.px]="star.size"
+          [style.height.px]="star.size"
+          [style.animation-delay.s]="star.delay">
+        </div>
+      }
+      
+      <!-- Étoiles filantes -->
+      <div class="shooting-star shooting-star-1"></div>
+      <div class="shooting-star shooting-star-2"></div>
+      <div class="shooting-star shooting-star-3"></div>
+    </div>
+    
+    <div 
+      class="modal-container" 
+      [class.theme-retro]="currentTheme().id === 'retro'"
+      [class.theme-cyberpunk]="currentTheme().id === 'cyberpunk'"
+      [class.theme-matrix]="currentTheme().id === 'matrix'"
+      [class]="'emotion-' + currentEmotion().type"
+      (click)="$event.stopPropagation()" 
+      [ngStyle]="getThemeStyles()">
+      <!-- En-tête de la modal -->
+      <div class="modal-header">
+        <div class="header-content">
+          <div class="terminal-indicator">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <h2 class="modal-title">Terminal Chat</h2>
+          <!-- Indicateur d'émotion -->
+          <div class="emotion-indicator" [class]="'emotion-' + currentEmotion().type">
+            <span class="emotion-icon" [title]="currentEmotion().description">{{ currentEmotion().icon }}</span>
+          </div>
+          <!-- Pseudo utilisateur -->
+          <div class="user-pseudo-display" (click)="editPseudo()" [title]="'Cliquez pour changer votre pseudo'">
+            <span class="pseudo-label">@</span>
+            <span class="pseudo-value">{{ userPseudo() }}</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="character-button" (click)="toggleCharacterSelector()" aria-label="Changer le personnage" title="Changer le personnage">
+            <span class="character-icon">{{ currentCharacter().icon }}</span>
+            <span class="character-name">{{ currentCharacter().name }}</span>
+          </button>
+          <button class="theme-button" (click)="toggleThemeSelector()" aria-label="Changer le thème" title="Changer le thème">
+            <span class="theme-icon">{{ currentTheme().icon }}</span>
+            <span class="theme-name">{{ currentTheme().name }}</span>
+          </button>
+          <button class="close-button" (click)="close()" aria-label="Fermer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sélecteur de personnage -->
+      @if (showCharacterSelector()) {
+        <div class="character-selector">
+          @for (character of characters(); track character.id) {
+            <button 
+              class="character-option"
+              [class.active]="currentCharacter().id === character.id"
+              (click)="selectCharacter(character)"
+              [attr.aria-label]="'Sélectionner le personnage ' + character.name"
+              [title]="character.description">
+              <span class="character-option-icon">{{ character.icon }}</span>
+              <div class="character-option-info">
+                <span class="character-option-name">{{ character.name }}</span>
+                <span class="character-option-desc">{{ character.description }}</span>
+              </div>
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Sélecteur de thème -->
+      @if (showThemeSelector()) {
+        <div class="theme-selector">
+          @for (theme of themes(); track theme.id) {
+            <button 
+              class="theme-option"
+              [class.active]="currentTheme().id === theme.id"
+              (click)="selectTheme(theme)"
+              [attr.aria-label]="'Sélectionner le thème ' + theme.name">
+              <span class="theme-option-icon">{{ theme.icon }}</span>
+              <span class="theme-option-name">{{ theme.name }}</span>
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Particules d'émotion -->
+      @if (currentEmotion().particles) {
+        <div class="emotion-particles">
+          @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+            <span class="particle" [style.animation-delay.s]="i * 0.2">{{ currentEmotion().particles }}</span>
+          }
+        </div>
+      }
+
+      <!-- Zone de messages -->
+      <div class="messages-container" #messagesContainer>
+        @for (message of messages(); track $index) {
+          <div class="message" [class.user-message]="message.role === 'user'" [class.assistant-message]="message.role === 'assistant'">
+            <div class="message-header">
+              <span class="message-role">{{ message.role === 'user' ? userPseudo() : currentCharacter().name.toLowerCase() }}</span>
+              <span class="message-time">{{ message.timestamp | date:'HH:mm:ss' }}</span>
+            </div>
+            <div class="message-content">{{ message.content }}</div>
+          </div>
+        }
+        @if (isLoading()) {
+          <div class="message assistant-message">
+            <div class="message-header">
+              <span class="message-role">{{ currentCharacter().name.toLowerCase() }}</span>
+            </div>
+            <div class="message-content">
+              <span class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Zone de saisie -->
+      <div class="input-container">
+        <div class="input-wrapper">
+          <span class="input-prompt">{{ userPseudo() }}</span>
+          <input
+            #inputField
+            type="text"
+            class="chat-input"
+            [ngModel]="userInput()"
+            (ngModelChange)="userInput.set($event)"
+            (keydown)="onKeyDown($event)"
+            placeholder="Tapez votre message..."
+            [disabled]="isLoading()"
+          />
+          <button 
+            class="send-button"
+            (click)="sendMessage()"
+            [disabled]="!userInput().trim() || isLoading()"
+            aria-label="Envoyer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
