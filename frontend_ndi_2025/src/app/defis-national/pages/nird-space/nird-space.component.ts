@@ -367,7 +367,6 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     this.planets.update(planets => planets.map(p => p.id === planet.id ? { ...p, visited: true } : p));
     if (this.planets().filter(p => p.visited).length === this.totalPlanets()) {
       this.allVisited.set(true);
-      this.showVictoryBanner.set(true);
     }
   }
 
@@ -375,7 +374,16 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     this.showVictoryBanner.set(false);
   }
 
-  closeModal() { this.showModal.set(false); this.currentPlanet.set(null); }
+  closeModal() { 
+    this.showModal.set(false); 
+    this.currentPlanet.set(null);
+    // Afficher le message de félicitation avec un délai après la fermeture de la modal
+    if (this.allVisited() && !this.showVictoryBanner()) {
+      setTimeout(() => {
+        this.showVictoryBanner.set(true);
+      }, 500);
+    }
+  }
   onPlanetClick(planet: Planet) { if (this.gameStarted()) this.openPlanetInfo(planet); }
   
   isNearPlanet(planet: Planet): boolean {
