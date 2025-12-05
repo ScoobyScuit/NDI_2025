@@ -1,30 +1,32 @@
-<!-- Monitor (visible quand le chat n'est pas ouvert ou toujours visible derrière) -->
 @if (!isChatOpen()) {
-  <div class="monitor-chassis" (click)="openChat()">
-    <div class="monitor-bezel">
-      <div class="screen-surface">
-        <div class="crt-overlay"></div>
-        <div class="screen-content">
-          @for (line of displayLines(); track $index) {
-            <div class="terminal-line">> {{ line }}</div>
-          }
-          <div class="terminal-line blink-cursor">_</div>
+    <div class="monitor-chassis" (click)="openChat()">
+      <div class="monitor-bezel">
+        <div class="screen-surface">
+          <div class="crt-overlay"></div>
+          <div class="screen-content">
+            @for (line of displayLines(); track $index) {
+              <div class="terminal-line">> {{ line }}</div>
+            }
+            <div class="terminal-line blink-cursor">_</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="monitor-controls">
-      <div class="btn power-btn"></div>
-      <div class="vents">
-        <span></span><span></span><span></span>
+      <div class="monitor-controls">
+        <div class="btn power-btn"></div>
+        <div class="vents">
+          <span></span><span></span><span></span>
+        </div>
       </div>
+  
+      @if (isNear) {
+        <div class="interact-hint">"ESPACE" pour appeler le Chat Bruti</div>
+      }
     </div>
-  </div>
-}
-
-<!-- Chat Modal - Plein écran -->
-@if (isChatOpen()) {
-  <app-chat-modal 
-    [isOpen]="isChatOpen()" 
-    (closeModal)="closeChat()">
-  </app-chat-modal>
-}
+  }
+  
+  @if (isChatOpen()) {
+    <app-chat-modal 
+      [isOpen]="isChatOpen()" 
+      (closeModal)="closeChat()">
+    </app-chat-modal>
+  }

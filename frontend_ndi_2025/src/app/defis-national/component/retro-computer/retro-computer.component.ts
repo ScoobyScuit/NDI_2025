@@ -36,7 +36,7 @@ export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // RIEN ICI : On n'ouvre plus automatiquement
+    // Aucune action automatique ici, tout est géré par la touche Espace dans le parent.
   }
 
   ngOnDestroy() {
