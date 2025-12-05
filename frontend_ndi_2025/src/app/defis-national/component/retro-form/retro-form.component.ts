@@ -51,7 +51,6 @@ export class RetroFormComponent implements OnInit, OnDestroy {
   }
 
   navigateToForm() {
-    // TODO: Remplacer par la route du formulaire quand elle sera créée
-    this.router.navigate(['/add-talent']);
+    this.router.navigate(['/ergonomie/labyrinthe-temporel']);
   }
 }

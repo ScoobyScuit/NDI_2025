@@ -1,0 +1,93 @@
+<div class="moving-drag-drop-field-container">
+  <h2 class="field-title">Drag & Drop Mouvant</h2>
+  <div class="content-wrapper" [class.blurred]="!isStarted()">
+    <div class="header">
+      <div class="instruction-text">
+        <p>Cliquez et tirez vers l'arrière pour propulser le bloc "<strong>{{ currentBlockText() }}</strong>" vers la zone cible.</p>
+        <p class="warning-text">⚠️ Le bloc doit s'arrêter dans la zone pendant au moins 500ms pour valider !</p>
+      </div>
+    </div>
+
+    @if (isStarted()) {
+      <div class="drag-drop-area">
+        <!-- Draggable block (curling style) -->
+        <div
+          class="draggable-block"
+          [class.dragging]="isDragging()"
+          [class.sliding]="isSliding"
+          [style]="getBlockStyle()"
+          (mousedown)="onMouseDown($event)"
+        >
+          {{ currentBlockText() }}
+          @if (isDragging()) {
+            <div class="launch-indicator">
+              <div class="launch-line"></div>
+            </div>
+          }
+        </div>
+
+        <!-- Moving drop zone -->
+        <div
+          class="drop-zone"
+          [style]="getDropZoneStyle()"
+          [class.active]="isInDropZone"
+        >
+          <div class="drop-zone-content">
+            <p class="drop-zone-text">Zone cible</p>
+            @if (isInDropZone && dropZoneEnterTime) {
+              <div class="validation-timer">
+                <p class="timer-text">{{ getTimeInZone() }}ms</p>
+                <div class="timer-bar">
+                  <div class="timer-fill" [style.width.%]="getValidationProgress()"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (showError()) {
+        <div class="error-message">
+          <p>{{ errorMessage() }}</p>
+        </div>
+      }
+
+      @if (!isActive()) {
+        <div class="validation-message">
+          <p>✅ Bloc déposé avec succès : {{ currentBlockText() }}</p>
+          <button class="reset-button" (click)="reset()">Réinitialiser</button>
+        </div>
+      }
+    }
+  </div>
+  
+  @if (!isStarted()) {
+    <div class="start-button-wrapper">
+      <div class="word-input-section">
+        <p class="word-input-label">Écrivez le mot à propulser :</p>
+        <input
+          type="text"
+          class="word-input"
+          [value]="currentBlockText()"
+          (input)="updateBlockText($any($event.target).value)"
+          placeholder="Entrez votre mot..."
+          maxlength="7"
+        />
+        @if (currentBlockText()) {
+          <div class="word-preview">
+            <p class="word-preview-label">Mot à propulser :</p>
+            <p class="word-preview-text">{{ currentBlockText() }}</p>
+          </div>
+        }
+      </div>
+      <button 
+        class="start-button" 
+        (click)="startField()"
+        [disabled]="!currentBlockText() || currentBlockText().trim() === ''"
+      >
+        Commencer le champ
+      </button>
+    </div>
+  }
+</div>
+

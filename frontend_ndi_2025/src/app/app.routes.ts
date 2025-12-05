@@ -12,6 +12,12 @@ export const routes: Routes = [
       .then(m => m.NirdSpaceComponent),
     title: 'NIRD Space Mission - Défi National'
   },
+  {
+    path: 'ergonomie/labyrinthe-temporel',
+    loadComponent: () => import('./defis/ergonomie/pages/temporal-maze-test/temporal-maze-test.component')
+      .then(m => m.TemporalMazeTestComponent),
+    title: 'Défis Ergonomie'
+  },
     {
         path: '',
         redirectTo: 'landing-page',

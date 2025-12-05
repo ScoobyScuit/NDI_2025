@@ -1,0 +1,72 @@
+<div class="address-puzzle-field-container">
+  <h2 class="field-title">Puzzle d'Adresse</h2>
+  <div class="content-wrapper" [class.blurred]="!isStarted()">
+    <div class="header">
+      <div class="instruction-text">
+        <p>Reconstituez l'adresse en glissant les fragments dans le bon ordre.</p>
+      </div>
+    </div>
+
+    @if (isStarted()) {
+      <div class="puzzle-area">
+        <!-- Target container -->
+        <div class="target-container">
+          <h3 class="target-title">Adresse à reconstituer :</h3>
+          <div class="target-slots">
+            @for (slot of targetFragments(); track $index; let i = $index) {
+              <div 
+                class="target-slot"
+                [class.filled]="slot !== null"
+                [class.drag-over]="draggedFragment !== null"
+                (dragover)="onDragOver($event, i)"
+                (drop)="onDrop($event, i)"
+                (dragleave)="$event.preventDefault()">
+                @if (slot) {
+                  <div class="target-fragment" (click)="removeFromTarget(slot)">
+                    {{ slot.text }}
+                    <span class="remove-icon">×</span>
+                  </div>
+                } @else {
+                  <span class="slot-placeholder">{{ i + 1 }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Source fragments -->
+        <div class="source-container">
+          <h3 class="source-title">Fragments disponibles :</h3>
+          <div class="fragments-grid">
+            @for (fragment of fragments(); track fragment.id) {
+              @if (!fragment.isInTarget) {
+                <div 
+                  class="fragment"
+                  [class.dragging]="draggedFragment?.id === fragment.id"
+                  draggable="true"
+                  (dragstart)="onDragStart($event, fragment)"
+                  (dragend)="onDragEnd($event)">
+                  {{ fragment.text }}
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (!isActive()) {
+        <div class="validation-message">
+          <p>✅ Adresse validée : {{ getComputedAddress() }}</p>
+          <button class="reset-button" (click)="reset()">Réinitialiser</button>
+        </div>
+      }
+    }
+  </div>
+  
+  @if (!isStarted()) {
+    <div class="start-button-wrapper">
+      <button class="start-button" (click)="startField()">Commencer le champ</button>
+    </div>
+  }
+</div>
+
