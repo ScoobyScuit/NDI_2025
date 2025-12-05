@@ -31,6 +31,13 @@ body {
   font-family: 'VT323', monospace;
   color: var(--secondary); /* Texte noir sur fond clair */
   transition: background-color 0.5s;
+  overflow: hidden; /* Masquer la scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE et Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 #bgCanvas {
