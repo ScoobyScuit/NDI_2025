@@ -5,6 +5,7 @@
   [style.width.px]="blackHole.size"
   [style.height.px]="blackHole.size"
   [class.pulling]="isNear"
+  [class.menu-open]="isMenuOpen()"
 >
   <svg class="black-hole-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
     
@@ -50,9 +51,48 @@
 
   <div class="black-hole-name">{{ blackHole.name }}</div>
 
-  @if (isNear) {
+  @if (isNear && !isMenuOpen()) {
     <div class="interact-hint">
-      <span>ALERTE GRAVITATIONNELLE</span>
+      <span>⚡ ESPACE pour ouvrir le PORTAIL</span>
     </div>
   }
 </div>
+
+<!-- MENU PORTAIL DIMENSIONNEL -->
+@if (isMenuOpen()) {
+  <div class="portal-overlay" (click)="closeMenu()">
+    <div class="portal-menu" (click)="$event.stopPropagation()">
+      <div class="portal-header">
+        <div class="portal-title-wrapper">
+          <span class="portal-icon">🌀</span>
+          <h2 class="portal-title">PORTAIL DIMENSIONNEL</h2>
+        </div>
+        <p class="portal-subtitle">Choisissez votre destination</p>
+        <button class="portal-close" (click)="closeMenu()">✕</button>
+      </div>
+      
+      <div class="portal-destinations">
+        @for (dest of destinations; track dest.id; let i = $index) {
+          <div 
+            class="destination-item"
+            [class.selected]="selectedIndex() === i"
+            [style.--dest-color]="dest.color"
+            (click)="selectDestination(dest)"
+            (mouseenter)="selectedIndex.set(i)"
+          >
+            <div class="dest-icon">{{ dest.icon }}</div>
+            <div class="dest-info">
+              <span class="dest-name">{{ dest.name }}</span>
+              <span class="dest-description">{{ dest.description }}</span>
+            </div>
+            <div class="dest-arrow">→</div>
+          </div>
+        }
+      </div>
+      
+      <div class="portal-footer">
+        <span class="portal-controls">↑↓ Naviguer | ENTRÉE Sélectionner | ESC Fermer</span>
+      </div>
+    </div>
+  </div>
+}

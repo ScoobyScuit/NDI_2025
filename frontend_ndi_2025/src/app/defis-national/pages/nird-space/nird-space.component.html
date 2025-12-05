@@ -51,6 +51,7 @@
       [blackHole]="blackHole"
       [isNear]="isNearBlackHole()"
       [speedMultiplier]="blackHoleSpeedMultiplier()"
+      (openChatRequest)="onOpenChatFromPortal()"
     />
 
     @for (planet of planets(); track planet.id) {
@@ -97,7 +98,7 @@
   @if (gameStarted()) {
     <div class="bottom-bar">
       <div class="mission-brief">
-        <span class="pixel-text">🎯 MISSION : Explore les 5 planètes pour découvrir la démarche NIRD<br>  Le trou noir vous transporte dans une autre dimension, pour découvrir d’autres éléments de cet univers <br> (vous pourrez en sortir tout en sécurité)</span>
+        <span class="pixel-text">🎯 MISSION : Explore les 5 planètes pour découvrir la démarche NIRD<br>  Le trou noir vous transporte dans une autre dimension, pour découvrir d’autres éléments de cet univers <br> (vous pourrez en sortir tout en sécurité) <br><br> Allez sur chaque item au 4 coins de l'univers pour en découvrir ses secrets</span>
       </div>
     </div>
   }
