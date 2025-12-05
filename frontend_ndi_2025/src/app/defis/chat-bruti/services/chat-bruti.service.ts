@@ -16,7 +16,8 @@ export interface ChatMessageResponse {
   providedIn: 'root'
 })
 export class ChatBrutiService {
-  private readonly apiUrl = 'http://localhost:3000/chat-bruti';
+  // URL relative pour fonctionner en local ET en production
+  private readonly apiUrl = '/chat-bruti';
 
   constructor(private http: HttpClient) {}
 

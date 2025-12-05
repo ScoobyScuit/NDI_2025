@@ -30,7 +30,7 @@ async function bootstrap() {
   // Fallback pour le routing Angular (SPA)
   app.use((req, res, next) => {
     // Si la requête est pour l'API, laisser passer
-    if (req.path.startsWith('/api')) {
+    if (req.path.startsWith('/api') || req.path.startsWith('/chat-bruti')) {
       return next();
     }
     // Sinon, servir index.html
