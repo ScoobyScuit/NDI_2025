@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Nuit de l'Info 2025 - Monolith deployment",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "install:frontend": "cd frontend_ndi_2025 && npm ci",
     "install:backend": "cd backend_ndi_2025 && npm ci",
