@@ -9,6 +9,7 @@ import { StarsBackgroundComponent } from '../../component/stars-background/stars
 import { RetroComputerComponent } from '../../component/retro-computer/retro-computer.component';
 import { RetroMediaPlayerComponent } from '../../component/retro-mediaPlayer/retro-media-player.component';
 import { CardTalentsComponent } from '../../component/card-talents/card-talents.component';
+import { RetroFormComponent } from '../../component/retro-form/retro-form.component';
 
 @Component({
   selector: 'app-nird-space',
@@ -23,15 +24,17 @@ import { CardTalentsComponent } from '../../component/card-talents/card-talents.
     StarsBackgroundComponent,
     RetroComputerComponent,
     RetroMediaPlayerComponent,
-    CardTalentsComponent
+    CardTalentsComponent,
+    RetroFormComponent
   ],
   templateUrl: './nird-space.component.html',
   styleUrl: './nird-space.component.css'
 })
 export class NirdSpaceComponent implements OnInit, OnDestroy {
-  // Référence essentielle pour commander l'ordinateur
+  // Références pour commander les composants interactifs
   @ViewChild(RetroComputerComponent) retroComputer!: RetroComputerComponent;
   @ViewChild(CardTalentsComponent) cardTalents!: CardTalentsComponent;
+  @ViewChild(RetroFormComponent) retroForm!: RetroFormComponent;
 
   // Rocket position
   rocketX = signal(50);
@@ -94,6 +97,20 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     return dist < 12; // Rayon de détection
   });
 
+  // --- CONFIGURATION RETRO FORM ---
+  // Position fixe en haut à gauche
+  retroFormPos = { x: 10, y: 20 };
+  
+  // Calcul de proximité pour l'animation
+  isNearRetroForm = computed(() => {
+    if (!this.gameStarted()) return false;
+    const dist = Math.sqrt(
+      Math.pow(this.rocketX() - this.retroFormPos.x, 2) + 
+      Math.pow(this.rocketY() - this.retroFormPos.y, 2)
+    );
+    return dist < 12; // Rayon de détection
+  });
+
   // --- PHYSIQUE TROU NOIR ---
   private rocketDistanceToBlackHole = computed(() => {
     if (!this.gameStarted()) return 100;
@@ -124,7 +141,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'constat',
       name: 'CONSTAT',
-      x: 15, y: 20, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: ' ', 
+      x: 30, y: 25, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: ' ', 
       title: '🔴 LE CONSTAT', 
       content: [
         '💥 <strong>Le déclencheur :</strong> Fin du support Windows 10 en octobre 2025',
@@ -286,6 +303,14 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     if (this.isNearCardTalents()) {
        this.keys.clear();
        this.cardTalents.navigateToTalents();
+       return;
+    }
+    
+    // 4. Check Retro Form - Navigation vers le formulaire
+    // Si on est proche et qu'on appuie sur Espace, on redirige vers /add-talent
+    if (this.isNearRetroForm()) {
+       this.keys.clear();
+       this.retroForm.navigateToForm();
     }
   }
 
