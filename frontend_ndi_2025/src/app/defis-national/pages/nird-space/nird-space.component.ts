@@ -147,7 +147,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'constat',
       name: 'CONSTAT',
-      x: 30, y: 25, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: '⚠️', 
+      x: 30, y: 25, size: 90, color: '#ff6b6b', glowColor: '#ff000080', icon: ' ', 
       title: '🔴 LE CONSTAT : La menace Big Tech', 
       content: [
         '💥 <strong>LE DÉCLENCHEUR :</strong> Fin du support Windows 10 en octobre 2025 - Microsoft force la mise à jour vers Windows 11',
@@ -163,7 +163,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'technique',
       name: 'TECHNIQUE',
-      x: 75, y: 35, size: 100, color: '#4ecdc4', glowColor: '#00ffcc80', icon: '🐧', 
+      x: 75, y: 35, size: 100, color: '#4ecdc4', glowColor: '#00ffcc80', icon: ' ', 
       title: '🐧 LEVIER TECHNIQUE : Passer au Libre', 
       content: [
         '🔄 <strong>LINUX, LA SOLUTION :</strong> Système d\'exploitation 100% libre et gratuit - alternative complète à Windows sans aucune licence à payer',
@@ -180,7 +180,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'materiel',
       name: 'MATÉRIEL',
-      x: 25, y: 55, size: 85, color: '#f9ca24', glowColor: '#ffcc0080', icon: '🔧', 
+      x: 25, y: 55, size: 85, color: '#f9ca24', glowColor: '#ffcc0080', icon: ' ', 
       title: '🔧 LEVIER MATÉRIEL : Reconditionnement', 
       content: [
         '🚫 <strong>STOP AU GASPILLAGE :</strong> Un ordinateur peut fonctionner 15-20 ans avec Linux - arrêtons de jeter ce qui marche !',
@@ -197,7 +197,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'pedagogique',
       name: 'PÉDAGOGIE',
-      x: 70, y: 65, size: 95, color: '#a55eea', glowColor: '#9900ff80', icon: '👨‍🎓', 
+      x: 70, y: 65, size: 95, color: '#a55eea', glowColor: '#9900ff80', icon: ' ', 
       title: '👨‍🎓 LEVIER PÉDAGOGIQUE : Élèves vers Élèves', 
       content: [
         '🎓 <strong>ÉLÈVES ACTEURS :</strong> Ce ne sont pas des techniciens externes mais les élèves eux-mêmes qui reconditionnent les PC !',
@@ -215,7 +215,7 @@ export class NirdSpaceComponent implements OnInit, OnDestroy {
     {
       id: 'methode',
       name: 'MÉTHODE',
-      x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: '📋', 
+      x: 50, y: 15, size: 110, color: '#ff9ff3', glowColor: '#ff66cc80', icon: ' ', 
       title: '📋 LA MÉTHODE NIRD : 3 Jalons', 
       content: [
         '🏁 <strong>JALON 1 - MOBILISATION :</strong> Un enseignant volontaire se désigne comme "référent NIRD", informe la direction et contacte la collectivité locale',
