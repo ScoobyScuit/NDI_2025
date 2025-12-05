@@ -1,4 +1,6 @@
-<div class="monitor-chassis">
+<!-- Monitor (visible quand le chat n'est pas ouvert ou toujours visible derrière) -->
+@if (!isChatOpen()) {
+  <div class="monitor-chassis" (click)="openChat()">
     <div class="monitor-bezel">
       <div class="screen-surface">
         <div class="crt-overlay"></div>
@@ -17,3 +19,12 @@
       </div>
     </div>
   </div>
+}
+
+<!-- Chat Modal - Plein écran -->
+@if (isChatOpen()) {
+  <app-chat-modal 
+    [isOpen]="isChatOpen()" 
+    (closeModal)="closeChat()">
+  </app-chat-modal>
+}

@@ -1,17 +1,25 @@
-import { Component, OnInit, OnDestroy, signal, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChatModalComponent } from '../../../defis/chat-bruti/component/chat-modal/chat-modal.component';
 
 @Component({
   selector: 'app-retro-computer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChatModalComponent],
   templateUrl: './retro-computer.component.html',
   styleUrls: ['./retro-computer.component.css']
 })
-export class RetroComputerComponent implements OnInit, OnDestroy {
-  @Input() isNear: boolean = false; // Reçoit l'état de proximité
+export class RetroComputerComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() isNear: boolean = false;
 
   displayLines = signal<string[]>([]);
+  isChatOpen = signal(false);
+
+  // Ajoute la classe 'chat-open' quand le chat est ouvert
+  @HostBinding('class.chat-open')
+  get chatOpenClass() {
+    return this.isChatOpen();
+  }
   
   private messages = [
     "SYSTEME NIRD v1.0",
@@ -25,6 +33,13 @@ export class RetroComputerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.bootSequence();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Ouvrir le chat automatiquement quand la fusée entre en contact
+    if (changes['isNear'] && changes['isNear'].currentValue === true && !changes['isNear'].previousValue) {
+      this.openChat();
+    }
   }
 
   ngOnDestroy() {
@@ -42,5 +57,13 @@ export class RetroComputerComponent implements OnInit, OnDestroy {
         clearInterval(this.intervalId);
       }
     }, 800);
+  }
+
+  openChat() {
+    this.isChatOpen.set(true);
+  }
+
+  closeChat() {
+    this.isChatOpen.set(false);
   }
 }
