@@ -1,19 +1,41 @@
 <div class="game-container">
-  <!-- Stars Background -->
   <app-stars-background />
   
-  <!-- Header HUD -->
+  <app-retro-computer 
+    [style.left.%]="computerPos.x"
+    [style.top.%]="computerPos.y"
+    [isNear]="isNearComputer()"
+    [class.near]="isNearComputer()"
+  />
+
+  <app-retro-media-player
+    [style.left.%]="mediaPlayerPos.x"
+    [style.top.%]="mediaPlayerPos.y"
+    [isNear]="isNearMediaPlayer()"
+    [class.near]="isNearMediaPlayer()"
+  />
+
+  <app-card-talents
+    [style.left.%]="cardTalentsPos.x"
+    [style.top.%]="cardTalentsPos.y"
+    [isNear]="isNearCardTalents()"
+    [class.near]="isNearCardTalents()"
+  />
+
+  <app-retro-form
+    [style.left.%]="retroFormPos.x"
+    [style.top.%]="retroFormPos.y"
+    [isNear]="isNearRetroForm()"
+    [class.near]="isNearRetroForm()"
+  />
+  
   <div class="hud">
     <div class="hud-left">
       <span class="score">🪐 {{ visitedCount() }}/{{ totalPlanets() }}</span>
     </div>
     <div class="hud-center">
       <h1 class="title">
-        <span class="nird">N</span>
-        <span class="nird">I</span>
-        <span class="nird">R</span>
-        <span class="nird">D</span>
-        <span class="subtitle">SPACE MISSION</span>
+        <span class="nird">P</span><span class="nird">R</span><span class="nird">O</span><span class="nird">J</span><span class="nird">E</span><span class="nird">T</span><span class="nird">-</span><span class="nird">N</span><span class="nird">I</span><span class="nird">R</span><span class="nird">D</span>
       </h1>
     </div>
     <div class="hud-right">
@@ -23,9 +45,15 @@
     </div>
   </div>
 
-  <!-- Game Area -->
   <div class="game-area">
-    <!-- Planets -->
+    
+    <app-black-hole
+      [blackHole]="blackHole"
+      [isNear]="isNearBlackHole()"
+      [speedMultiplier]="blackHoleSpeedMultiplier()"
+      (openPortal)="openPortalMenu()"
+    />
+
     @for (planet of planets(); track planet.id) {
       <app-planet
         [planet]="planet"
@@ -34,26 +62,25 @@
       />
     }
     
-    <!-- Rocket -->
     @if (gameStarted()) {
       <app-rocket
         [x]="rocketX()"
         [y]="rocketY()"
         [rotation]="rocketRotation()"
+        [scale]="rocketScale()"
         [isFlying]="isFlying()"
       />
     }
   </div>
 
-  <!-- Arcade Cabinet (Start Screen) -->
   @if (!gameStarted()) {
     <app-arcade-cabinet (startGame)="startGame()" />
   }
 
-  <!-- Victory Banner -->
-  @if (allVisited()) {
+  @if (showVictoryBanner()) {
     <div class="victory-banner">
       <div class="victory-content">
+        <button class="victory-close-btn" (click)="closeVictoryBanner()" aria-label="Fermer">×</button>
         <span class="victory-icon">🏆</span>
         <span class="victory-text">MISSION ACCOMPLIE !</span>
         <span class="victory-sub">Tu es maintenant un résistant NIRD !</span>
@@ -61,7 +88,6 @@
     </div>
   }
 
-  <!-- Info Modal -->
   @if (showModal() && currentPlanet()) {
     <app-info-modal
       [planet]="currentPlanet()!"
@@ -69,13 +95,18 @@
     />
   }
 
-  <!-- Bottom Controls -->
+  @if (showPortalMenu()) {
+    <app-portal-menu
+      (closeMenu)="closePortalMenu()"
+      (openChatRequest)="onOpenChatFromPortal()"
+    />
+  }
+
   @if (gameStarted()) {
     <div class="bottom-bar">
       <div class="mission-brief">
-        <span class="pixel-text">🎯 MISSION : Explore les 5 planètes pour découvrir la démarche NIRD</span>
+        <span class="pixel-text">🎯 MISSION : Explore les 5 planètes pour découvrir la démarche NIRD<br>  Le trou noir vous transporte dans une autre dimension, pour découvrir d’autres éléments de cet univers <br> (vous pourrez en sortir tout en sécurité) <br><br> Allez sur chaque item au 4 coins de l'univers pour en découvrir ses secrets</span>
       </div>
     </div>
   }
 </div>
-

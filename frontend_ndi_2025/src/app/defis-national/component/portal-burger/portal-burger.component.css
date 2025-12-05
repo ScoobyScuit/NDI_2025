@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.portal-burger {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px 8px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00ff88;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.portal-burger:hover {
+  background: rgba(0, 255, 136, 0.15);
+  border-color: #00ff88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+  transform: scale(1.05);
+}
+
+.portal-burger.active {
+  background: rgba(0, 255, 136, 0.2);
+  border-color: #00ff88;
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+}
+
+.burger-svg {
+  width: 45px;
+  height: 45px;
+  stroke: #00ff88;
+  filter: drop-shadow(0 0 3px rgba(0, 255, 136, 0.5));
+}
+
+.rotating-spirals {
+  transform-origin: 100px 100px;
+  animation: spinBurger 15s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes spinBurger {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.burger-disk {
+  fill: #000;
+  stroke: none;
+}
+
+.burger-glow {
+  fill: none;
+  stroke: #00ff88;
+  stroke-width: 2px;
+  opacity: 0.8;
+}
+
+.portal-burger:hover .rotating-spirals {
+  animation-duration: 5s;
+}
+
+.portal-burger:hover .burger-glow {
+  stroke-width: 3px;
+  opacity: 1;
+}
+
+.burger-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #00ff88;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  letter-spacing: 1px;
+}
+
+/* Animation au hover */
+.portal-burger:hover .burger-label {
+  text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .portal-burger {
+    padding: 6px 12px 6px 6px;
+  }
+  
+  .burger-svg {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .burger-label {
+    font-size: 8px;
+  }
+}

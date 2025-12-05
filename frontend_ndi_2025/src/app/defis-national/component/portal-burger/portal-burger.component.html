@@ -1,0 +1,24 @@
+<div class="portal-burger" (click)="toggleMenu()" [class.active]="showPortalMenu()">
+  <svg class="burger-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <g class="rotating-spirals">
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round" transform="rotate(45, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round" transform="rotate(90, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round" transform="rotate(135, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round" transform="rotate(180, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round" transform="rotate(225, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round" transform="rotate(270, 100, 100)"/>
+      <path d="M100,80 C135,80 160,120 160,160" fill="none" stroke-width="2" stroke-linecap="round" transform="rotate(315, 100, 100)"/>
+    </g>
+    <circle class="burger-disk" cx="100" cy="100" r="25"/>
+    <circle class="burger-glow" cx="100" cy="100" r="25"/>
+  </svg>
+  <span class="burger-label">MENU</span>
+</div>
+
+@if (showPortalMenu()) {
+  <app-portal-menu
+    (closeMenu)="closeMenu()"
+    (openChatRequest)="onOpenChat()"
+  />
+}

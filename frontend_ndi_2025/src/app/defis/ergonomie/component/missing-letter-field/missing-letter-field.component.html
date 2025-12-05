@@ -1,0 +1,53 @@
+<div class="missing-letter-field-container">
+  <h2 class="field-title">Lettre Manquante</h2>
+  <div class="content-wrapper" [class.blurred]="!isStarted()">
+    <div class="header">
+      <div class="instruction-text">
+        <p>Trouvez les {{ missingLetters.length }} lettres manquantes. Attention : toutes les 1.5 lettres tapées, une lettre sera effacée !</p>
+        @if (isStarted()) {
+          <div class="word-display">
+            <p class="word-label">Mot à compléter :</p>
+            <p class="word-text">{{ getDisplayedWord() }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (isStarted()) {
+      <div class="input-area">
+        <input
+          type="text"
+          class="text-input"
+          [ngModel]="inputValue()"
+          (ngModelChange)="onInputChangeModel($event)"
+          (keyup.enter)="validate()"
+          placeholder="Tapez les lettres manquantes..."
+          [disabled]="!isActive()"
+        />
+        <button class="validate-button" (click)="validate()" [disabled]="!isActive()">
+          Valider
+        </button>
+      </div>
+
+      @if (showMessage()) {
+        <div class="message-box" [class.error]="!isActive()">
+          <p>{{ messageText() }}</p>
+        </div>
+      }
+
+      @if (!isActive()) {
+        <div class="validation-message">
+          <p>✅ Mot validé : {{ getCurrentWord() }}</p>
+          <button class="reset-button" (click)="reset()">Réinitialiser</button>
+        </div>
+      }
+    }
+  </div>
+  
+  @if (!isStarted()) {
+    <div class="start-button-wrapper">
+      <button class="start-button" (click)="startField()">Commencer le champ</button>
+    </div>
+  }
+</div>
+

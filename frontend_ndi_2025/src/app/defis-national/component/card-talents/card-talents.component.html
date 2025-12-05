@@ -1,0 +1,53 @@
+<div class="retro-card" [class.near]="isNear" (click)="onClick()">
+  
+  <!-- Effet holographique -->
+  <div class="holo-effect"></div>
+  
+  <!-- Contenu de la carte -->
+  <div class="card-content">
+    
+    <!-- Header avec badge -->
+    <div class="card-header">
+      <div class="badge-container">
+        <span class="badge-icon">🎴</span>
+        <span class="badge-text">TALENTS</span>
+      </div>
+      <div class="talent-count">
+        <span class="count-value">{{ talentCount() }}</span>
+        <span class="count-label">profils</span>
+      </div>
+    </div>
+
+    <!-- Zone Avatar Preview -->
+    <div class="avatar-zone">
+      <div class="avatar-ring">
+        <div class="avatar" [style.background-color]="getAvatarColor()">
+          {{ getInitial() }}
+        </div>
+      </div>
+      <div class="sparkles">✨</div>
+    </div>
+
+    <!-- Terminal mini -->
+    <div class="mini-terminal">
+      @for (line of displayLines(); track $index) {
+        <div class="terminal-line">> {{ line }}</div>
+      }
+      <div class="terminal-line blink">_</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer">
+      <span class="footer-text">DÉCOUVRIR</span>
+      <span class="arrow">→</span>
+    </div>
+
+  </div>
+
+  <!-- Bordure décorative -->
+  <div class="card-border"></div>
+  
+  @if (isNear) {
+    <div class="interact-hint">"ESPACE" pour explorer les Talents</div>
+  }
+</div>

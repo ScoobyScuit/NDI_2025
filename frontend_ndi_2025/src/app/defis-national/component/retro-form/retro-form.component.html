@@ -1,0 +1,53 @@
+<div class="retro-form" [class.near]="isNear" (click)="onClick()">
+  
+  <!-- Clip du clipboard -->
+  <div class="clipboard-clip">
+    <div class="clip-metal"></div>
+  </div>
+  
+  <!-- Contenu du formulaire -->
+  <div class="form-content">
+    
+    <!-- Header -->
+    <div class="form-header">
+      <span class="header-icon">📝</span>
+      <span class="header-text">FORMULAIRE</span>
+    </div>
+
+    <!-- Faux champs de formulaire -->
+    <div class="fake-fields">
+      <div class="fake-field">
+        <div class="field-label">NOM</div>
+        <div class="field-input">
+          <span class="cursor-blink">|</span>
+        </div>
+      </div>
+      <div class="fake-field">
+        <div class="field-label">TALENT</div>
+        <div class="field-input"></div>
+      </div>
+      <div class="fake-field small">
+        <div class="field-label">XP</div>
+        <div class="field-input"></div>
+      </div>
+    </div>
+
+    <!-- Mini terminal -->
+    <div class="mini-terminal">
+      @for (line of displayLines(); track $index) {
+        <div class="terminal-line">> {{ line }}</div>
+      }
+    </div>
+
+    <!-- Footer button -->
+    <div class="form-footer">
+      <span class="footer-text">REMPLIR</span>
+      <span class="footer-icon">✏️</span>
+    </div>
+
+  </div>
+  
+  @if (isNear) {
+    <div class="interact-hint">"ESPACE" pour s'inscrire</div>
+  }
+</div>

@@ -6,19 +6,368 @@
   height: 100%;
   overflow: hidden;
   z-index: 1;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: linear-gradient(180deg, 
+    #0a0015 0%, 
+    #0d0020 30%, 
+    #1a0a30 50%, 
+    #0d0020 70%, 
+    #0a0015 100%
+  );
 }
 
-/* Stars */
+/* ============================================
+   VOIE LACTÉE - Style spirale galaxie centrale
+   ============================================ */
+   .milky-way {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    pointer-events: none;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+  
+  /* Spirale centrale - cœur noir */
+  .milky-way-cloud-1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle,
+      #000000 0%,
+      #0a0015 100%
+    );
+    border-radius: 50%;
+    box-shadow: 
+      0 0 20px rgba(100, 50, 150, 0.4),
+      0 0 40px rgba(80, 40, 120, 0.2);
+    animation: coreRotate 20s linear infinite;
+  }
+  
+  /* Bras spirale 1 - violet/magenta */
+  .milky-way-cloud-2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background: 
+      conic-gradient(from 0deg,
+        transparent 0deg,
+        transparent 20deg,
+        rgba(180, 100, 200, 0.3) 25deg,
+        rgba(150, 80, 180, 0.25) 45deg,
+        transparent 60deg,
+        transparent 80deg,
+        rgba(180, 100, 200, 0.3) 85deg,
+        rgba(150, 80, 180, 0.25) 105deg,
+        transparent 120deg,
+        transparent 140deg,
+        rgba(180, 100, 200, 0.3) 145deg,
+        rgba(150, 80, 180, 0.25) 165deg,
+        transparent 180deg,
+        transparent 200deg,
+        rgba(180, 100, 200, 0.3) 205deg,
+        rgba(150, 80, 180, 0.25) 225deg,
+        transparent 240deg,
+        transparent 360deg
+      );
+    border-radius: 50%;
+    animation: spiralRotate1 30s linear infinite;
+    filter: blur(2px);
+  }
+  
+  /* Bras spirale 2 - cyan/bleu */
+  .milky-way-cloud-3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 380px;
+    height: 380px;
+    background: 
+      conic-gradient(from 0deg,
+        transparent 0deg,
+        transparent 30deg,
+        rgba(100, 200, 255, 0.25) 35deg,
+        rgba(80, 180, 240, 0.2) 50deg,
+        transparent 65deg,
+        transparent 90deg,
+        rgba(100, 200, 255, 0.25) 95deg,
+        rgba(80, 180, 240, 0.2) 110deg,
+        transparent 125deg,
+        transparent 150deg,
+        rgba(100, 200, 255, 0.25) 155deg,
+        rgba(80, 180, 240, 0.2) 170deg,
+        transparent 185deg,
+        transparent 210deg,
+        rgba(100, 200, 255, 0.25) 215deg,
+        rgba(80, 180, 240, 0.2) 230deg,
+        transparent 245deg,
+        transparent 360deg
+      );
+    border-radius: 50%;
+    animation: spiralRotate2 35s linear infinite;
+    filter: blur(2px);
+  }
+  
+  /* Bras spirale 3 - rose/magenta vif */
+  .milky-way-cloud-4 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    width: 360px;
+    height: 360px;
+    background: 
+      conic-gradient(from 0deg,
+        transparent 0deg,
+        transparent 25deg,
+        rgba(255, 100, 200, 0.28) 30deg,
+        rgba(220, 80, 180, 0.22) 48deg,
+        transparent 60deg,
+        transparent 85deg,
+        rgba(255, 100, 200, 0.28) 90deg,
+        rgba(220, 80, 180, 0.22) 108deg,
+        transparent 120deg,
+        transparent 145deg,
+        rgba(255, 100, 200, 0.28) 150deg,
+        rgba(220, 80, 180, 0.22) 168deg,
+        transparent 180deg,
+        transparent 205deg,
+        rgba(255, 100, 200, 0.28) 210deg,
+        rgba(220, 80, 180, 0.22) 228deg,
+        transparent 240deg,
+        transparent 360deg
+      );
+    border-radius: 50%;
+    animation: spiralRotate3 25s linear infinite;
+    filter: blur(2px);
+  }
+  
+  /* Bras spirale 4 - jaune/doré */
+  .milky-way-cloud-5 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(135deg);
+    width: 340px;
+    height: 340px;
+    background: 
+      conic-gradient(from 0deg,
+        transparent 0deg,
+        transparent 35deg,
+        rgba(255, 220, 100, 0.3) 40deg,
+        rgba(240, 200, 80, 0.24) 55deg,
+        transparent 70deg,
+        transparent 95deg,
+        rgba(255, 220, 100, 0.3) 100deg,
+        rgba(240, 200, 80, 0.24) 115deg,
+        transparent 130deg,
+        transparent 155deg,
+        rgba(255, 220, 100, 0.3) 160deg,
+        rgba(240, 200, 80, 0.24) 175deg,
+        transparent 190deg,
+        transparent 215deg,
+        rgba(255, 220, 100, 0.3) 220deg,
+        rgba(240, 200, 80, 0.24) 235deg,
+        transparent 250deg,
+        transparent 360deg
+      );
+    border-radius: 50%;
+    animation: spiralRotate4 28s linear infinite;
+    filter: blur(2px);
+    mix-blend-mode: screen;
+  }
+  
+  /* Anneau extérieur lumineux */
+  .milky-way-cloud-6 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: 
+      radial-gradient(circle,
+        transparent 0%,
+        transparent 75%,
+        rgba(150, 100, 200, 0.15) 80%,
+        rgba(120, 80, 180, 0.1) 85%,
+        transparent 95%
+      );
+    animation: ringPulse 8s ease-in-out infinite;
+  }
+  
+  /* Points lumineux dans la spirale */
+  .milky-way-cloud-7 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    height: 350px;
+    background: 
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 2%),
+      radial-gradient(circle at 70% 35%, rgba(100, 200, 255, 0.4) 0%, transparent 2%),
+      radial-gradient(circle at 45% 60%, rgba(255, 100, 200, 0.4) 0%, transparent 2%),
+      radial-gradient(circle at 80% 75%, rgba(255, 220, 100, 0.4) 0%, transparent 2%),
+      radial-gradient(circle at 15% 80%, rgba(180, 100, 200, 0.4) 0%, transparent 2%);
+    border-radius: 50%;
+    animation: starsRotate 40s linear infinite;
+  }
+  
+  @keyframes coreRotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  @keyframes spiralRotate1 {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  @keyframes spiralRotate2 {
+    0% { transform: translate(-50%, -50%) rotate(45deg); }
+    100% { transform: translate(-50%, -50%) rotate(405deg); }
+  }
+  
+  @keyframes spiralRotate3 {
+    0% { transform: translate(-50%, -50%) rotate(90deg); }
+    100% { transform: translate(-50%, -50%) rotate(450deg); }
+  }
+  
+  @keyframes spiralRotate4 {
+    0% { transform: translate(-50%, -50%) rotate(135deg); }
+    100% { transform: translate(-50%, -50%) rotate(495deg); }
+  }
+  
+  @keyframes starsRotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  @keyframes ringPulse {
+    0%, 100% {
+      opacity: 0.6;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+  }
+
+/* ============================================
+   ÉTOILES - Style 8 bits gros pixels
+   ============================================ */
 .star {
   position: absolute;
   background: #fff;
-  border-radius: 50%;
-  animation: twinkle infinite ease-in-out;
+  border-radius: 0 !important; /* Carré = pixel parfait */
+  animation: twinklePixel infinite ease-in-out;
+  image-rendering: pixelated;
 }
 
-@keyframes twinkle {
+/* Étoiles standard - GROSSES */
+.star {
+  box-shadow: 
+    0 0 0 1px #fff,
+    2px 0 0 0 rgba(255, 255, 255, 0.6),
+    -2px 0 0 0 rgba(255, 255, 255, 0.6),
+    0 2px 0 0 rgba(255, 255, 255, 0.6),
+    0 -2px 0 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Étoiles jaunes/dorées - style pixel */
+.star:nth-child(3n) {
+  background: #ffff00;
+  box-shadow: 
+    0 0 0 1px #ffff00,
+    2px 0 0 0 rgba(255, 255, 0, 0.7),
+    -2px 0 0 0 rgba(255, 255, 0, 0.7),
+    0 2px 0 0 rgba(255, 255, 0, 0.7),
+    0 -2px 0 0 rgba(255, 255, 0, 0.7),
+    2px 2px 0 0 rgba(255, 255, 0, 0.4),
+    -2px -2px 0 0 rgba(255, 255, 0, 0.4);
+}
+
+/* Étoiles cyan - style pixel */
+.star:nth-child(5n) {
+  background: #00ffff;
+  box-shadow: 
+    0 0 0 1px #00ffff,
+    2px 0 0 0 rgba(0, 255, 255, 0.7),
+    -2px 0 0 0 rgba(0, 255, 255, 0.7),
+    0 2px 0 0 rgba(0, 255, 255, 0.7),
+    0 -2px 0 0 rgba(0, 255, 255, 0.7);
+}
+
+/* Étoiles magenta - style pixel */
+.star:nth-child(7n) {
+  background: #ff00ff;
+  box-shadow: 
+    0 0 0 1px #ff00ff,
+    2px 0 0 0 rgba(255, 0, 255, 0.7),
+    -2px 0 0 0 rgba(255, 0, 255, 0.7),
+    0 2px 0 0 rgba(255, 0, 255, 0.7),
+    0 -2px 0 0 rgba(255, 0, 255, 0.7);
+}
+
+/* MEGA étoiles - très grosses, style croix 8 bits */
+.star:nth-child(11n) {
+  background: #ffffff;
+  box-shadow: 
+    /* Centre */
+    0 0 0 2px #fff,
+    /* Croix principale */
+    4px 0 0 0 #fff,
+    -4px 0 0 0 #fff,
+    0 4px 0 0 #fff,
+    0 -4px 0 0 #fff,
+    /* Extensions */
+    8px 0 0 0 rgba(255, 255, 255, 0.6),
+    -8px 0 0 0 rgba(255, 255, 255, 0.6),
+    0 8px 0 0 rgba(255, 255, 255, 0.6),
+    0 -8px 0 0 rgba(255, 255, 255, 0.6),
+    /* Diagonales */
+    4px 4px 0 0 rgba(255, 255, 255, 0.4),
+    -4px -4px 0 0 rgba(255, 255, 255, 0.4),
+    4px -4px 0 0 rgba(255, 255, 255, 0.4),
+    -4px 4px 0 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Super mega étoiles brillantes */
+.star:nth-child(17n) {
+  background: #ffffaa;
+  box-shadow: 
+    0 0 0 3px #ffffaa,
+    6px 0 0 0 #ffff88,
+    -6px 0 0 0 #ffff88,
+    0 6px 0 0 #ffff88,
+    0 -6px 0 0 #ffff88,
+    12px 0 0 0 rgba(255, 255, 136, 0.5),
+    -12px 0 0 0 rgba(255, 255, 136, 0.5),
+    0 12px 0 0 rgba(255, 255, 136, 0.5),
+    0 -12px 0 0 rgba(255, 255, 136, 0.5),
+    6px 6px 0 0 rgba(255, 255, 170, 0.6),
+    -6px -6px 0 0 rgba(255, 255, 170, 0.6),
+    6px -6px 0 0 rgba(255, 255, 170, 0.6),
+    -6px 6px 0 0 rgba(255, 255, 170, 0.6);
+}
+
+@keyframes twinklePixel {
   0%, 100% { 
-    opacity: var(--opacity, 0.5);
+    opacity: var(--opacity, 0.6);
     transform: scale(1);
   }
   50% { 
@@ -27,15 +376,41 @@
   }
 }
 
-/* Shooting Stars */
+/* ============================================
+   ÉTOILES FILANTES - Style 8 bits
+   ============================================ */
 .shooting-star {
   position: absolute;
-  width: 100px;
-  height: 2px;
-  background: linear-gradient(90deg, #fff, transparent);
-  border-radius: 50%;
+  width: 80px;
+  height: 4px;
+  background: 
+    /* Queue pixelisée */
+    linear-gradient(90deg, 
+      #ffffff 0%, 
+      #ffffff 10%,
+      #aaffff 20%,
+      #88ddff 40%,
+      #4488aa 60%,
+      transparent 100%
+    );
+  border-radius: 0;
   animation: shoot linear infinite;
   opacity: 0;
+  image-rendering: pixelated;
+}
+
+/* Tête de l'étoile filante - gros pixel */
+.shooting-star::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -2px;
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  box-shadow: 
+    2px 0 0 0 #aaffff,
+    4px 0 0 0 #88ddff;
 }
 
 @keyframes shoot {
@@ -43,10 +418,10 @@
     opacity: 0;
     transform: translateX(0) translateY(0) rotate(35deg);
   }
-  10% {
+  5% {
     opacity: 1;
   }
-  70% {
+  60% {
     opacity: 1;
   }
   100% {
@@ -55,69 +430,39 @@
   }
 }
 
-/* Nebulas */
+/* ============================================
+   NÉBULEUSES - Désactivées (remplacées par milky-way clouds)
+   ============================================ */
 .nebula {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.15;
-  animation: nebulaPulse 10s infinite ease-in-out;
+  display: none;
 }
 
-.nebula-1 {
-  top: 10%;
-  left: 20%;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, #ff6b6b 0%, transparent 70%);
-  animation-delay: 0s;
+.nebula-1, .nebula-2, .nebula-3 {
+  display: none;
 }
 
-.nebula-2 {
-  top: 60%;
-  right: 10%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #4ecdc4 0%, transparent 70%);
-  animation-delay: 3s;
-}
-
-.nebula-3 {
-  bottom: 20%;
-  left: 40%;
-  width: 250px;
-  height: 250px;
-  background: radial-gradient(circle, #a55eea 0%, transparent 70%);
-  animation-delay: 6s;
-}
-
-@keyframes nebulaPulse {
-  0%, 100% { 
-    transform: scale(1);
-    opacity: 0.1;
-  }
-  50% { 
-    transform: scale(1.2);
-    opacity: 0.2;
-  }
-}
-
-/* Grid Overlay */
+/* ============================================
+   GRILLE OVERLAY - Effet scanline 8 bits
+   ============================================ */
 .grid-overlay {
+  display: none;
+}
+
+/* Scanlines optionnelles pour effet CRT */
+.stars-container::after {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(rgba(78, 205, 196, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(78, 205, 196, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 100;
 }
-
-@keyframes gridMove {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(50px); }
-}
-

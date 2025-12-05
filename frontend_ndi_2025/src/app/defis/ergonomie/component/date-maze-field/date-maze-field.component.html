@@ -1,0 +1,96 @@
+<div class="date-maze-field-container">
+  <h2 class="field-title">Labyrinthe Temporel</h2>
+  <div class="content-wrapper" [class.blurred]="!isStarted() || showError()">
+    <div class="header">
+      <div class="date-display">
+        <span class="date-label">Date actuelle :</span>
+        <span class="date-value">{{ formattedDate() }}</span>
+      </div>
+      @if (formattedTargetDate()) {
+        <div class="target-date-display">
+          <span class="target-label">⚠️ Ne pas dépasser :</span>
+          <span class="target-value">{{ formattedTargetDate() }}</span>
+        </div>
+      }
+    </div>
+
+    @if (isStarted()) {
+    <div class="maze-wrapper">
+    <div class="maze-grid">
+      @for (row of maze(); track $index; let y = $index) {
+        <div class="maze-row">
+          @for (cell of row; track $index; let x = $index) {
+            <div [class]="getCellClass(x, y)">
+              @if (cell.type === 'exit-left') {
+                <span class="exit-label">← Jour</span>
+              }
+              @if (cell.type === 'exit-right') {
+                <span class="exit-label">Mois →</span>
+              }
+              @if (cell.type === 'exit-top') {
+                <span class="exit-label">↑ Année</span>
+              }
+              @if (cell.type === 'exit-bottom') {
+                <span class="exit-label">✓ Valider</span>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+    </div>
+
+    <div class="instructions">
+      <p class="instruction-text">
+        <strong>Instructions :</strong> Utilisez les flèches du clavier pour naviguer dans le labyrinthe.
+      </p>
+      <div class="exit-legend">
+        <div class="legend-item">
+          <span class="legend-arrow">←</span>
+          <span>Gauche : Jour +1</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-arrow">→</span>
+          <span>Droite : Mois +1</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-arrow">↑</span>
+          <span>Haut : Année +1</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-arrow">↓</span>
+          <span>Bas : Valider</span>
+        </div>
+      </div>
+    </div>
+    }
+    
+    @if (!isActive() && !showError()) {
+      <div class="validation-message">
+        <p>✅ Date validée : {{ formattedDate() }}</p>
+        <button class="reset-button" (click)="reset()">Réinitialiser</button>
+      </div>
+    }
+  </div>
+  
+  @if (showError()) {
+    <div class="error-message-overlay">
+      <div class="error-message">
+        <p class="error-title">❌ Date incorrecte !</p>
+        @if (errorType() === 'limit') {
+          <p class="error-text">Vous avez dépassé la date limite ({{ formattedTargetDate() }}) !</p>
+        } @else {
+          <p class="error-text">La date sélectionnée ({{ formattedDate() }}) ne correspond pas à la date cible ({{ formattedTargetDate() }}).</p>
+        }
+        <button class="error-button" (click)="acknowledgeError()">OK</button>
+      </div>
+    </div>
+  }
+  
+  @if (!isStarted()) {
+    <div class="start-button-wrapper">
+      <button class="start-button" (click)="startField()">Commencer le champ</button>
+    </div>
+  }
+</div>
+

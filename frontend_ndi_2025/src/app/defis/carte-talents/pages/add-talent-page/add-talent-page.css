@@ -1,0 +1,225 @@
+/* ===========================
+ *  ADD TALENT PAGE
+ * =========================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--cream, #FFF8E7);
+}
+
+.add-talent-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ===========================
+ *  HEADER
+ * =========================== */
+
+.page-header {
+  margin-bottom: 2.5rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3DB4AD;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  color: #2a918b;
+  transform: translateX(-4px);
+}
+
+.header-content {
+  background: linear-gradient(135deg, #3DB4AD 0%, #2a918b 100%);
+  padding: 2.5rem;
+  border-radius: 24px;
+  border: 4px solid #1a1a1a;
+  box-shadow: 8px 8px 0 #1a1a1a;
+  color: #fff;
+}
+
+.header-kicker {
+  display: inline-block;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: #F5D547;
+  color: #1a1a1a;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+.header-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+}
+
+.header-desc {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 600px;
+  opacity: 0.95;
+}
+
+/* ===========================
+ *  MAIN
+ * =========================== */
+
+.page-main {
+  position: relative;
+}
+
+.form-section {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================
+ *  PREVIEW SECTION
+ * =========================== */
+
+.preview-section {
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.success-message {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.success-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.success-message h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem;
+}
+
+.success-message p {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+.preview-card {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.preview-card app-card {
+  width: 100%;
+  max-width: 360px;
+}
+
+.success-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ===========================
+ *  BUTTONS
+ * =========================== */
+
+.btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  border: 3px solid #1a1a1a;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 #1a1a1a;
+}
+
+.btn:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.btn--primary {
+  background: #3DB4AD;
+  color: #fff;
+}
+
+.btn--secondary {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+/* ===========================
+ *  RESPONSIVE
+ * =========================== */
+
+@media (max-width: 640px) {
+  .add-talent-page {
+    padding: 1.5rem 1rem;
+  }
+  
+  .header-content {
+    padding: 1.75rem;
+    border-radius: 18px;
+  }
+  
+  .header-title {
+    font-size: 1.75rem;
+  }
+  
+  .success-actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
